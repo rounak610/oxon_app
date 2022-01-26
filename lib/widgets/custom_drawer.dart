@@ -36,10 +36,10 @@ class CustomDrawer extends StatelessWidget {
                   radius: 36,
                   backgroundColor: Colors.green[900],
                   child: CircleAvatar(
-                    
                     radius: 35,
-                    backgroundImage: Image.asset('assets/images/profile_pic.jpg')
-                        .image, //TO BE REPLACED WITH USER'S NETWORK IMAGE//
+                    backgroundImage:
+                        Image.asset('assets/images/profile_pic.jpg')
+                            .image, //TO BE REPLACED WITH USER'S NETWORK IMAGE//
                   ),
                 ),
                 Column(
@@ -79,7 +79,7 @@ class CustomDrawer extends StatelessWidget {
               child: Container(
                 height: 120,
                 padding: EdgeInsets.all(15),
-                child: Image.asset('assets/images/oxon_logo.jpeg'),
+                child: Image.asset('assets/images/oxon_logo.png'),
               ),
             ),
           )
