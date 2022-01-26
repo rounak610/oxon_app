@@ -50,6 +50,8 @@ flutter:
     - assets/images/profile_pic.jpg
     - assets/images/sign_in_pg.png
     - assets/images/oxon_logo.png
+    - assets/images/products_pg_bg.png
+    - assets/images/oxon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
