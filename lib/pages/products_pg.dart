@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/custom_drawer.dart';
+
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
 
@@ -14,7 +16,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          drawer: Drawer(),
+          drawer: CustomDrawer(),
           appBar: AppBar(
             shadowColor: Colors.transparent,
             leading: Builder(builder: (context)
@@ -46,7 +48,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("assets/images/products_pg_bg.png"),
+                          image: Image.asset('assets/images/products_pg_bg.png').image,
                           fit: BoxFit.cover
                       )
                   ),
@@ -86,7 +88,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                  children: [
                                    Container(
                                        height:80, width:80,
-                                       child: Image(image: AssetImage("assets/images/oxon.png"))),
+                                       child: Image(image: Image.asset("assets/images/oxon.png").image)),
                                    Text("Product",
                                      style: TextStyle(
                                          fontSize: 20,
