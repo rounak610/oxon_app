@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:oxon_app/pages/sigup_pg.dart';
 import 'login_pg.dart';
 import '../widgets/custom_drawer.dart';
+import 'package:oxon_app/pages/products_pg.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
