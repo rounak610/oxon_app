@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/sigup_pg.dart';
 import 'login_pg.dart';
 
@@ -35,7 +36,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         constraints: const BoxConstraints.tightFor(width: 190, height: 60),
                         child: ElevatedButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductsPage()));
                           },
                           child: Text(
                             'Login',
