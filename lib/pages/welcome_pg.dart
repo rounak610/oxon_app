@@ -5,6 +5,10 @@ import 'package:oxon_app/pages/sigup_pg.dart';
 import 'login_pg.dart';
 import '../widgets/custom_drawer.dart';
 import 'package:oxon_app/pages/products_pg.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pinput/pin_put/pin_put.dart';
+import 'package:pinput/pin_put/pin_put_state.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);

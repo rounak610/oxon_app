@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "480965234325",
+    "project_id": "oxon-app-a4ede",
+    "storage_bucket": "oxon-app-a4ede.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480965234325:android:df5da989e8652833c5159c",
+        "android_client_info": {
+          "package_name": "com.example.oxon_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKTRLF565EvrfbvcN-J0fPwFYLoBFQXps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
