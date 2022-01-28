@@ -18,6 +18,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,11 +47,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                 builder: (context) => ProductsPage()));
                       },
                       child: Text(
-                        'Login',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.green[900],
-                            fontWeight: FontWeight.bold),
+                        "Get OTP",
+                        style: TextStyle(color: Colors.black, fontSize: 35),
                       ),
                       style: ElevatedButton.styleFrom(
                           primary: Colors.green[50],
