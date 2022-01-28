@@ -31,29 +31,56 @@ class _WelcomePageState extends State<WelcomePage> {
                       image: AssetImage("assets/images/sign_in_pg.png"),
                       fit: BoxFit.cover)),
             ),
+            Container(
+              margin: EdgeInsets.only(top: 40, right: 10, left: 10),
+              child: TextField(
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelStyle: TextStyle(color: Colors.black),
+                  hintText: 'Phone Number',
+                  hintStyle: TextStyle(color: Colors.black54),
+                  prefix: Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Text(
+                      '+91',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+                maxLength: 10,
+                keyboardType: TextInputType.number,
+                controller: _controller,
+              ),
+              padding: EdgeInsets.all(32.0),
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 460, 0, 0),
-                  child: ConstrainedBox(
-                    constraints:
-                        const BoxConstraints.tightFor(width: 190, height: 60),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductsPage()));
-                      },
-                      child: Text(
-                        "Get OTP",
-                        style: TextStyle(color: Colors.black, fontSize: 35),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 460, 0, 0),
+                    child: ConstrainedBox(
+                      constraints:
+                          const BoxConstraints.tightFor(width: 190, height: 60),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProductsPage()));
+                        },
+                        child: Text(
+                          "Get OTP",
+                          style: TextStyle(color: Colors.black, fontSize: 35),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.green[50],
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(35.0))),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.green[50],
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(35.0))),
                     ),
                   ),
                 ),
