@@ -71,6 +71,7 @@ class CustomDrawer extends StatelessWidget {
           _tileItem('My Wallet', 'routename'),
           _tileItem('Let\'s Shop', 'routename'),
           _tileItem('Sustainable Mapping', 'routename'),
+          _tileItem('Donate a Dustbin', 'routename'),
           _tileItem('Explore & Bid', 'routename'),
           Expanded(
             child: Align(

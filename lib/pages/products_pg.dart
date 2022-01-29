@@ -32,21 +32,11 @@ class _ProductsPageState extends State<ProductsPage> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage("assets/icons/shopping_cart.png"))),
-                    )),
+                    )
+                ),
               )
-              // Builder(
-              //   builder: (context) => IconButton(
-              //       onPressed: () {},
-              //       icon: Container(
-              //         width: 43,
-              //         height: 43,
-              //         alignment: Alignment.center,
-              //         decoration: BoxDecoration(
-              //             image: DecorationImage(
-              //                 image: AssetImage("assets/icons/shopping_cart.png"))),
-              //       )),
-              // )
-            ]),
+            ]
+            ),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
             body: SafeArea(
               child: Stack(
@@ -855,6 +845,9 @@ class _ProductsPageState extends State<ProductsPage> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        )
                       ],
                     ),
                   )
