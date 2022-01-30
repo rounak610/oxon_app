@@ -59,9 +59,9 @@ class _DonateDustbinState extends State<DonateDustbin> {
                           .image,
                       fit: BoxFit.cover)),
             ),
-            SingleChildScrollView(
-              child: Padding(
-                padding : EdgeInsets.fromLTRB(20, 0, 0, 0),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -205,8 +205,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                     SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
+                    Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(width: 250, height: 60),
                         child: ElevatedButton(
@@ -242,8 +241,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                     SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(width: 340, height: 60),
                         child: ElevatedButton(

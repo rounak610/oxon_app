@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
+import 'package:oxon_app/pages/preview_report.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/sigup_pg.dart';
 import 'login_pg.dart';
@@ -73,7 +74,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DonateDustbin()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PreviewReport()));
                           },
                           child: Text(
                             "Sign Up",
