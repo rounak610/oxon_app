@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../pages/raise_concern.dart';
+
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
 
@@ -70,7 +72,10 @@ class CustomDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10.0, bottom: 10),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, RaiseConcernDirect.routeName);
+              },
               child: Text(
                 'Raise a Concern',
                 style: TextStyle(fontSize: 22),
