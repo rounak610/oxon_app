@@ -9,6 +9,8 @@ import '../widgets/custom_drawer.dart';
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
 
+  static const routeName = '/products-page';
+
   @override
   _ProductsPageState createState() => _ProductsPageState();
 }
@@ -33,12 +35,11 @@ class _ProductsPageState extends State<ProductsPage> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage("assets/icons/shopping_cart.png"))),
-                    )
-                ),
+                              image: AssetImage(
+                                  "assets/icons/shopping_cart.png"))),
+                    )),
               )
-            ]
-            ),
+            ]),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
             body: SafeArea(
               child: Stack(

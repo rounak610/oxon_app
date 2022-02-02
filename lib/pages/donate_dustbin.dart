@@ -5,6 +5,8 @@ import 'package:oxon_app/widgets/custom_drawer.dart';
 class DonateDustbin extends StatefulWidget {
   const DonateDustbin({Key? key}) : super(key: key);
 
+  static const routeName = '/donate-dustbin';
+
   @override
   _DonateDustbinState createState() => _DonateDustbinState();
 }
@@ -13,25 +15,24 @@ class _DonateDustbinState extends State<DonateDustbin> {
   int selectedRadio = 1;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
     selectedRadio = 0;
   }
-  setSelectedRadio(int val)
-  {
+
+  setSelectedRadio(int val) {
     setState(() {
       selectedRadio = val;
     });
   }
-  String ? value;
+
+  String? value;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         drawer: CustomDrawer(),
-        appBar: CustomAppBar(context, "Donate a Dustbin",
-        [
+        appBar: CustomAppBar(context, "Donate a Dustbin", [
           Container(
             width: 105,
             height: 105,
@@ -44,19 +45,16 @@ class _DonateDustbinState extends State<DonateDustbin> {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/icons/shopping_cart.png"))),
-                )
-            ),
+                )),
           )
-        ]
-        ),
+        ]),
         body: Stack(
           children: [
             Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image:
-                      Image.asset('assets/images/products_pg_bg.png')
-                          .image,
+                          Image.asset('assets/images/products_pg_bg.png').image,
                       fit: BoxFit.cover)),
             ),
             Padding(
@@ -70,8 +68,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                       style: TextStyle(
                           fontSize: 28,
                           color: Colors.white,
-                          fontWeight: FontWeight.w700
-                      ),
+                          fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
                       height: 10,
@@ -81,8 +78,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
-                          fontWeight: FontWeight.w100
-                      ),
+                          fontWeight: FontWeight.w100),
                     ),
                     SizedBox(
                       height: 25,
@@ -94,8 +90,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                             groupValue: selectedRadio,
                             activeColor: Colors.white,
                             fillColor: MaterialStateProperty.all(Colors.white),
-                            onChanged: (val) => setSelectedRadio(val as int)
-                            ),
+                            onChanged: (val) => setSelectedRadio(val as int)),
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: Text(
@@ -103,8 +98,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500
-                            ),
+                                fontWeight: FontWeight.w500),
                           ),
                         )
                       ],
@@ -116,15 +110,13 @@ class _DonateDustbinState extends State<DonateDustbin> {
                             groupValue: selectedRadio,
                             activeColor: Colors.white,
                             fillColor: MaterialStateProperty.all(Colors.white),
-                            onChanged: (val) => setSelectedRadio(val as int)
-                        ),
+                            onChanged: (val) => setSelectedRadio(val as int)),
                         Text(
                           "Choose on Maps",
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
-                              fontWeight: FontWeight.w500
-                          ),
+                              fontWeight: FontWeight.w500),
                         )
                       ],
                     ),
@@ -136,8 +128,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                       style: TextStyle(
                           fontSize: 28,
                           color: Colors.white,
-                          fontWeight: FontWeight.w700
-                      ),
+                          fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
                       height: 10,
@@ -147,8 +138,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
-                          fontWeight: FontWeight.w100
-                      ),
+                          fontWeight: FontWeight.w100),
                     ),
                     SizedBox(
                       height: 20,
@@ -163,31 +153,41 @@ class _DonateDustbinState extends State<DonateDustbin> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            hint: Text("Select",
+                            hint: Text(
+                              "Select",
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w100
-                              ),
+                                  fontWeight: FontWeight.w100),
                             ),
                             value: value,
-                            dropdownColor:  Color.fromARGB(255, 34, 90, 0),
+                            dropdownColor: Color.fromARGB(255, 34, 90, 0),
                             isExpanded: true,
                             iconSize: 26,
-                            icon: Icon(Icons.arrow_drop_down, color: Colors.white,),
-                            items: <String>['select','item1', 'item2', 'item3', 'item4'].map((String value) {
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.white,
+                            ),
+                            items: <String>[
+                              'select',
+                              'item1',
+                              'item2',
+                              'item3',
+                              'item4'
+                            ].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value,
+                                child: Text(
+                                  value,
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
-                                      fontWeight: FontWeight.w500
-                                  ),
+                                      fontWeight: FontWeight.w500),
                                 ),
                               );
                             }).toList(),
-                            onChanged: (value) => setState(() => this.value = value),
+                            onChanged: (value) =>
+                                setState(() => this.value = value),
                           ),
                         ),
                       ),
@@ -195,76 +195,69 @@ class _DonateDustbinState extends State<DonateDustbin> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text("Note: This price is the one-time installation fee which goes directly to the municipality. Check “Info” (in top right) for further details.",
+                    Text(
+                      "Note: This price is the one-time installation fee which goes directly to the municipality. Check “Info” (in top right) for further details.",
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
-                          fontWeight: FontWeight.w500
-                      ),
+                          fontWeight: FontWeight.w500),
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 250, height: 60),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: (){
-                          },
+                          onPressed: () {},
                           child: Text(
                             'Donate Now',
                             style: TextStyle(
                                 fontSize: 30,
                                 color: Colors.green[900],
-                                fontWeight: FontWeight.bold
-                            ),
+                                fontWeight: FontWeight.bold),
                           ),
                           style: ElevatedButton.styleFrom(
                               primary: Colors.green[50],
                               shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(35.0)
-                              )
-                          ),
+                                  borderRadius:
+                                      new BorderRadius.circular(35.0))),
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    Text("__________________OR________________",
+                    Text(
+                      "__________________OR________________",
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
-                          fontWeight: FontWeight.w500
-                      ),
+                          fontWeight: FontWeight.w500),
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 340, height: 60),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 340, height: 60),
                         child: ElevatedButton(
-                          onPressed: (){
-                          },
+                          onPressed: () {},
                           child: Text(
                             'Report a Requirement',
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold
-                            ),
+                                fontWeight: FontWeight.bold),
                           ),
                           style: ElevatedButton.styleFrom(
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 2
-                            ),
-                              primary:  Color.fromARGB(255, 34, 90, 0),
+                              side: BorderSide(color: Colors.white, width: 2),
+                              primary: Color.fromARGB(255, 34, 90, 0),
                               shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(35.0)
-                              )
-                          ),
+                                  borderRadius:
+                                      new BorderRadius.circular(35.0))),
                         ),
                       ),
                     ),

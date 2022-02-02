@@ -5,6 +5,7 @@ import 'package:oxon_app/widgets/custom_drawer.dart';
 
 class SusMapping extends StatefulWidget {
   SusMapping({Key? key, required this.title}) : super(key: key);
+  static const routeName = '/mapping-page';
 
   final String title;
 
@@ -34,7 +35,8 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
     return SafeArea(
       child: Scaffold(
           drawer: CustomDrawer(),
-          backgroundColor: Color.fromARGB(255, 34, 90, 0), // add this to remove the line green between appbar and body
+          backgroundColor: Color.fromARGB(255, 34, 90,
+              0), // add this to remove the line green between appbar and body
           appBar: CustomAppBar(context, widget.title),
           body: Column(
             children: [
@@ -111,7 +113,8 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
               ),
               Container(
                 height: 100,
-                child: TabBarView( // TODO: add map here
+                child: TabBarView(
+                  // TODO: add map here
                   controller: _tabController,
                   children: [
                     Column(

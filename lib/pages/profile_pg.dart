@@ -5,6 +5,7 @@ import 'package:oxon_app/widgets/custom_drawer.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key, required this.title}) : super(key: key);
+  static const routeName = '/profile-page';
 
   final String title;
 

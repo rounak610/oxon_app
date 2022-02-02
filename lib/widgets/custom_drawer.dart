@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/donate_dustbin.dart';
+import 'package:oxon_app/pages/products_pg.dart';
+import 'package:oxon_app/pages/profile_pg.dart';
+import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 
 import '../pages/raise_concern.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
 
-  Widget _tileItem(String text, String routename) {
+  Widget _tileItem(String text, String routeName,BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: ListTile( 
-        onTap: () {},
+      child: ListTile(
+        onTap: () {
+          Navigator.of(context).pushReplacementNamed(routeName);
+        },
         title: Text(
           text,
           style: TextStyle(
@@ -69,7 +75,6 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-
           Padding(
             padding: const EdgeInsets.only(left: 10.0, bottom: 10),
             child: ElevatedButton(
@@ -84,12 +89,12 @@ class CustomDrawer extends StatelessWidget {
               style: ElevatedButton.styleFrom(primary: Colors.green[900]),
             ),
           ),
-          _tileItem('Profile', 'routename'),
-          _tileItem('My Wallet', 'routename'),
-          _tileItem('Let\'s Shop', 'routename'),
-          _tileItem('Sustainable Mapping', 'routename'),
-          _tileItem('Donate a Dustbin', 'routename'),
-          _tileItem('Explore & Bid', 'routename'),
+          _tileItem('Profile', ProfilePage.routeName, context),
+          _tileItem('My Wallet', ProductsPage.routeName, context),
+          _tileItem('Let\'s Shop', ProductsPage.routeName, context),
+          _tileItem('Sustainable Mapping', SusMapping.routeName, context),
+          _tileItem('Donate a Dustbin', DonateDustbin.routeName, context),
+          _tileItem('Explore & Bid', ProductsPage.routeName, context),
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
