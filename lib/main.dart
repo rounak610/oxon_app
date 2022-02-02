@@ -15,8 +15,6 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error in fetching the cameras: $e');
   }
-
-void main() async {
   runApp(MyApp());
 }
 
@@ -38,9 +36,9 @@ class MyApp extends StatelessWidget {
       home: WelcomePage(),
       routes: {
         RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
-        TakePictureScreen.routeName: (context) => TakePictureScreen(camera: cameras[0])
+        TakePictureScreen.routeName: (context) =>
+            TakePictureScreen(camera: cameras[0])
       },
-      home: WelcomePage(),
     );
   }
 }
