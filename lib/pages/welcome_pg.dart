@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oxon_app/pages/OTP%20screen.dart';
 import 'package:oxon_app/pages/sigup_pg.dart';
 import 'login_pg.dart';
 import '../widgets/custom_drawer.dart';
@@ -71,7 +72,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProductsPage()));
+                                  builder: (context) =>
+                                      otpscreen(_controller.text)));
                         },
                         child: Text(
                           "Send OTP",
