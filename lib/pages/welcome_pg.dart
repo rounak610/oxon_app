@@ -74,7 +74,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   builder: (context) => ProductsPage()));
                         },
                         child: Text(
-                          "Get OTP",
+                          "Send OTP",
                           style: TextStyle(color: Colors.black, fontSize: 35),
                         ),
                         style: ElevatedButton.styleFrom(
