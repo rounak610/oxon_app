@@ -71,8 +71,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  otpscreen(_controller.text)));
+                              builder: (context) => ProductsPage()));
                     },
                     child: Text(
                       "Send OTP",
