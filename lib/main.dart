@@ -18,8 +18,9 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error in fetching the cameras: $e');
   }
-  runApp(MyApp());
-}
+
+  runApp(MyApp());}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
