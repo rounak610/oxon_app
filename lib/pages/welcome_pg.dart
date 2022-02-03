@@ -36,7 +36,7 @@ class _WelcomePageState extends State<WelcomePage> {
             Container(
               margin: EdgeInsets.only(top: 40, right: 10, left: 10),
               child: Padding(
-                padding: const EdgeInsets.only(top: 400),
+                padding: const EdgeInsets.only(top: 460),
                 child: TextField(
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -66,7 +66,7 @@ class _WelcomePageState extends State<WelcomePage> {
               children: [
                 Container(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 460, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 500, 0, 0),
                     child: ConstrainedBox(
                       constraints:
                           const BoxConstraints.tightFor(width: 190, height: 60),
