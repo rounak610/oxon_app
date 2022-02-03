@@ -35,26 +35,29 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
             Container(
               margin: EdgeInsets.only(top: 40, right: 10, left: 10),
-              child: TextField(
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: 'Phone Number',
-                  hintStyle: TextStyle(color: Colors.black54),
-                  prefix: Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                      '+91',
-                      style: TextStyle(color: Colors.black),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 400),
+                child: TextField(
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.black),
+                    hintText: 'Phone Number',
+                    hintStyle: TextStyle(color: Colors.black54),
+                    prefix: Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Text(
+                        '+91',
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  controller: _controller,
                 ),
-                maxLength: 10,
-                keyboardType: TextInputType.number,
-                controller: _controller,
               ),
               padding: EdgeInsets.all(32.0),
             ),
