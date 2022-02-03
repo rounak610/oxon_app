@@ -66,7 +66,7 @@ class _WelcomePageState extends State<WelcomePage> {
               children: [
                 Container(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 500, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 540, 0, 0),
                     child: ConstrainedBox(
                       constraints:
                           const BoxConstraints.tightFor(width: 190, height: 60),
@@ -90,40 +90,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account?",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green[50],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupPage()));
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.green[50],
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                )
+
               ],
             ),
           ],
