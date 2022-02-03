@@ -77,7 +77,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         },
                         child: Text(
                           "Send OTP",
-                          style: TextStyle(color: Colors.black, fontSize: 35),
+                          style: TextStyle(color: Colors.black, fontSize: 20),
                         ),
                         style: ElevatedButton.styleFrom(
                             primary: Colors.green[50],
