@@ -3,8 +3,11 @@ import 'package:camera/camera.dart';
 
 import 'pages/welcome_pg.dart';
 import './pages/raise_concern.dart';
-// import './pages/raise_concern_camera.dart';
 import './pages/take_picture.dart';
+import './pages/sustainable_mapping_pg.dart';
+import './pages/profile_pg.dart';
+import './pages/donate_dustbin.dart';
+import './pages/products_pg.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -17,6 +20,7 @@ Future<void> main() async {
   }
 
   runApp(MyApp());}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -36,9 +40,12 @@ class MyApp extends StatelessWidget {
       home: WelcomePage(),
       routes: {
         RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
-        TakePictureScreen.routeName: (context) => TakePictureScreen(camera: cameras[0])
+        TakePictureScreen.routeName: (context) => TakePictureScreen(camera: cameras[0]),
+        ProfilePage.routeName: (context) => ProfilePage(title: 'John Doe'), //Change later
+        SusMapping.routeName: (context) => SusMapping(title: 'Title'),     //Change Later
+        DonateDustbin.routeName: (context) => DonateDustbin(),
+        ProductsPage.routeName: (context) => ProductsPage()
       },
-
     );
   }
 }
