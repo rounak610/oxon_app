@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/models/concern.dart';
 import 'package:oxon_app/pages/take_picture.dart';
 
 import '../widgets/custom_drawer.dart';
@@ -13,7 +14,10 @@ class RaiseConcernDirect extends StatefulWidget {
 }
 
 class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
-  String dropdownValue = 'One';
+  String authorityDropdownValue = 'One';
+  String issueTypeDropdownValue = 'One';
+
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
               icon: Icon(Icons.article_rounded),
             );
           }),
-          backgroundColor: Colors.green[900],
+          backgroundColor: Color.fromARGB(255, 34, 90, 0),
           title: Text(
             "Raise a Concern",
             style: TextStyle(
@@ -90,7 +94,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                         ),
                       ),
                       isExpanded: true,
-                      value: dropdownValue,
+                      value: authorityDropdownValue,
                       items: <String>['One', 'Two', 'Free', 'Four']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
@@ -103,7 +107,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          dropdownValue = newValue as String;
+                          authorityDropdownValue = newValue as String;
                         });
                       },
                     ),
@@ -145,7 +149,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                         ),
                       ),
                       isExpanded: true,
-                      value: dropdownValue,
+                      value: issueTypeDropdownValue,
                       items: <String>['One', 'Two', 'Free', 'Four']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
@@ -158,7 +162,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          dropdownValue = newValue as String;
+                          issueTypeDropdownValue = newValue as String;
                         });
                       },
                     ),
@@ -181,6 +185,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                     padding: EdgeInsets.only(right: 25, top: 10, bottom: 20),
                     width: double.infinity,
                     child: TextFormField(
+                      controller: descriptionController,
                       textInputAction: TextInputAction.done,
                       maxLines: 5,
                       style: TextStyle(color: Colors.white),
@@ -210,8 +215,14 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                     padding: EdgeInsets.only(right: 25),
                     child: ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(TakePictureScreen.routeName);
+                          Navigator.of(context).pushNamed(
+                              TakePictureScreen.routeName,
+                              arguments: Concern(
+                                  description: descriptionController.text,
+                                  authorityType: authorityDropdownValue,
+                                  issueType: issueTypeDropdownValue,
+                                  image: Image.asset(
+                                      'assets/images/oxon_logo.png')));
                         },
                         child: Text(
                           'Proceed',

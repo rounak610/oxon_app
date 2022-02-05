@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:oxon_app/pages/preview_report.dart';
 
 import './pages/welcome_pg.dart';
 import './pages/raise_concern.dart';
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
         SusMapping.routeName: (context) => SusMapping(title: 'Title'),     //Change Later
         DonateDustbin.routeName: (context) => DonateDustbin(),
         ProductsPage.routeName: (context) => ProductsPage(),
-        ComingSoon.routeName: (context) => ComingSoon()
+        ComingSoon.routeName: (context) => ComingSoon(),
+        PreviewReport.routeName: (context) => PreviewReport()
       },
     );
   }
