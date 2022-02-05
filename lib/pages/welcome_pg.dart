@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oxon_app/pages/OTP%20screen.dart';
 import 'package:oxon_app/pages/sigup_pg.dart';
 import 'login_pg.dart';
 import '../widgets/custom_drawer.dart';
@@ -32,95 +33,58 @@ class _WelcomePageState extends State<WelcomePage> {
                       image: AssetImage("assets/images/sign_in_pg.png"),
                       fit: BoxFit.cover)),
             ),
-            Container(
-              margin: EdgeInsets.only(top: 40, right: 10, left: 10),
-              child: TextField(
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintText: 'Phone Number',
-                  hintStyle: TextStyle(color: Colors.black54),
-                  prefix: Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                      '+91',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                maxLength: 10,
-                keyboardType: TextInputType.number,
-                controller: _controller,
-              ),
-              padding: EdgeInsets.all(32.0),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 460, 0, 0),
-                    child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints.tightFor(width: 190, height: 60),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProductsPage()));
-                        },
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                margin: EdgeInsets.only(top: 40, right: 10, left: 10),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 480),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(color: Colors.black),
+                      hintText: 'Phone Number',
+                      hintStyle: TextStyle(color: Colors.black54),
+                      prefix: Padding(
+                        padding: EdgeInsets.all(4),
                         child: Text(
-                          "Get OTP",
-                          style: TextStyle(color: Colors.black, fontSize: 35),
+                          '+91',
+                          style: TextStyle(color: Colors.black),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.green[50],
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(35.0))),
                       ),
                     ),
+                    maxLength: 10,
+                    keyboardType: TextInputType.number,
+                    controller: _controller,
                   ),
                 ),
-                SizedBox(
-                  height: 10,
+                padding: EdgeInsets.all(32.0),
+              ),
+              Container(
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints.tightFor(width: 190, height: 60),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductsPage()));
+                    },
+                    child: Text(
+                      "Send OTP",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green[50],
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(35.0))),
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account?",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green[50],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupPage()));
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.green[50],
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
+              ),
+            ])
           ],
         ),
       ),
