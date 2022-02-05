@@ -29,7 +29,7 @@ PreferredSizeWidget CustomAppBar(BuildContext context, String title,
       textAlign: TextAlign.center,
       text: TextSpan(
           text: title,
-          style: TextStyle(fontSize: 27.0, fontFamily: "Montserrat")),
+          style: TextStyle(fontSize: 27.0, fontFamily: "Montserrat", color: Colors.white)),
     ),
   );
 }
