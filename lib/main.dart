@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
-import 'pages/welcome_pg.dart';
+import './pages/welcome_pg.dart';
 import './pages/raise_concern.dart';
 import './pages/take_picture.dart';
 import './pages/sustainable_mapping_pg.dart';
 import './pages/profile_pg.dart';
 import './pages/donate_dustbin.dart';
 import './pages/products_pg.dart';
+import './pages/coming_soon.dart';
+
 
 List<CameraDescription> cameras = [];
 
@@ -44,7 +46,8 @@ class MyApp extends StatelessWidget {
         ProfilePage.routeName: (context) => ProfilePage(title: 'John Doe'), //Change later
         SusMapping.routeName: (context) => SusMapping(title: 'Title'),     //Change Later
         DonateDustbin.routeName: (context) => DonateDustbin(),
-        ProductsPage.routeName: (context) => ProductsPage()
+        ProductsPage.routeName: (context) => ProductsPage(),
+        ComingSoon.routeName: (context) => ComingSoon()
       },
     );
   }
