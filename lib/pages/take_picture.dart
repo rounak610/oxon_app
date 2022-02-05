@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:oxon_app/pages/preview_report.dart';
+import 'dart:io';
+
+import '../models/concern.dart';
 
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -43,6 +47,12 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Concern;
+
+    final description = args.description;
+    final issueType = args.issueType;
+    final authority = args.authorityType;
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 34, 90, 0),
       // You must wait until the controller is initialized before displaying the
@@ -58,7 +68,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       // If the Future is complete, display the preview.
-                      return Container(height: MediaQuery.of(context).size.height*0.7,child: CameraPreview(_controller));
+                      return Container(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: CameraPreview(_controller));
                     } else {
                       // Otherwise, display a loading indicator.
                       return const Center(child: CircularProgressIndicator());
@@ -81,10 +93,34 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   height: 50,
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        // Take the Picture in a try / catch block. If anything goes wrong,
+                        // catch the error.
+                        try {
+                          // Ensure that the camera is initialized.
+                          await _initializeControllerFuture;
+
+                          // Attempt to take a picture and then get the location
+                          // where the image file is saved.
+                          final image = await _controller.takePicture();
+                          final imageFile = Image.file(File(image.path));
+                          Navigator.of(context).pushNamed(
+                              PreviewReport.routeName,
+                              arguments: Concern(
+                                  description: description,
+                                  authorityType: authority,
+                                  issueType: issueType,
+                                  image: imageFile));
+                        } catch (e) {
+                          // If an error occurs, log the error to the console.
+                          print(e);
+                        }
+                      },
                       child: Text(
                         'Proceed',
-                        style: TextStyle(color: Color.fromARGB(255, 34, 90, 0), fontSize: 20),
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 34, 90, 0),
+                            fontSize: 20),
                       ),
                       style: ButtonStyle(
                           backgroundColor:
@@ -126,12 +162,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)),
-            backgroundColor: Color.fromARGB(255, 34, 90, 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        backgroundColor: Color.fromARGB(255, 34, 90, 0),
         // Provide an onPressedb callback.
         onPressed: () {},
-        child: const Icon(Icons.article_rounded,size: 40,),
+        child: const Icon(
+          Icons.article_rounded,
+          size: 40,
+        ),
       ),
     );
   }
