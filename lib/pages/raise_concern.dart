@@ -242,6 +242,8 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
               ),
             ),
           )
-        ]));
+        ]
+        )
+    );
   }
 }
