@@ -50,8 +50,11 @@ ButtonStyle outlinedButtonStyleRounder(BuildContext context) {
 
 ButtonStyle SolidRoundButtonStyle() {
   return ElevatedButton.styleFrom(
-      primary: Color.fromARGB(255, 34, 90, 0),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32.0)));
+    primary: Color.fromARGB(255, 223, 229, 215),
+    minimumSize: Size(1000, 52),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(32)),
+    ),
+  );
 }
 

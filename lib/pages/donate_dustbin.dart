@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 
@@ -27,27 +28,14 @@ class _DonateDustbinState extends State<DonateDustbin> {
   }
 
   String? value;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AppTheme.colors.oxonGreen, // add this to every page
         drawer: CustomDrawer(),
-        appBar: CustomAppBar(context, "Donate a Dustbin", [
-          Container(
-            width: 105,
-            height: 105,
-            child: IconButton(
-                onPressed: () {},
-                icon: Container(
-                  width: 43,
-                  height: 43,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/icons/shopping_cart.png"))),
-                )),
-          )
-        ]),
+        appBar: CustomAppBar(context, "Donate a Dustbin"),
         body: Stack(
           children: [
             Container(
@@ -58,7 +46,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                       fit: BoxFit.cover)),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              padding: EdgeInsets.fromLTRB(10, 16, 10, 0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +82,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: Text(
-                            "Detect my current loaction",
+                            "Detect my current location",
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -247,6 +235,7 @@ class _DonateDustbinState extends State<DonateDustbin> {
                           onPressed: () {},
                           child: Text(
                             'Report a Requirement',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,

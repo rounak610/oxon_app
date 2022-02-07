@@ -1,19 +1,30 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:oxon_app/repositories/loc_data_repository.dart';
 import 'package:oxon_app/styles/button_styles.dart';
+import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 
 class SusMapping extends StatefulWidget {
-  SusMapping({Key? key, required this.title}) : super(key: key);
+  SusMapping({Key? key}) : super(key: key); //, required this.title
   static const routeName = '/mapping-page';
 
-  final String title;
+  // final String title;
 
   @override
   _SusMappingState createState() => _SusMappingState();
 }
 
 class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
+  final LocDataRepository repository = LocDataRepository();
+  Set<Marker> dustbinMarkers = {};
+  Set<Marker> toiletMarkers = {};
+  Completer<GoogleMapController> _controller = Completer();
+
   late TabController _tabController;
 
   @override
@@ -35,9 +46,8 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
     return SafeArea(
       child: Scaffold(
           drawer: CustomDrawer(),
-          backgroundColor: Color.fromARGB(255, 34, 90,
-              0), // add this to remove the line green between appbar and body
-          appBar: CustomAppBar(context, widget.title),
+          backgroundColor: Color.fromARGB(255, 34, 90, 0),
+          appBar: CustomAppBar(context, "Sustainable Mapping"),
           body: Column(
             children: [
               Container(
@@ -112,79 +122,114 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                 ),
               ),
               Container(
-                height: 100,
+                margin: EdgeInsets.only(top: 24),
+                height: (MediaQuery.of(context).size.height) * 0.4,
                 child: TabBarView(
-                  // TODO: add map here
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: [
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Container(
-                              width: 28,
-                              height: 28,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/dustbin.png"))),
-                            )),
-                        Text(
-                          "Dustbins",
-                          style: Theme.of(context).textTheme.headline6,
-                        )
-                      ],
+                    Container(
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: repository.dustbinsGetStream(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return LinearProgressIndicator();
+
+                            for (int i = 0;
+                                i < snapshot.data!.docs.length;
+                                i++) {
+                              dustbinMarkers.add(Marker(
+                                markerId: MarkerId("$i"),
+                                infoWindow: InfoWindow(
+                                  title: "Public Dustbins",
+                                ),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(
+                                    BitmapDescriptor.hueGreen),
+                                position: LatLng(
+                                    snapshot.data!.docs[i]["location"].latitude,
+                                    snapshot
+                                        .data!.docs[i]["location"].longitude),
+                              ));
+                            }
+
+                            return GoogleMap(
+                              mapType: MapType.hybrid,
+                              initialCameraPosition: CameraPosition(
+                                  target: LatLng(26.4723125, 76.7268125),
+                                  zoom: 16),
+                              markers: dustbinMarkers,
+                              onMapCreated: (GoogleMapController controller) {
+                                _controller.complete(controller);
+                              },
+                            );
+                          }),
                     ),
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Container(
-                              width: 28,
-                              height: 28,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/toilet.png"))),
-                            )),
-                        Text(
-                          "Toilets",
-                          style: Theme.of(context).textTheme.headline6,
-                        )
-                      ],
+                    Container(
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: repository.toiletsGetStream(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return LinearProgressIndicator();
+
+                            for (int i = 0;
+                                i < snapshot.data!.docs.length;
+                                i++) {
+                              toiletMarkers.add(Marker(
+                                markerId: MarkerId("$i"),
+                                infoWindow: InfoWindow(
+                                  title: "Public Toilet",
+                                ),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(
+                                    BitmapDescriptor.hueRed),
+                                position: LatLng(
+                                    snapshot.data!.docs[i]["location"].latitude,
+                                    snapshot
+                                        .data!.docs[i]["location"].longitude),
+                              ));
+                            }
+
+                            return GoogleMap(
+                              mapType: MapType.hybrid,
+                              initialCameraPosition: CameraPosition(
+                                  target: LatLng(26.4723125, 76.7268125),
+                                  zoom: 16),
+                              markers: toiletMarkers,
+                              onMapCreated: (GoogleMapController controller) {
+                                _controller.complete(controller);
+                              },
+                            );
+                          }),
                     ),
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Container(
-                              width: 28,
-                              height: 28,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/suggest_loc.png"))),
-                            )),
-                        Text(
-                          "Suggest\nLocation",
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
-                        )
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Coming Soon",
+                            style: AppTheme.define().textTheme.headline1,
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(80, 50, 80, 18),
+                margin: EdgeInsets.fromLTRB(80, 18, 80, 18),
                 child: OutlinedButton(
                     onPressed: () {},
                     child: Text(
                       "Guide The Way",
-                      style: Theme.of(context).textTheme.headline3,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3!
+                          .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
                     ),
                     style: solidRoundButtonStyle),
               ),
@@ -194,7 +239,10 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                     onPressed: () {},
                     child: Text(
                       "Open In Maps",
-                      style: Theme.of(context).textTheme.headline3,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3!
+                          .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
                     ),
                     style: solidRoundButtonStyle),
               ),
