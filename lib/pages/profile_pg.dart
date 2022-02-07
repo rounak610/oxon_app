@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:oxon_app/styles/button_styles.dart';
+import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key, required this.title}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key); //, required this.title
+
   static const routeName = '/profile-page';
 
-  final String title;
+  // final String title;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -26,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Scaffold(
           drawer: CustomDrawer(),
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
-          appBar: CustomAppBar(context, widget.title),
+          appBar: CustomAppBar(context, "Profile"),
           body: Stack(
             children: [
               Container(
@@ -39,6 +41,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 margin: EdgeInsets.fromLTRB(36, 0, 36, 0),
                 child: Center(
                   child: Column(children: [
+                    SizedBox(
+                      height: 40,
+                    ),
                     Table(
                       defaultColumnWidth: FixedColumnWidth(160),
                       children: [
@@ -73,41 +78,35 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 32,
                     ),
-                    SizedBox(
-                      height: 50,
-                      child: Container(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(width: 2.0, color: Colors.white),
-                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius. circular(30.0))
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            "Update Details",
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
+                    Container(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Update Details",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline1!
+                              .copyWith(color: AppTheme.colors.oxonGreen),
                         ),
+                        style: solidRoundButtonStyle,
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 16,
                     ),
-                    SizedBox(
-                      height: 50,
-                      child: Container(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(width: 2.0, color: Colors.white),
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius. circular(30.0))
-                          ),
-                          onPressed: () {},
-                          child: Container(
-                            child: Text(
-                              "Check Your Wallet",
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
+                    Container(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        child: Container(
+                          child: Text(
+                            "Check Your Wallet",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: AppTheme.colors.oxonGreen),
                           ),
                         ),
+                        style: solidRoundButtonStyle,
                       ),
                     )
                   ]),

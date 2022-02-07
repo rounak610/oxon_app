@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-import 'package:oxon_app/pages/preview_report.dart';
 import 'dart:io';
+
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/preview_report.dart';
 
 import '../models/concern.dart';
 
@@ -103,13 +104,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                           // Attempt to take a picture and then get the location
                           // where the image file is saved.
                           final image = await _controller.takePicture();
-                          await Navigator.of(context).pushNamed(
+                          final imageFile = Image.file(File(image.path));
+                          Navigator.of(context).pushNamed(
                               PreviewReport.routeName,
                               arguments: Concern(
                                   description: description,
                                   authorityType: authority,
                                   issueType: issueType,
-                                  imagePath: image.path));
+                                  image: imageFile));
                         } catch (e) {
                           // If an error occurs, log the error to the console.
                           print(e);

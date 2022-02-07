@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:oxon_app/models/concern.dart';
 import 'package:oxon_app/pages/take_picture.dart';
+import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon_app/widgets/custom_appbar.dart';
 
 import '../widgets/custom_drawer.dart';
 
@@ -22,26 +24,9 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppTheme.colors.oxonGreen,
         drawer: CustomDrawer(),
-        appBar: AppBar(
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          leading: Builder(builder: (context) {
-            return IconButton(
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: Icon(Icons.article_rounded),
-            );
-          }),
-          backgroundColor: Color.fromARGB(255, 34, 90, 0),
-          title: Text(
-            "Raise a Concern",
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-        ),
+        appBar: CustomAppBar(context, "Raise a Concern"),
         body: Stack(children: [
           Container(
             decoration: BoxDecoration(
@@ -51,7 +36,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 25.0),
+              padding: const EdgeInsets.fromLTRB(25.0, 0, 0, 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -221,7 +206,8 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                                   description: descriptionController.text,
                                   authorityType: authorityDropdownValue,
                                   issueType: issueTypeDropdownValue,
-                                  imagePath: 'assets/images/oxon_logo.png'));
+                                  image: Image.asset(
+                                      'assets/images/oxon_logo.png')));
                         },
                         child: Text(
                           'Proceed',
