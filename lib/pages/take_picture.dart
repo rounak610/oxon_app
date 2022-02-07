@@ -103,14 +103,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                           // Attempt to take a picture and then get the location
                           // where the image file is saved.
                           final image = await _controller.takePicture();
-                          final imageFile = Image.file(File(image.path));
-                          Navigator.of(context).pushNamed(
+                          await Navigator.of(context).pushNamed(
                               PreviewReport.routeName,
                               arguments: Concern(
                                   description: description,
                                   authorityType: authority,
                                   issueType: issueType,
-                                  image: imageFile));
+                                  imagePath: image.path));
                         } catch (e) {
                           // If an error occurs, log the error to the console.
                           print(e);
