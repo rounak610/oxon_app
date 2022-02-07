@@ -82,7 +82,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                       ),
                       alignment: Alignment.center,
                       hint: Text('Select'),
-                      dropdownColor: Colors.black,
+                      dropdownColor: Color.fromARGB(255, 34, 90, 0),
                       decoration: InputDecoration(
                         enabledBorder: new OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(15.0),
@@ -137,7 +137,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                       ),
                       alignment: Alignment.center,
                       hint: Text('Select'),
-                      dropdownColor: Colors.black,
+                      dropdownColor: Color.fromARGB(255, 34, 90, 0),
                       decoration: InputDecoration(
                         enabledBorder: new OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(15.0),
@@ -242,6 +242,8 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
               ),
             ),
           )
-        ]));
+        ]
+        )
+    );
   }
 }

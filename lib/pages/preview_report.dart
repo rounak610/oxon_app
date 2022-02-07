@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon_app/models/concern.dart';
 import '../models/concern.dart';
 
 class PreviewReport extends StatefulWidget {
@@ -19,12 +22,12 @@ class _PreviewReportState extends State<PreviewReport> {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
     final description = args.description;
     final issueType = args.issueType;
-    final image = args.image;
+    final image_by_user = args.image;
 
     return SafeArea(
         child: Scaffold(
-      drawer: CustomDrawer(),
-      appBar: CustomAppBar(context, "Preview Your Report", [
+         drawer: CustomDrawer(),
+           appBar: CustomAppBar(context, "Preview Your Report", [
         Container(
           width: 105,
           height: 105,
@@ -37,19 +40,21 @@ class _PreviewReportState extends State<PreviewReport> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/icons/shopping_cart.png"))),
-              )),
+              )
+          ),
         )
-      ]),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
+      ]
+           ),
+            body: Stack(
+              children: [
+             Container(
+              decoration: BoxDecoration(
                 image: DecorationImage(
                     image:
                         Image.asset('assets/images/products_pg_bg.png').image,
                     fit: BoxFit.cover)),
           ),
-          Padding(
+             Padding(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: SingleChildScrollView(
                 child: Column(
@@ -140,7 +145,7 @@ class _PreviewReportState extends State<PreviewReport> {
                       width: 15,
                     ),
                     Text(
-                      "XXXXXXXXXXXXXXXXXXX",
+                      issueType,
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -176,7 +181,7 @@ class _PreviewReportState extends State<PreviewReport> {
                   height: 20,
                 ),
                 Text(
-                  "Description",
+                  "Description :",
                   style: TextStyle(
                       fontSize: 28,
                       color: Colors.white,
@@ -205,14 +210,24 @@ class _PreviewReportState extends State<PreviewReport> {
                   height: 20,
                 ),
                 Text(
-                  "Photo Uploaded:",
+                  "Photo Uploaded :",
                   style: TextStyle(
                       fontSize: 28,
                       color: Colors.white,
                       fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 10,
+                ),
+                Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Image.file(File(image_by_user.toString()))
                 ),
                 Text(
                   "*Note: A Twitter post will be uploaded on your handle with this report tagging the involved authorities.",

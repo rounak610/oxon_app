@@ -73,29 +73,41 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 32,
                     ),
-                    Container(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Update Details",
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                        style: solidRoundButtonStyle,
-                      ),
-                    ),
                     SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: Container(
+                      height: 50,
+                      child: Container(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(width: 2.0, color: Colors.white),
+                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius. circular(30.0))
+                          ),
+                          onPressed: () {},
                           child: Text(
-                            "Check Your Wallet",
+                            "Update Details",
                             style: Theme.of(context).textTheme.headline1,
                           ),
                         ),
-                        style: solidRoundButtonStyle,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: Container(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(width: 2.0, color: Colors.white),
+                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius. circular(30.0))
+                          ),
+                          onPressed: () {},
+                          child: Container(
+                            child: Text(
+                              "Check Your Wallet",
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   ]),
