@@ -26,6 +26,7 @@ dependencies:
   google_maps_flutter: ^2.1.1
   dio: ^4.0.4
   flutter_polyline_points: ^1.0.0
+  oauth1: ^2.0.0
 
   flutter:
     sdk: flutter
