@@ -22,7 +22,7 @@ class _PreviewReportState extends State<PreviewReport> {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
     final description = args.description;
     final issueType = args.issueType;
-    final image_by_user = args.image;
+    final imagePath = args.imagePath;
 
     return SafeArea(
         child: Scaffold(
@@ -227,7 +227,7 @@ class _PreviewReportState extends State<PreviewReport> {
                       border: Border.all(color: Colors.white, width: 2),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Image.file(File(image_by_user.toString()))
+                    child: Image.file(File(imagePath))
                 ),
                 Text(
                   "*Note: A Twitter post will be uploaded on your handle with this report tagging the involved authorities.",
