@@ -312,10 +312,11 @@ class _PreviewReportState extends State<PreviewReport> {
 
   void _onShare(BuildContext context, String imagePath, String issueType, String description) async {
     final box = context.findRenderObject() as RenderBox?;
+    List<String> imagePaths = [imagePath];
 
     if (imagePath.isNotEmpty) {
       await Share.shareFiles(
-          imagePaths,
+        imagePaths,
           text: issueType,
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
