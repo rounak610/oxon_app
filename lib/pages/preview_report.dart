@@ -6,7 +6,9 @@ import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import '../models/concern.dart';
-import 'package:flutter_share_me/flutter_share_me.dart';
+//import 'package:flutter_share_me/flutter_share_me.dart';
+//import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 enum Share {
   twitter
@@ -22,6 +24,8 @@ class PreviewReport extends StatefulWidget {
 }
 
 class _PreviewReportState extends State<PreviewReport> {
+
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
@@ -234,7 +238,7 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => onButtonTap(Share.twitter),
+                          onPressed: () => _onShare(context, issueType, description, imagePath),
                           child: Text(
                             'Confirm',
                             style: TextStyle(
@@ -300,7 +304,8 @@ class _PreviewReportState extends State<PreviewReport> {
                       ),
                     ),
                   ],
-                )),
+                )
+            ),
           )
         ],
       ),
@@ -308,18 +313,20 @@ class _PreviewReportState extends State<PreviewReport> {
     );
   }
 
-  Future<void> onButtonTap(Share share) async {
-    String msg = 'ignore this tweet I am just checking the working of automated tweet function in my new app @JioCare';
-    //String url = 'https://pub.dev/packages/flutter_share_me';
-    String? response;
-    final FlutterShareMe flutterShareMe = FlutterShareMe();
+  void _onShare(BuildContext context, String imagePath, String issueType, String description) async {
+    final box = context.findRenderObject() as RenderBox?;
 
-    switch (share) {
-      case Share.twitter:
-        response = await flutterShareMe.shareToTwitter(msg: msg);
-        break;
+    if (imagePath.isNotEmpty) {
+      await Share.shareFiles(imagePath,
+          text: issueType,
+          subject: description,
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+    } else {
+      await Share.share(issueType,
+          subject: description,
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
-    debugPrint(response);
+
   }
 
 }
