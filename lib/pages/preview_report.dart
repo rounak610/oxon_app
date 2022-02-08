@@ -10,9 +10,6 @@ import '../models/concern.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
-enum Share {
-  twitter
-}
 
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
@@ -317,7 +314,8 @@ class _PreviewReportState extends State<PreviewReport> {
     final box = context.findRenderObject() as RenderBox?;
 
     if (imagePath.isNotEmpty) {
-      await Share.shareFiles(imagePath,
+      await Share.shareFiles(
+          imagePaths,
           text: issueType,
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
