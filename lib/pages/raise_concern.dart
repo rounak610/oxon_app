@@ -206,8 +206,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                                   description: descriptionController.text,
                                   authorityType: authorityDropdownValue,
                                   issueType: issueTypeDropdownValue,
-                                  image: Image.asset(
-                                      'assets/images/oxon_logo.png')));
+                                  imagePath: 'assets/images/oxon_logo.png'));
                         },
                         child: Text(
                           'Proceed',
@@ -227,6 +226,8 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
               ),
             ),
           )
-        ]));
+        ]
+        )
+    );
   }
 }

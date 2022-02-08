@@ -5,11 +5,11 @@ class Concern {
   final String description;
   final issueType;
   final authorityType;
-  Image image;
+  String imagePath;
 
   Concern(
       {required this.description,
       required this.authorityType,
       required this.issueType,
-      required this.image});
+        required this.imagePath});
 }
