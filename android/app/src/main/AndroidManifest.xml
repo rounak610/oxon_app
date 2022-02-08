@@ -39,6 +39,14 @@
             android:value="2" />
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyA5g2UYGLDIKrpRidLtgG7UCLkcfCC0Z6w"/>
+       <meta-data
+           android:name="com.facebook.sdk.ApplicationId"
+           android:value="@string/facebook_app_id" />
+
+       <provider
+           android:name="com.facebook.FacebookContentProvider"
+           android:authorities="com.facebook.app.FacebookContentProvider[facebook_app_id]"
+           android:exported="false" />
     </application>
 
     <queries>

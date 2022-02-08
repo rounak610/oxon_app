@@ -6,8 +6,11 @@ import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import '../models/concern.dart';
-import 'package:http/src/response.dart';
-import 'package:oauth1/oauth1.dart' as oauth1;
+import 'package:flutter_share_me/flutter_share_me.dart';
+
+enum Share {
+  twitter
+}
 
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
@@ -231,9 +234,7 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () {
-                            post_tweet();
-                          },
+                          onPressed: () => onButtonTap(Share.twitter),
                           child: Text(
                             'Confirm',
                             style: TextStyle(
@@ -306,61 +307,19 @@ class _PreviewReportState extends State<PreviewReport> {
     )
     );
   }
-  void post_tweet() {
-    // define platform (server)
-    final oauth1.Platform platform = oauth1.Platform(
-        'https://api.twitter.com/oauth/request_token', // temporary credentials request
-        'https://api.twitter.com/oauth/authorize', // resource owner authorization
-        'https://api.twitter.com/oauth/access_token', // token credentials request
-        oauth1.SignatureMethods.hmacSha1 // signature method
-    );
 
-    // define client credentials (consumer keys)
-    const String apiKey = '5s4o3m6dwOWHOfQJCD4EU1V9E';
-    const String apiSecret = 'qnFEFjacNFYUx8nDh8OURUdtgItsMmnk78IhnXgyfv8AcljXch';
-    final oauth1.ClientCredentials clientCredentials =
-    oauth1.ClientCredentials(apiKey, apiSecret);
+  Future<void> onButtonTap(Share share) async {
+    String msg = 'ignore this tweet I am just checking the working of automated tweet function in my new app @JioCare';
+    //String url = 'https://pub.dev/packages/flutter_share_me';
+    String? response;
+    final FlutterShareMe flutterShareMe = FlutterShareMe();
 
-    // create Authorization object with client credentials and platform definition
-    final oauth1.Authorization auth =
-    oauth1.Authorization(clientCredentials, platform);
-
-    // request temporary credentials (request tokens)
-    auth
-        .requestTemporaryCredentials('oob')
-        .then((oauth1.AuthorizationResponse res) {
-      // redirect to authorization page
-      print('Open with your browser:'
-          '${auth.getResourceOwnerAuthorizationURI(res.credentials.token)}');
-
-      // get verifier (PIN)
-      stdout.write('PIN: ');
-      final String verifier = stdin.readLineSync() ?? '';
-
-      // request token credentials (access tokens)
-      return auth.requestTokenCredentials(res.credentials, verifier);
-    }).then((oauth1.AuthorizationResponse res) {
-      // yeah, you got token credentials
-      // create Client object
-      final oauth1.Client client = oauth1.Client(
-          platform.signatureMethod, clientCredentials, res.credentials);
-
-      // now you can access to protected resources via client
-      client
-          .post(Uri.parse(
-          'https://api.twitter.com/2/tweets')
-          ,body:{
-            "text" : "hello!!"
-          }
-      )
-          .then((Response res) {
-        print(res.body);
-      });
-
-      // NOTE: you can get optional values from AuthorizationResponse object
-      print('Your screen name is ' + res.optionalParameters['screen_name']!);
+    switch (share) {
+      case Share.twitter:
+        response = await flutterShareMe.shareToTwitter(msg: msg);
+        break;
     }
-    );
+    debugPrint(response);
   }
 
 }
