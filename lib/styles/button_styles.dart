@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/size_config.dart';
 
 ButtonStyle outlinedButtonStyle(BuildContext context) {
   return OutlinedButton.styleFrom(
@@ -48,10 +49,12 @@ ButtonStyle outlinedButtonStyleRounder(BuildContext context) {
   );
 }
 
-ButtonStyle SolidRoundButtonStyle() {
+ButtonStyle SolidRoundButtonStyle([minSize]) {
   return ElevatedButton.styleFrom(
     primary: Color.fromARGB(255, 223, 229, 215),
-    minimumSize: Size(1000, 52),
+    minimumSize: minSize,//minSize != null ? minSize : null,
+    // minimumSize: Size(146.32 * SizeConfig.textMultiplier, 7.61 * SizeConfig.textMultiplier),
+    // minimumSize: Size(146.32 * SizeConfig.textMultiplier, 7.61 * SizeConfig.textMultiplier),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(32)),
     ),
