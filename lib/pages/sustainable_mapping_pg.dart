@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:oxon_app/models/loc_data.dart';
 import 'package:oxon_app/repositories/loc_data_repository.dart';
 import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
@@ -49,6 +50,7 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
   Set<Marker> toiletMarkers = {};
   Completer<GoogleMapController> _controller = Completer();
   var dustbinIcon = BitmapDescriptor.defaultMarker;
+  var toiletIcon = BitmapDescriptor.defaultMarker;
 
   late TabController _tabController;
 
@@ -64,11 +66,52 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
     // WidgetsBinding.instance?.addPostFrameCallback(onLayoutDone);
   }
 
+  void _buildList(List<DocumentSnapshot>? snapshot) {
+    var count = 0;
+    snapshot!.forEach((element) {
+      count += 1;
+      final locData = LocData.fromSnapshot(element);
+      if (locData.is_displayed) {
+        if (locData.type == "dustbin") {
+          dustbinMarkers.add(Marker(
+              markerId: MarkerId("${count}"),
+              infoWindow: InfoWindow(
+                  title: "Dustbin located by ${locData.name}",
+                  snippet: locData.upvote != 0
+                      ? "${locData.upvote} people found helpful"
+                      : null),
+                icon: dustbinIcon,
+                position: LatLng(locData.location.latitude, locData.location.longitude)
+          
+          )
+          );
+        } else {
+          toiletMarkers.add(Marker(
+              markerId: MarkerId("${count}"),
+              infoWindow: InfoWindow(
+                  title: "Toilet located by ${locData.name}",
+                  snippet: locData.upvote != 0
+                      ? "${locData.upvote} people found helpful"
+                      : null),
+              icon: dustbinIcon,
+              position: LatLng(locData.location.latitude, locData.location.longitude)
+
+          )
+          );
+        }
+      }
+    });
+  }
+
   void setCustomMarker() async {
     // dustbinIcon = await _bitmapDescriptorFromSvgAsset(context, "assets/icons/svg_green_dustbin.svg");
     dustbinIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
-      'assets/icons/green_dustbin_100.png',
+      'assets/icons/dustbin_market_final.jpeg',
+    );
+    toiletIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
+      'assets/icons/toilet_marker_final.jpeg',
     );
     setState(() {});
 
@@ -77,10 +120,9 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
 
   void getCurrLocationAndAdd(String type) async {
     _locationData = await location.getLocation();
-    final id = await repository.addToilet({
-      'location': GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
-      'name': userName
-    });
+    final id = await repository.addLocData(
+      LocData(downvote: 0, is_displayed: true, location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!), name: userName, type: type, sub_type: "ordinary", u_id: "firebase_u_id", upvote: 0)
+    );
     print("The id: ${id.toString()}");
 
     setState(() {});
@@ -213,30 +255,32 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                   children: [
                     Container(
                       child: StreamBuilder<QuerySnapshot>(
-                          stream: repository.dustbinsGetStream(),
+                          stream: repository.getStream(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData)
                               return LinearProgressIndicator();
 
-                            for (int i = 0;
-                                i < snapshot.data!.docs.length;
-                                i++) {
-                              dustbinMarkers.add(Marker(
-                                markerId: MarkerId("$i"),
-                                infoWindow: InfoWindow(
-                                  // title: (snapshot.data!.docs[i] as Map<String, dynamic>).containsKey('name') ? "Dustbin located by $userName" : "Public Dustbin",//['name'], con
-                                  // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}" ?? "Public Dustbin",//['name'], con
-                                  // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}", // should be used
-                                  title: "Dustbin located by $userName",
-                                  snippet: "1k people found helpful"
-                                ),
-                                icon: dustbinIcon,
-                                position: LatLng(
-                                    snapshot.data!.docs[i]["location"].latitude,
-                                    snapshot
-                                        .data!.docs[i]["location"].longitude),
-                              ));
-                            }
+                            _buildList(snapshot.data?.docs ?? []);
+
+                            // for (int i = 0;
+                            //     i < snapshot.data!.docs.length;
+                            //     i++) {
+                            //   dustbinMarkers.add(Marker(
+                            //     markerId: MarkerId("$i"),
+                            //     infoWindow: InfoWindow(
+                            //       // title: (snapshot.data!.docs[i] as Map<String, dynamic>).containsKey('name') ? "Dustbin located by $userName" : "Public Dustbin",//['name'], con
+                            //       // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}" ?? "Public Dustbin",//['name'], con
+                            //       // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}", // should be used
+                            //       title: "Dustbin located by $userName",
+                            //       snippet: "1k people found helpful"
+                            //     ),
+                            //     icon: dustbinIcon,
+                            //     position: LatLng(
+                            //         snapshot.data!.docs[i]["location"].latitude,
+                            //         snapshot
+                            //             .data!.docs[i]["location"].longitude),
+                            //   ));
+                            // }
                             // return Text('${_locationData != null ? _locationData!.latitude : "Not done" }');
 
                             return GoogleMap(
@@ -253,45 +297,46 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                             );
                           }),
                     ),
-                    Container(
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: repository.toiletsGetStream(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                              return LinearProgressIndicator();
-
-                            for (int i = 0;
-                                i < snapshot.data!.docs.length;
-                                i++) {
-                              toiletMarkers.add(Marker(
-                                markerId: MarkerId("$i"),
-                                infoWindow: InfoWindow(
-                                  title: "Public Toilet",
-                                ),
-                                icon: BitmapDescriptor.defaultMarkerWithHue(
-                                    BitmapDescriptor.hueRed),
-                                position: LatLng(
-                                    snapshot.data!.docs[i]["location"].latitude,
-                                    snapshot
-                                        .data!.docs[i]["location"].longitude),
-                              ));
-                            }
-
-                            return Text(
-                                '${_locationData != null ? _locationData!.latitude : "Not done"}');
-
-                            // return GoogleMap(
-                            //   mapType: MapType.hybrid,
-                            //   initialCameraPosition: CameraPosition(
-                            //       target: LatLng(26.4723125, 76.7268125),
-                            //       zoom: 16),
-                            //   markers: toiletMarkers,
-                            //   onMapCreated: (GoogleMapController controller) {
-                            //     _controller.complete(controller);
-                            //   },
-                            // );
-                          }),
-                    ),
+                    Text("coming soon"),
+                    // Container(
+                    //   child: StreamBuilder<QuerySnapshot>(
+                    //       stream: repository.toiletsGetStream(),
+                    //       builder: (context, snapshot) {
+                    //         if (!snapshot.hasData)
+                    //           return LinearProgressIndicator();
+                    //
+                    //         for (int i = 0;
+                    //             i < snapshot.data!.docs.length;
+                    //             i++) {
+                    //           toiletMarkers.add(Marker(
+                    //             markerId: MarkerId("$i"),
+                    //             infoWindow: InfoWindow(
+                    //               title: "Public Toilet",
+                    //             ),
+                    //             icon: BitmapDescriptor.defaultMarkerWithHue(
+                    //                 BitmapDescriptor.hueRed),
+                    //             position: LatLng(
+                    //                 snapshot.data!.docs[i]["location"].latitude,
+                    //                 snapshot
+                    //                     .data!.docs[i]["location"].longitude),
+                    //           ));
+                    //         }
+                    //
+                    //         return Text(
+                    //             '${_locationData != null ? _locationData!.latitude : "Not done"}');
+                    //
+                    //         // return GoogleMap(
+                    //         //   mapType: MapType.hybrid,
+                    //         //   initialCameraPosition: CameraPosition(
+                    //         //       target: LatLng(26.4723125, 76.7268125),
+                    //         //       zoom: 16),
+                    //         //   markers: toiletMarkers,
+                    //         //   onMapCreated: (GoogleMapController controller) {
+                    //         //     _controller.complete(controller);
+                    //         //   },
+                    //         // );
+                    //       }),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Container(

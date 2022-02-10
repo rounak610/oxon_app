@@ -1,26 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:oxon_app/models/loc_data.dart';
 
 class LocDataRepository {
-  final CollectionReference toiletsCollection =
-      FirebaseFirestore.instance.collection('toilets_geopoint');
+  final CollectionReference collection = FirebaseFirestore
+      .instance.collection('loc_data_test');
 
-  final CollectionReference dustbinsCollection =
-      FirebaseFirestore.instance.collection('dustbins_geopoint');
-
-  Stream<QuerySnapshot> toiletsGetStream() {
-    return toiletsCollection.snapshots();
+  Stream<QuerySnapshot> getStream() {
+    return collection.snapshots();
   }
 
-  Stream<QuerySnapshot> dustbinsGetStream() {
-    return dustbinsCollection.snapshots();
+  Future<DocumentReference> addLocData(LocData locData) {
+    return collection.add(locData.toJson());
   }
 
-  Future<DocumentReference> addToilet(Map<String, dynamic> toilet) { // save this id
-    return toiletsCollection.add(toilet);
+  void updateLocData(LocData locData) async {
+    await collection.doc(locData.referenceId).update(locData.toJson());
   }
 
-  // Future<DocumentReference> addPet(Pet pet) {
-  //   return collection.add(pet.toJson());
-  // }
-
+  void deleteLocData(LocData locData) async {
+    await collection.doc(locData.referenceId).delete();
+  }
 }
