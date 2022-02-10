@@ -9,9 +9,8 @@ import 'package:oxon_app/pages/profile_pg.dart';
 import 'package:oxon_app/pages/raise_concern.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/pages/take_picture.dart';
+import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
-import 'pages/welcome_pg.dart';
-
 
 List<CameraDescription> cameras = [];
 
@@ -24,29 +23,38 @@ Future<void> main() async {
     print('Error in fetching the cameras: $e');
   }
 
-  runApp(MyApp());}
-
-
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.define(),
-      debugShowCheckedModeBanner: false,
-      home: SusMapping(),
-      routes: {
-        RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
-        TakePictureScreen.routeName: (context) => TakePictureScreen(camera: cameras[0]),
-        ProfilePage.routeName: (context) => ProfilePage(), //Change later //title: 'John Doe'
-        SusMapping.routeName: (context) => SusMapping(),     //Change Later //title: 'Title'
-        DonateDustbin.routeName: (context) => DonateDustbin(),
-        ProductsPage.routeName: (context) => ProductsPage(),
-        ComingSoon.routeName: (context) => ComingSoon(),
-        PreviewReport.routeName: (context) => PreviewReport()
-      },
-    );
+    return OrientationBuilder(builder: (context, orientation) {
+      return LayoutBuilder(
+
+          builder: (context, constraints) {
+            SizeConfig().init(constraints, orientation);
+        return MaterialApp(
+          theme: AppTheme.define(),
+          debugShowCheckedModeBanner: false,
+          home: SusMapping(),
+          routes: {
+            RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
+            TakePictureScreen.routeName: (context) =>
+                TakePictureScreen(camera: cameras[0]),
+            ProfilePage.routeName: (context) => ProfilePage(),
+            //Change later //title: 'John Doe'
+            SusMapping.routeName: (context) => SusMapping(),
+            //Change Later //title: 'Title'
+            DonateDustbin.routeName: (context) => DonateDustbin(),
+            ProductsPage.routeName: (context) => ProductsPage(),
+            ComingSoon.routeName: (context) => ComingSoon(),
+            PreviewReport.routeName: (context) => PreviewReport()
+          },
+        );
+      });
+    });
   }
 }

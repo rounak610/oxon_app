@@ -1,41 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/size_config.dart';
+import 'package:oxon_app/theme/app_theme.dart';
 
 PreferredSizeWidget CustomAppBar(BuildContext context, String title,
     [List<Widget>? actions]) {
-  final mQ = MediaQuery.of(context);
-  final height = mQ.size.height;
-  final width = mQ.size.width;
+  // final toolBarHeight = 16.10 * SizeConfig.textMultiplier;
 
-  double makeResponsiveWidth(double mWidth) {
-    final ratio = mWidth / 1080 * width;
-    return mWidth * ratio;
-  }
-
-  double makeResponsiveHeight(double mHeight) {
-    final ratio = mHeight / 1920 * height;
-    return mHeight * ratio;
-  }
-
+  final toolBarHeight = SizeConfig.screenHeight > 600 ? 12 * SizeConfig.responsiveMultiplier + 3 * SizeConfig.responsiveMultiplier : 12 * SizeConfig.responsiveMultiplier;
+  final actionsSize = 13.3 * SizeConfig.responsiveMultiplier;
+  // final toolBarHeight = 16.10 * SizeConfig.textMultiplier;
+  // final toolBarHeight = 16.10 * SizeConfig.textMultiplier;
   return PreferredSize(
-    preferredSize: Size.fromHeight(110.0),
+    preferredSize: Size.fromHeight(toolBarHeight),
+    // preferredSize: Size.fromHeight(18 * SizeConfig.textMultiplier),
+    // preferredSize: Size.fromHeight(20* SizeConfig.textMultiplier),
     child: Container(
-      margin: EdgeInsets.only(
-          top: makeResponsiveHeight(40) > 40 ? 40 : makeResponsiveHeight(40)),
+      margin: SizeConfig.screenHeight > 600 ? EdgeInsets.only(top: 5.85 * SizeConfig.responsiveMultiplier) : EdgeInsets.all(0),
+      // margin: EdgeInsets.only(top: 5.85 * SizeConfig.textMultiplier),
+      // margin: EdgeInsets.only(top: 0 * SizeConfig.textMultiplier),
       child: AppBar(
+        toolbarHeight: toolBarHeight,
+        // toolbarHeight: 14.63 * SizeConfig.textMultiplier,
+
         actions: actions!= null ? actions : [Container(
-          width: makeResponsiveWidth(105) > 105 ? 105 : makeResponsiveWidth(105),
-          height: makeResponsiveHeight(50) > 50 ? 50 : makeResponsiveHeight(50),
+          width: actionsSize,
+          height: actionsSize,
+          // width: 15.36 * SizeConfig.textMultiplier,
+          // height:15.36 * SizeConfig.textMultiplier,
         )],
-        leadingWidth:
-            makeResponsiveWidth(105) > 105 ? 105 : makeResponsiveWidth(105),
-        //1080 1920
+        // leadingWidth: 12 * SizeConfig.textMultiplier,
+        leadingWidth: actionsSize,
+        // leadingWidth: 15.36 * SizeConfig.textMultiplier,
+        // //1080 1920
         // leadingWidth: 80,
         leading: Builder(
           builder: (context) => IconButton(
               onPressed: () => Scaffold.of(context).openDrawer(),
               icon: Container(
-                width: 43,
-                height: 43,
+                width: 6.29 * SizeConfig.responsiveMultiplier,
+                height: 6.29 * SizeConfig.responsiveMultiplier,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     image: DecorationImage(
@@ -43,8 +46,6 @@ PreferredSizeWidget CustomAppBar(BuildContext context, String title,
               )),
         ),
         bottomOpacity: 0,
-        toolbarHeight:
-            makeResponsiveHeight(100) > 100 ? 100 : makeResponsiveHeight(100),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Color.fromARGB(255, 34, 90, 0),
@@ -52,47 +53,9 @@ PreferredSizeWidget CustomAppBar(BuildContext context, String title,
           textAlign: TextAlign.center,
           text: TextSpan(
               text: title,
-              style: TextStyle(fontSize: 27.0, fontFamily: "Montserrat")),
+              style: AppTheme.define().textTheme.headline1),
         ),
       ),
     ),
   );
-
-  // return PreferredSize(
-  //   preferredSize: Size.fromHeight(110.0),
-  //   child: Container(
-  //     margin: EdgeInsets.only(top: 40),
-  //     child: AppBar(
-  //       // leadingWidth: 80,
-  //       leadingWidth: 105,
-  //       actions: [Container(
-  //         width: 105,
-  //         height: 55,
-  //       )],
-  //       leading: Builder(
-  //         builder: (context) => IconButton(
-  //             onPressed: () => Scaffold.of(context).openDrawer(),
-  //             icon: Container(
-  //               width: 43,
-  //               height: 43,
-  //               alignment: Alignment.center,
-  //               decoration: BoxDecoration(
-  //                   image: DecorationImage(
-  //                       image: AssetImage("assets/icons/menu.png"))),
-  //             )),
-  //       ),
-  //       bottomOpacity: 0,
-  //       toolbarHeight: 100,
-  //       centerTitle: true,
-  //       elevation: 0,
-  //       backgroundColor: Color.fromARGB(255, 34, 90, 0),
-  //       title: RichText(
-  //         textAlign: TextAlign.center,
-  //         text: TextSpan(
-  //             text: title,
-  //             style: TextStyle(fontSize: 27.0, fontFamily: "Montserrat")),
-  //       ),
-  //     ),
-  //   ),
-  // );
 }

@@ -15,3 +15,38 @@ If you do need action buttons, call CustomAppBar(context, <title>, <list of widg
 - Keep in mind that the screen resolution of user's phone could be different from that of your emulator. So, design accordingly.
 - Extract and refactor codes which are reusable and keep it in separate file. And also document how to use it.
 
+
+# Creating responsive UI:
+
+- Whenever possible, use the textTheme of the custom AppTheme as it is already made responsive.
+  Use it in this way-
+  ```Text(
+        "Guide The Way",
+        style: Theme.of(context)
+            .textTheme
+            .headline3!
+            .copyWith(color: AppTheme.colors.oxonGreen),
+                    )```
+- Update the project. Then run the app in your usual emulator.
+- Note the output value of print("responsiveMultiplier value = $responsiveMultiplier"); 
+  (called in size_config) code from the logcat
+- Using this multiplier value, transform every value which is responsible for a responsive UI 
+  (for e.g., size of images, button, text, etc.)
+- Python code for transformation is:
+  ```
+  def calc(currentValue, responsiveMultiplier):
+    newValue = currentValue / responsiveMultiplier
+    print('%.2f' % (newValue))
+  
+  ```
+- Use the newValue value to replace your values in this way:
+    Suppose my margin value is this-
+  ```
+  margin: EdgeInsets.only(top: 80.0)
+  ```
+  And in my case, the result value is 11.71 (= 80 / responsiveMultiplier).
+  Then I would replace 80 with '11.71 * SizeConfig.responsiveMultiplier', as shown below-
+  
+  ```
+  margin: EdgeInsets.only(top: 11.71 * SizeConfig.responsiveMultiplier)
+  ```
