@@ -34,20 +34,15 @@ class SizeConfig {
     _blockHeight = _screenHeight / 100;
 
     responsiveMultiplier = _blockHeight;
+
     imageSizeMultiplier = _blockWidth;
     heightMultiplier = _blockHeight;
     widthMultiplier = _blockWidth;
 
+    if (screenHeight > 600) {
+      responsiveMultiplier *= 0.8;
+    }
+
     print("responsiveMultiplier value = $responsiveMultiplier");
-
-    // print("check this config1;");
-    // print(_screenWidth);
-    // print("block width $_blockWidth");
-    // print("block height $_blockHeight");
-
-    // I/flutter (13698): check this config1;
-    // I/flutter (13698): 411.42857142857144
-    // I/flutter (13698): block width 4.114285714285715
-    // I/flutter (13698): block height 6.8342857142857145
   }
 }

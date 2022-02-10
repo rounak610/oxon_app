@@ -21,7 +21,8 @@ class SusMapping extends StatefulWidget {
   _SusMappingState createState() => _SusMappingState();
 }
 
-class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, WidgetsBindingObserver {
+class _SusMappingState extends State<SusMapping>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   int selectedRadio = 1;
   String type = "dustbin";
 
@@ -72,21 +73,13 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
     print("APP_STATE: $state");
 
     if (state == AppLifecycleState.resumed) {
-      print("in xyz resumed"); // when come back from recent tabs
-      // user returned to our app
-      //_showPasswordDialog();
+      print("in xyz resumed");
     } else if (state == AppLifecycleState.inactive) {
       print("in xyz inactive");
-
-      // app is inactive
     } else if (state == AppLifecycleState.paused) {
-      print("in xyz paused"); // when gone to recent tabs
-
-      // user quit our app temporally
+      print("in xyz paused");
     } else if (state == AppLifecycleState.detached) {
       print("in xyz detached");
-
-      // app suspended
     }
   }
 
@@ -152,8 +145,10 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
         target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 16);
     setState(() {});
-    if (type == "dustbin") _tabController.animateTo(0);
-    else _tabController.animateTo(1);
+    if (type == "dustbin")
+      _tabController.animateTo(0);
+    else
+      _tabController.animateTo(1);
 
     final snack = SnackBar(
         content: Text("Location of the $type added to the map successfully"));
@@ -293,7 +288,6 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
                       Stack(
                         children: [
                           Container(
-
                             child: StreamBuilder<QuerySnapshot>(
                                 stream: repository.getStream(),
                                 builder: (context, snapshot) {
@@ -306,7 +300,8 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
                                     mapType: MapType.normal,
                                     initialCameraPosition: cameraPosition,
                                     markers: dustbinMarkers,
-                                    onMapCreated: (GoogleMapController controller) {
+                                    onMapCreated:
+                                        (GoogleMapController controller) {
                                       _googleMapController = controller;
                                       _controller.complete(controller);
                                     },
@@ -320,13 +315,19 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
                               right: 20,
                               child: FloatingActionButton.extended(
                                 icon: Icon(Icons.location_on),
-                              onPressed: () {
-                                CameraUpdate update =CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
-                                    zoom: 16));
-                                CameraUpdate zoom = CameraUpdate.zoomTo(16);
-                                _googleMapController.animateCamera(update);
-                                // _googleMapController.moveCamera(update);
-                              }, label: Text("Go to your location"),),
+                                onPressed: () {
+                                  CameraUpdate update =
+                                      CameraUpdate.newCameraPosition(
+                                          CameraPosition(
+                                              target: LatLng(
+                                                  _locationData!.latitude!,
+                                                  _locationData!.longitude!),
+                                              zoom: 16));
+                                  CameraUpdate zoom = CameraUpdate.zoomTo(16);
+                                  _googleMapController.animateCamera(update);
+                                },
+                                label: Text("Go to your location"),
+                              ),
                             ),
                           )
                         ],
@@ -366,7 +367,8 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  child: Text("What are you volunteering to locate?",
+                                  child: Text(
+                                      "What are you volunteering to locate?",
                                       style: mAppTheme.textTheme.headline3),
                                 ),
                                 Row(
@@ -419,7 +421,10 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, 
                                               SizeConfig.responsiveMultiplier),
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Adding the location...")));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Adding the location...")));
                                           getCurrLocationAndAdd(type);
                                         },
                                         child: Text(
