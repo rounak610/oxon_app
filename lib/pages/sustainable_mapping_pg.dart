@@ -28,6 +28,10 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
 
   var userName = "Aikagra";
 
+  var cameraPosition = CameraPosition(
+      target: LatLng(26.4723125, 76.7268125),
+      zoom: 16);
+
   setSelectedRadio(int val) {
     setState(() {
       selectedRadio = val;
@@ -107,11 +111,11 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
     // dustbinIcon = await _bitmapDescriptorFromSvgAsset(context, "assets/icons/svg_green_dustbin.svg");
     dustbinIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
-      'assets/icons/dustbin_market_final.jpeg',
+      'assets/icons/dustbin_1.png',
     );
     toiletIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
-      'assets/icons/toilet_marker_final.jpeg',
+      'assets/icons/toilet_1.png',
     );
     setState(() {});
 
@@ -125,8 +129,13 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
     );
     print("The id: ${id.toString()}");
 
+    cameraPosition = CameraPosition(target: LatLng(_locationData!.latitude!, _locationData!.longitude!), zoom: 16);
     setState(() {});
+    _tabController.animateTo(0);
+    final snack = SnackBar(content: Text("Location of the $type added to the map successfully"));
+    ScaffoldMessenger.of(context).showSnackBar(snack);
     print("${_locationData!.latitude}"); // WLC
+
   }
 
   void onLayoutDone(Duration timeStamp) async {
@@ -283,11 +292,10 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                             // }
                             // return Text('${_locationData != null ? _locationData!.latitude : "Not done" }');
 
+
                             return GoogleMap(
                               mapType: MapType.normal,
-                              initialCameraPosition: CameraPosition(
-                                  target: LatLng(26.4723125, 76.7268125),
-                                  zoom: 16),
+                              initialCameraPosition: cameraPosition,
                               markers: dustbinMarkers,
                               onMapCreated: (GoogleMapController controller) {
                                 _controller.complete(controller);
