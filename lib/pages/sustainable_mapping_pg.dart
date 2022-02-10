@@ -14,24 +14,21 @@ import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'package:permission_handler/permission_handler.dart' as permHandler;
 
 class SusMapping extends StatefulWidget {
-  SusMapping({Key? key}) : super(key: key); //, required this.title
+  SusMapping({Key? key}) : super(key: key);
   static const routeName = '/mapping-page';
-
-  // final String title;
 
   @override
   _SusMappingState createState() => _SusMappingState();
 }
 
-class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
+class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin, WidgetsBindingObserver {
   int selectedRadio = 1;
   String type = "dustbin";
 
-  var userName = "Aikagra";
+  var userName = "User Name";
 
-  var cameraPosition = CameraPosition(
-      target: LatLng(26.4723125, 76.7268125),
-      zoom: 16);
+  var cameraPosition =
+      CameraPosition(target: LatLng(26.4723125, 76.7268125), zoom: 16);
 
   setSelectedRadio(int val) {
     setState(() {
@@ -48,12 +45,12 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
   late PermissionStatus _permissionGranted;
   LocationData? _locationData = null;
 
-  // _serviceEnabled = await location.serviceEnabled();
-
   final LocDataRepository repository = LocDataRepository();
   Set<Marker> dustbinMarkers = {};
   Set<Marker> toiletMarkers = {};
   Completer<GoogleMapController> _controller = Completer();
+  late GoogleMapController _googleMapController;
+
   var dustbinIcon = BitmapDescriptor.defaultMarker;
   var toiletIcon = BitmapDescriptor.defaultMarker;
 
@@ -62,13 +59,35 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // _controller.complete(GoogleMap)
+
+    WidgetsBinding.instance?.addObserver(this);
     _tabController = new TabController(length: 3, vsync: this);
     onLayoutDone(Duration());
     setCustomMarker();
     selectedRadio = 0;
-    // dustbinIcon = BitmapDescriptor.
-    // WidgetsBinding.instance?.addPostFrameCallback(onLayoutDone);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("APP_STATE: $state");
+
+    if (state == AppLifecycleState.resumed) {
+      print("in xyz resumed"); // when come back from recent tabs
+      // user returned to our app
+      //_showPasswordDialog();
+    } else if (state == AppLifecycleState.inactive) {
+      print("in xyz inactive");
+
+      // app is inactive
+    } else if (state == AppLifecycleState.paused) {
+      print("in xyz paused"); // when gone to recent tabs
+
+      // user quit our app temporally
+    } else if (state == AppLifecycleState.detached) {
+      print("in xyz detached");
+
+      // app suspended
+    }
   }
 
   void _buildList(List<DocumentSnapshot>? snapshot) {
@@ -85,11 +104,9 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                   snippet: locData.upvote != 0
                       ? "${locData.upvote} people found helpful"
                       : null),
-                icon: dustbinIcon,
-                position: LatLng(locData.location.latitude, locData.location.longitude)
-          
-          )
-          );
+              icon: dustbinIcon,
+              position: LatLng(
+                  locData.location.latitude, locData.location.longitude)));
         } else {
           toiletMarkers.add(Marker(
               markerId: MarkerId("${count}"),
@@ -98,18 +115,15 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                   snippet: locData.upvote != 0
                       ? "${locData.upvote} people found helpful"
                       : null),
-              icon: dustbinIcon,
-              position: LatLng(locData.location.latitude, locData.location.longitude)
-
-          )
-          );
+              icon: toiletIcon,
+              position: LatLng(
+                  locData.location.latitude, locData.location.longitude)));
         }
       }
     });
   }
 
   void setCustomMarker() async {
-    // dustbinIcon = await _bitmapDescriptorFromSvgAsset(context, "assets/icons/svg_green_dustbin.svg");
     dustbinIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
       'assets/icons/dustbin_1.png',
@@ -119,24 +133,32 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
       'assets/icons/toilet_1.png',
     );
     setState(() {});
-
-    // ImageConfiguration(devicePixelRatio: MediaQuery.of(context).devicePixelRatio), 'assets/icons/dustbin_marker.png');
   }
 
   void getCurrLocationAndAdd(String type) async {
     _locationData = await location.getLocation();
-    final id = await repository.addLocData(
-      LocData(downvote: 0, is_displayed: true, location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!), name: userName, type: type, sub_type: "ordinary", u_id: "firebase_u_id", upvote: 0)
-    );
+    final id = await repository.addLocData(LocData(
+        downvote: 0,
+        is_displayed: true,
+        location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
+        name: userName,
+        type: type,
+        sub_type: "ordinary",
+        u_id: "firebase_u_id",
+        upvote: 0));
     print("The id: ${id.toString()}");
 
-    cameraPosition = CameraPosition(target: LatLng(_locationData!.latitude!, _locationData!.longitude!), zoom: 16);
+    cameraPosition = CameraPosition(
+        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+        zoom: 16);
     setState(() {});
-    _tabController.animateTo(0);
-    final snack = SnackBar(content: Text("Location of the $type added to the map successfully"));
-    ScaffoldMessenger.of(context).showSnackBar(snack);
-    print("${_locationData!.latitude}"); // WLC
+    if (type == "dustbin") _tabController.animateTo(0);
+    else _tabController.animateTo(1);
 
+    final snack = SnackBar(
+        content: Text("Location of the $type added to the map successfully"));
+    ScaffoldMessenger.of(context).showSnackBar(snack);
+    print("${_locationData!.latitude}");
   }
 
   void onLayoutDone(Duration timeStamp) async {
@@ -163,20 +185,22 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
 
     print((_locationData as LocationData).latitude);
 
-    // setState required for components to react
     setState(() {});
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle();
-    final ButtonStyle solidRoundButtonStyleMinSize = SolidRoundButtonStyle(Size(146.32 * SizeConfig.responsiveMultiplier, 7.61 * SizeConfig.responsiveMultiplier));
+    final ButtonStyle solidRoundButtonStyleMinSize = SolidRoundButtonStyle(Size(
+        146.32 * SizeConfig.responsiveMultiplier,
+        7.61 * SizeConfig.responsiveMultiplier));
 
     final mAppTheme = AppTheme.define();
     return SafeArea(
@@ -193,7 +217,8 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                   indicatorWeight: 1,
                   indicator: UnderlineTabIndicator(
                       borderSide: BorderSide(width: 1.0, color: Colors.white),
-                      insets: EdgeInsets.symmetric(horizontal: 7.32 * SizeConfig.responsiveMultiplier)),
+                      insets: EdgeInsets.symmetric(
+                          horizontal: 7.32 * SizeConfig.responsiveMultiplier)),
                   controller: _tabController,
                   tabs: [
                     Column(
@@ -259,98 +284,73 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(top: 3.51 * SizeConfig.responsiveMultiplier),
-                  // margin: EdgeInsets.only(top: 3.51 * SizeConfig.textMultiplier),
-                  // height: (MediaQuery.of(context).size.height) * 0.4,
+                  margin: EdgeInsets.only(
+                      top: 3.51 * SizeConfig.responsiveMultiplier),
                   child: TabBarView(
                     physics: NeverScrollableScrollPhysics(),
                     controller: _tabController,
                     children: [
-                      Container(
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: repository.getStream(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData)
-                                return LinearProgressIndicator();
+                      Stack(
+                        children: [
+                          Container(
 
-                              _buildList(snapshot.data?.docs ?? []);
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: repository.getStream(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData)
+                                    return LinearProgressIndicator();
 
-                              // for (int i = 0;
-                              //     i < snapshot.data!.docs.length;
-                              //     i++) {
-                              //   dustbinMarkers.add(Marker(
-                              //     markerId: MarkerId("$i"),
-                              //     infoWindow: InfoWindow(
-                              //       // title: (snapshot.data!.docs[i] as Map<String, dynamic>).containsKey('name') ? "Dustbin located by $userName" : "Public Dustbin",//['name'], con
-                              //       // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}" ?? "Public Dustbin",//['name'], con
-                              //       // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}", // should be used
-                              //       title: "Dustbin located by $userName",
-                              //       snippet: "1k people found helpful"
-                              //     ),
-                              //     icon: dustbinIcon,
-                              //     position: LatLng(
-                              //         snapshot.data!.docs[i]["location"].latitude,
-                              //         snapshot
-                              //             .data!.docs[i]["location"].longitude),
-                              //   ));
-                              // }
-                              // return Text('${_locationData != null ? _locationData!.latitude : "Not done" }');
+                                  _buildList(snapshot.data?.docs ?? []);
 
-
-                              return GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition: cameraPosition,
-                                markers: dustbinMarkers,
-                                onMapCreated: (GoogleMapController controller) {
-                                  _controller.complete(controller);
-                                  // (_controller as GoogleMapController).showMarkerInfoWindow(markerId)
-                                  // PO: Need marker id
-                                },
-                              );
-                            }),
+                                  return GoogleMap(
+                                    mapType: MapType.normal,
+                                    initialCameraPosition: cameraPosition,
+                                    markers: dustbinMarkers,
+                                    onMapCreated: (GoogleMapController controller) {
+                                      _googleMapController = controller;
+                                      _controller.complete(controller);
+                                    },
+                                  );
+                                }),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Positioned(
+                              top: 20,
+                              right: 20,
+                              child: FloatingActionButton.extended(
+                                icon: Icon(Icons.location_on),
+                              onPressed: () {
+                                CameraUpdate update =CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+                                    zoom: 16));
+                                CameraUpdate zoom = CameraUpdate.zoomTo(16);
+                                _googleMapController.animateCamera(update);
+                                // _googleMapController.moveCamera(update);
+                              }, label: Text("Go to your location"),),
+                            ),
+                          )
+                        ],
                       ),
-                      Container(
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: repository.toiletsGetStream(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData)
-                                return LinearProgressIndicator();
+                      StreamBuilder<QuerySnapshot>(
+                          stream: repository.getStream(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return LinearProgressIndicator();
 
-                              for (int i = 0;
-                                  i < snapshot.data!.docs.length;
-                                  i++) {
-                                toiletMarkers.add(Marker(
-                                  markerId: MarkerId("$i"),
-                                  infoWindow: InfoWindow(
-                                    title: "Public Toilet",
-                                  ),
-                                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                                      BitmapDescriptor.hueRed),
-                                  position: LatLng(
-                                      snapshot.data!.docs[i]["location"].latitude,
-                                      snapshot
-                                          .data!.docs[i]["location"].longitude),
-                                ));
-                              }
+                            _buildList(snapshot.data?.docs ?? []);
 
-                              return Text(
-                                  '${_locationData != null ? _locationData!.latitude : "Not done"}');
-
-                              // return GoogleMap(
-                              //   mapType: MapType.hybrid,
-                              //   initialCameraPosition: CameraPosition(
-                              //       target: LatLng(26.4723125, 76.7268125),
-                              //       zoom: 16),
-                              //   markers: toiletMarkers,
-                              //   onMapCreated: (GoogleMapController controller) {
-                              //     _controller.complete(controller);
-                              //   },
-                              // );
-                            }),
-                      ),
+                            return GoogleMap(
+                              mapType: MapType.normal,
+                              initialCameraPosition: cameraPosition,
+                              markers: toiletMarkers,
+                              onMapCreated: (GoogleMapController controller) {
+                                _controller.complete(controller);
+                              },
+                            );
+                          }),
                       Padding(
-                        // padding: EdgeInsets.all(2.34 * SizeConfig.textMultiplier),
-                        padding: EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
+                        padding:
+                            EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -359,19 +359,16 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Padding(
-                            // padding: EdgeInsets.all(1.76 * SizeConfig.textMultiplier),
-                            padding: EdgeInsets.all(1.2 * SizeConfig.responsiveMultiplier),
+                            padding: EdgeInsets.all(
+                                1.2 * SizeConfig.responsiveMultiplier),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  child: Text("What would you like to locate? ",
+                                  child: Text("What are you volunteering to locate?",
                                       style: mAppTheme.textTheme.headline3),
                                 ),
-                                // Expanded(
-                                //   child: ,
-                                // ),
                                 Row(
                                   children: [
                                     Radio(
@@ -410,21 +407,27 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                                   child: Center(
                                       child: Align(
                                     alignment: Alignment.bottomCenter,
-                                    // this works only when expanded
-                                    // is parent
-                                    child: Container( //80 10 80 5
-                                      margin: EdgeInsets.fromLTRB(11.71 * SizeConfig.responsiveMultiplier, 1.46 * SizeConfig.responsiveMultiplier, 11.71 * SizeConfig.responsiveMultiplier, 0.73 * SizeConfig.responsiveMultiplier),
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          11.71 *
+                                              SizeConfig.responsiveMultiplier,
+                                          1.46 *
+                                              SizeConfig.responsiveMultiplier,
+                                          11.71 *
+                                              SizeConfig.responsiveMultiplier,
+                                          0.73 *
+                                              SizeConfig.responsiveMultiplier),
                                       child: ElevatedButton(
                                         onPressed: () {
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Adding the location...")));
                                           getCurrLocationAndAdd(type);
-                                          // location.getLocation()
                                         },
                                         child: Text(
                                           "Locate",
                                           style: mAppTheme.textTheme.headline3!
                                               .copyWith(
-                                                  color:
-                                                      AppTheme.colors.oxonGreen),
+                                                  color: AppTheme
+                                                      .colors.oxonGreen),
                                         ),
                                         style: solidRoundButtonStyle,
                                       ),
@@ -438,9 +441,6 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                                   ),
                                 )
                               ],
-                              //final FirebaseUser user = await auth.currentUser();
-                              // final userid = user.uid;
-                              // get user id somehow
                             ),
                           ),
                         ),
@@ -449,11 +449,15 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              Container(//80 18 80 18
-                margin: EdgeInsets.fromLTRB(11.71 * SizeConfig.responsiveMultiplier, 2.63 * SizeConfig.responsiveMultiplier, 11.71 * SizeConfig.responsiveMultiplier, 2.63 * SizeConfig.responsiveMultiplier),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    11.71 * SizeConfig.responsiveMultiplier,
+                    2.63 * SizeConfig.responsiveMultiplier,
+                    11.71 * SizeConfig.responsiveMultiplier,
+                    2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
                     onPressed: () {
-                      permHandler.openAppSettings(); // temp
+                      permHandler.openAppSettings();
                     },
                     child: Text(
                       "Guide The Way",
@@ -465,7 +469,11 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                     style: solidRoundButtonStyleMinSize),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(11.71 * SizeConfig.responsiveMultiplier, 0, 11.71 * SizeConfig.responsiveMultiplier, 2.63 * SizeConfig.responsiveMultiplier),
+                margin: EdgeInsets.fromLTRB(
+                    11.71 * SizeConfig.responsiveMultiplier,
+                    0,
+                    11.71 * SizeConfig.responsiveMultiplier,
+                    2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
                     onPressed: () {},
                     child: Text(
