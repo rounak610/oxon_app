@@ -285,52 +285,26 @@ class _SusMappingState extends State<SusMapping>
                     physics: NeverScrollableScrollPhysics(),
                     controller: _tabController,
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            child: StreamBuilder<QuerySnapshot>(
-                                stream: repository.getStream(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData)
-                                    return LinearProgressIndicator();
+                      Container(
+                        child: StreamBuilder<QuerySnapshot>(
+                            stream: repository.getStream(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData)
+                                return LinearProgressIndicator();
 
-                                  _buildList(snapshot.data?.docs ?? []);
+                              _buildList(snapshot.data?.docs ?? []);
 
-                                  return GoogleMap(
-                                    mapType: MapType.normal,
-                                    initialCameraPosition: cameraPosition,
-                                    markers: dustbinMarkers,
-                                    onMapCreated:
-                                        (GoogleMapController controller) {
-                                      _googleMapController = controller;
-                                      _controller.complete(controller);
-                                    },
-                                  );
-                                }),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Positioned(
-                              top: 20,
-                              right: 20,
-                              child: FloatingActionButton.extended(
-                                icon: Icon(Icons.location_on),
-                                onPressed: () {
-                                  CameraUpdate update =
-                                      CameraUpdate.newCameraPosition(
-                                          CameraPosition(
-                                              target: LatLng(
-                                                  _locationData!.latitude!,
-                                                  _locationData!.longitude!),
-                                              zoom: 16));
-                                  CameraUpdate zoom = CameraUpdate.zoomTo(16);
-                                  _googleMapController.animateCamera(update);
+                              return GoogleMap(
+                                mapType: MapType.normal,
+                                initialCameraPosition: cameraPosition,
+                                markers: dustbinMarkers,
+                                onMapCreated:
+                                    (GoogleMapController controller) {
+                                  _googleMapController = controller;
+                                  _controller.complete(controller);
                                 },
-                                label: Text("Go to your location"),
-                              ),
-                            ),
-                          )
-                        ],
+                              );
+                            }),
                       ),
                       StreamBuilder<QuerySnapshot>(
                           stream: repository.getStream(),
@@ -461,9 +435,7 @@ class _SusMappingState extends State<SusMapping>
                     11.71 * SizeConfig.responsiveMultiplier,
                     2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
-                    onPressed: () {
-                      permHandler.openAppSettings();
-                    },
+                    onPressed: () {},
                     child: Text(
                       "Guide The Way",
                       style: Theme.of(context)
