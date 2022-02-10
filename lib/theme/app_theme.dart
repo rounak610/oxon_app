@@ -15,6 +15,7 @@ class AppTheme {
           headline1: TextStyle(fontSize: 27.0),
           headline2: TextStyle(fontSize: 25.0),
           headline3: TextStyle(fontSize: 22.0),
+          headline4: TextStyle(fontSize: 19.0),
           headline6: TextStyle(fontSize: 15.0),
         ).apply(bodyColor: Colors.white, displayColor: Colors.white));
   }

@@ -14,4 +14,13 @@ class LocDataRepository {
   Stream<QuerySnapshot> dustbinsGetStream() {
     return dustbinsCollection.snapshots();
   }
+
+  Future<DocumentReference> addToilet(Map<String, dynamic> toilet) { // save this id
+    return toiletsCollection.add(toilet);
+  }
+
+  // Future<DocumentReference> addPet(Pet pet) {
+  //   return collection.add(pet.toJson());
+  // }
+
 }

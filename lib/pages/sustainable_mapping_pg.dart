@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:oxon_app/repositories/loc_data_repository.dart';
 import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:permission_handler/permission_handler.dart' as permHandler;
 
 class SusMapping extends StatefulWidget {
   SusMapping({Key? key}) : super(key: key); //, required this.title
@@ -20,17 +22,97 @@ class SusMapping extends StatefulWidget {
 }
 
 class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
+  int selectedRadio = 1;
+  String type = "dustbin";
+
+  var userName = "Aikagra";
+
+  setSelectedRadio(int val) {
+    setState(() {
+      selectedRadio = val;
+      type = val == 0 ? "dustbin" : "toilet";
+    });
+  }
+
+  String? value;
+
+  Location location = Location();
+
+  late bool _serviceEnabled;
+  late PermissionStatus _permissionGranted;
+  LocationData? _locationData = null;
+
+  // _serviceEnabled = await location.serviceEnabled();
+
   final LocDataRepository repository = LocDataRepository();
   Set<Marker> dustbinMarkers = {};
   Set<Marker> toiletMarkers = {};
   Completer<GoogleMapController> _controller = Completer();
+  var dustbinIcon = BitmapDescriptor.defaultMarker;
 
   late TabController _tabController;
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this);
     super.initState();
+    // _controller.complete(GoogleMap)
+    _tabController = new TabController(length: 3, vsync: this);
+    onLayoutDone(Duration());
+    setCustomMarker();
+    selectedRadio = 0;
+    // dustbinIcon = BitmapDescriptor.
+    // WidgetsBinding.instance?.addPostFrameCallback(onLayoutDone);
+  }
+
+  void setCustomMarker() async {
+    // dustbinIcon = await _bitmapDescriptorFromSvgAsset(context, "assets/icons/svg_green_dustbin.svg");
+    dustbinIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
+      'assets/icons/green_dustbin_100.png',
+    );
+    setState(() {});
+
+    // ImageConfiguration(devicePixelRatio: MediaQuery.of(context).devicePixelRatio), 'assets/icons/dustbin_marker.png');
+  }
+
+  void getCurrLocationAndAdd(String type) async {
+    _locationData = await location.getLocation();
+    final id = await repository.addToilet({
+      'location': GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
+      'name': userName
+    });
+    print("The id: ${id.toString()}");
+
+    setState(() {});
+    print("${_locationData!.latitude}"); // WLC
+  }
+
+  void onLayoutDone(Duration timeStamp) async {
+    print("on layout done called");
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    print("_locationData");
+
+    print((_locationData as LocationData).latitude);
+
+    // setState required for components to react
+    setState(() {});
   }
 
   @override
@@ -43,6 +125,7 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle();
 
+    final mAppTheme = AppTheme.define();
     return SafeArea(
       child: Scaffold(
           drawer: CustomDrawer(),
@@ -141,25 +224,31 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                               dustbinMarkers.add(Marker(
                                 markerId: MarkerId("$i"),
                                 infoWindow: InfoWindow(
-                                  title: "Public Dustbins",
+                                  // title: (snapshot.data!.docs[i] as Map<String, dynamic>).containsKey('name') ? "Dustbin located by $userName" : "Public Dustbin",//['name'], con
+                                  // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}" ?? "Public Dustbin",//['name'], con
+                                  // title: "Dustbin located by ${snapshot.data!.docs[i]['name']}", // should be used
+                                  title: "Dustbin located by $userName",
+                                  snippet: "1k people found helpful"
                                 ),
-                                icon: BitmapDescriptor.defaultMarkerWithHue(
-                                    BitmapDescriptor.hueGreen),
+                                icon: dustbinIcon,
                                 position: LatLng(
                                     snapshot.data!.docs[i]["location"].latitude,
                                     snapshot
                                         .data!.docs[i]["location"].longitude),
                               ));
                             }
+                            // return Text('${_locationData != null ? _locationData!.latitude : "Not done" }');
 
                             return GoogleMap(
-                              mapType: MapType.hybrid,
+                              mapType: MapType.normal,
                               initialCameraPosition: CameraPosition(
                                   target: LatLng(26.4723125, 76.7268125),
                                   zoom: 16),
                               markers: dustbinMarkers,
                               onMapCreated: (GoogleMapController controller) {
                                 _controller.complete(controller);
+                                // (_controller as GoogleMapController).showMarkerInfoWindow(markerId)
+                                // PO: Need marker id
                               },
                             );
                           }),
@@ -188,16 +277,19 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                               ));
                             }
 
-                            return GoogleMap(
-                              mapType: MapType.hybrid,
-                              initialCameraPosition: CameraPosition(
-                                  target: LatLng(26.4723125, 76.7268125),
-                                  zoom: 16),
-                              markers: toiletMarkers,
-                              onMapCreated: (GoogleMapController controller) {
-                                _controller.complete(controller);
-                              },
-                            );
+                            return Text(
+                                '${_locationData != null ? _locationData!.latitude : "Not done"}');
+
+                            // return GoogleMap(
+                            //   mapType: MapType.hybrid,
+                            //   initialCameraPosition: CameraPosition(
+                            //       target: LatLng(26.4723125, 76.7268125),
+                            //       zoom: 16),
+                            //   markers: toiletMarkers,
+                            //   onMapCreated: (GoogleMapController controller) {
+                            //     _controller.complete(controller);
+                            //   },
+                            // );
                           }),
                     ),
                     Padding(
@@ -209,10 +301,83 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
                           ),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Center(
-                          child: Text(
-                            "Coming Soon",
-                            style: AppTheme.define().textTheme.headline1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("What would you like to locate? ",
+                                  style: mAppTheme.textTheme.headline3),
+                              Row(
+                                children: [
+                                  Radio(
+                                      visualDensity: VisualDensity.compact,
+                                      value: 0,
+                                      groupValue: selectedRadio,
+                                      activeColor: Colors.white,
+                                      fillColor: MaterialStateProperty.all(
+                                          Colors.white),
+                                      onChanged: (val) =>
+                                          setSelectedRadio(val as int)),
+                                  Text(
+                                    "Dustbin",
+                                    style: mAppTheme.textTheme.headline4,
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio(
+                                      visualDensity: VisualDensity.compact,
+                                      value: 1,
+                                      groupValue: selectedRadio,
+                                      activeColor: Colors.white,
+                                      fillColor: MaterialStateProperty.all(
+                                          Colors.white),
+                                      onChanged: (val) =>
+                                          setSelectedRadio(val as int)),
+                                  Text(
+                                    "Toilet",
+                                    style: mAppTheme.textTheme.headline4,
+                                  )
+                                ],
+                              ),
+                              Expanded(
+                                child: Center(
+                                    child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  // this works only when expanded
+                                  // is parent
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(80, 10, 80, 5),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        getCurrLocationAndAdd(type);
+                                        // location.getLocation()
+                                      },
+                                      child: Text(
+                                        "Locate",
+                                        style: mAppTheme.textTheme.headline3!
+                                            .copyWith(
+                                                color:
+                                                    AppTheme.colors.oxonGreen),
+                                      ),
+                                      style: solidRoundButtonStyle,
+                                    ),
+                                  ),
+                                )),
+                              ),
+                              Center(
+                                child: Text(
+                                  "*stand near the $type before pressing the button.",
+                                  style: mAppTheme.textTheme.headline6,
+                                ),
+                              )
+                            ],
+                            //final FirebaseUser user = await auth.currentUser();
+                            // final userid = user.uid;
+                            // get user id somehow
                           ),
                         ),
                       ),
@@ -223,7 +388,9 @@ class _SusMappingState extends State<SusMapping> with TickerProviderStateMixin {
               Container(
                 margin: EdgeInsets.fromLTRB(80, 18, 80, 18),
                 child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      permHandler.openAppSettings(); // temp
+                    },
                     child: Text(
                       "Guide The Way",
                       style: Theme.of(context)
