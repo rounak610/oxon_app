@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 
 import '../widgets/custom_drawer.dart';
@@ -26,7 +27,9 @@ class _ProductsPageState extends State<ProductsPage> {
                 width: 105,
                 height: 105,
                 child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(CartPage.routeName);
+                    },
                     icon: Container(
                       width: 43,
                       height: 43,

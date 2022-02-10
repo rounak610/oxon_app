@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
 import 'package:oxon_app/pages/preview_report.dart';
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
         DonateDustbin.routeName: (context) => DonateDustbin(),
         ProductsPage.routeName: (context) => ProductsPage(),
         ComingSoon.routeName: (context) => ComingSoon(),
-        PreviewReport.routeName: (context) => PreviewReport()
+        PreviewReport.routeName: (context) => PreviewReport(),
+        CartPage.routeName: (context) => CartPage()
       },
     );
   }
