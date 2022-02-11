@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
+import 'package:oxon_app/theme/app_theme.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -28,60 +30,65 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldkey,
-      appBar: AppBar(
-        title: Text('OTP Verification'),
-      ),
-      body: Column(
-        children: [
+        key: _scaffoldkey,
+        appBar: AppBarotpscreen(context, "OTP Verification"),
+        body: Stack(children: [
           Container(
-            margin: EdgeInsets.only(top: 40),
-            child: Center(
-              child: Text(
-                'Enter OTP',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-              ),
-            ),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/products_pg_bg.png"),
+                    fit: BoxFit.cover)),
           ),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: PinPut(
-              fieldsCount: 6,
-              textStyle: const TextStyle(fontSize: 25.0, color: Colors.white),
-              eachFieldWidth: 40.0,
-              eachFieldHeight: 55.0,
-              focusNode: _pinPutFocusNode,
-              controller: _pinPutController,
-              submittedFieldDecoration: pinPutDecoration,
-              selectedFieldDecoration: pinPutDecoration,
-              followingFieldDecoration: pinPutDecoration,
-              pinAnimationType: PinAnimationType.fade,
-              onSubmit: (pin) async {
-                try {
-                  await FirebaseAuth.instance
-                      .signInWithCredential(PhoneAuthProvider.credential(
-                          verificationId: _verificationCode, smsCode: pin))
-                      .then((value) async {
-                    if (value.user != null) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage()),
-                          (route) => false);
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 40),
+                child: Center(
+                  child: Text('Enter OTP',
+                      style: AppTheme.define().textTheme.headline1),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: PinPut(
+                  fieldsCount: 6,
+                  textStyle:
+                      const TextStyle(fontSize: 25.0, color: Colors.white),
+                  eachFieldWidth: 40.0,
+                  eachFieldHeight: 55.0,
+                  focusNode: _pinPutFocusNode,
+                  controller: _pinPutController,
+                  submittedFieldDecoration: pinPutDecoration,
+                  selectedFieldDecoration: pinPutDecoration,
+                  followingFieldDecoration: pinPutDecoration,
+                  pinAnimationType: PinAnimationType.fade,
+                  onSubmit: (pin) async {
+                    try {
+                      await FirebaseAuth.instance
+                          .signInWithCredential(PhoneAuthProvider.credential(
+                              verificationId: _verificationCode, smsCode: pin))
+                          .then((value) async {
+                        if (value.user != null) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WelcomePage()),
+                              (route) => false);
+                        }
+                      });
+                    } catch (e) {
+                      FocusScope.of(context).unfocus();
+                      _scaffoldkey.currentState
+                          // ignore: deprecated_member_use
+                          ?.showSnackBar(
+                              SnackBar(content: Text('invalid OTP')));
                     }
-                  });
-                } catch (e) {
-                  FocusScope.of(context).unfocus();
-                  _scaffoldkey.currentState
-                      // ignore: deprecated_member_use
-                      ?.showSnackBar(SnackBar(content: Text('invalid OTP')));
-                }
-              },
-            ),
-          )
-        ],
-      ),
-    );
+                  },
+                ),
+              )
+            ],
+          ),
+        ]));
   }
 
   _verifyPhone() async {
