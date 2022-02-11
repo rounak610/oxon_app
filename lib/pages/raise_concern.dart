@@ -16,8 +16,9 @@ class RaiseConcernDirect extends StatefulWidget {
 }
 
 class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
-  String authorityDropdownValue = 'One';
-  String issueTypeDropdownValue = 'One';
+  String? issueSubTypeDropdownValue;
+  String? issueTypeDropdownValue;
+  String? value;
 
   TextEditingController descriptionController = TextEditingController();
 
@@ -44,60 +45,6 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                     height: 35,
                   ),
                   Text(
-                    'Concerned Authority :',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    '*The authority to whom the issue should be reported.',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(right: 25, top: 10, bottom: 30),
-                    child: DropdownButtonFormField(
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_outlined,
-                        color: Colors.white,
-                      ),
-                      alignment: Alignment.center,
-                      hint: Text('Select'),
-                      dropdownColor: Color.fromARGB(255, 34, 90, 0),
-                      decoration: InputDecoration(
-                        enabledBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                      ),
-                      isExpanded: true,
-                      value: authorityDropdownValue,
-                      items: <String>['One', 'Two', 'Free', 'Four']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          authorityDropdownValue = newValue as String;
-                        });
-                      },
-                    ),
-                  ),
-                  Text(
                     'Type of Issue :',
                     style: TextStyle(
                       fontSize: 25,
@@ -109,47 +56,129 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                     height: 5,
                   ),
                   Text(
-                    '*If concern is not listed, use "Custom" option.',
+                    '*If concern is not listed, use "Other" option.',
                     style: TextStyle(fontSize: 15, color: Colors.white),
                   ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(right: 25, top: 10, bottom: 30),
-                    child: DropdownButtonFormField(
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_outlined,
-                        color: Colors.white,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 5, 25, 5),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      alignment: Alignment.center,
-                      hint: Text('Select'),
-                      dropdownColor: Color.fromARGB(255, 34, 90, 0),
-                      decoration: InputDecoration(
-                        enabledBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                      ),
-                      isExpanded: true,
-                      value: issueTypeDropdownValue,
-                      items: <String>['One', 'Two', 'Free', 'Four']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Colors.white),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          hint: Text(
+                            "Select",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w100),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          issueTypeDropdownValue = newValue as String;
-                        });
-                      },
+                          value: issueTypeDropdownValue,
+                          dropdownColor: Color.fromARGB(255, 34, 90, 0),
+                          isExpanded: true,
+                          iconSize: 26,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                          ),
+                          items: <String>[
+                            'select',
+                            'Dustbin',
+                            'Sewerage Problem',
+                            'Road Light',
+                            'Road Related Problems',
+                            'Water Related Problems',
+                            'Enroachment',
+                            'Other'
+                          ].map((String issueTypeDropdownValue) {
+                            return DropdownMenuItem<String>(
+                              value: issueTypeDropdownValue,
+                              child: Text(
+                                issueTypeDropdownValue,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (issueTypeDropdownValue) =>
+                              setState(() => this.issueTypeDropdownValue = issueTypeDropdownValue),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'Issue Subtype :',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    '*Provide a few more details.',
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 5, 25, 5),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          hint: Text(
+                            "Select",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w100),
+                          ),
+                          value: issueSubTypeDropdownValue,
+                          dropdownColor: Color.fromARGB(255, 34, 90, 0),
+                          isExpanded: true,
+                          iconSize: 26,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                          ),
+                          items: <String>[
+                            'select',
+                            'Dustbin unavailable in locality',
+                            'Dustbins overfilled ',
+                            'Roads are broken or unbuilt',
+                            'Narrow roads ',
+                            'Too many speed breakers on the road',
+                            'No or very little water supply ',
+                            'Irregular schedule of water supply',
+                            'Undrinkable & dirty water',
+                            'Encroachment over private property',
+                            'Encroachment over public property',
+                            'Other'
+                          ].map((String issueSubTypeDropdownValue) {
+                            return DropdownMenuItem<String>(
+                              value: issueSubTypeDropdownValue,
+                              child: Text(
+                                issueSubTypeDropdownValue,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (issueSubTypeDropdownValue) =>
+                              setState(() => this.issueSubTypeDropdownValue = issueSubTypeDropdownValue),
+                        ),
+                      ),
                     ),
                   ),
                   Text(
@@ -204,7 +233,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                               TakePictureScreen.routeName,
                               arguments: Concern(
                                   description: descriptionController.text,
-                                  authorityType: authorityDropdownValue,
+                                  authorityType: issueSubTypeDropdownValue,
                                   issueType: issueTypeDropdownValue,
                                   imagePath: 'assets/images/oxon_logo.png'));
                         },
@@ -226,8 +255,6 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
               ),
             ),
           )
-        ]
-        )
-    );
+        ]));
   }
 }
