@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -37,7 +38,7 @@ class _OTPScreenState extends State<OTPScreen> {
             margin: EdgeInsets.only(top: 40),
             child: Center(
               child: Text(
-                'Verify +91-${widget.phone}',
+                'Enter OTP',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
               ),
             ),
@@ -93,7 +94,7 @@ class _OTPScreenState extends State<OTPScreen> {
             if (value.user != null) {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => WelcomePage()),
+                  MaterialPageRoute(builder: (context) => SusMapping()),
                   (route) => false);
             }
           });
