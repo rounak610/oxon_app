@@ -202,7 +202,7 @@ class _SusMappingState extends State<SusMapping>
       child: Scaffold(
           drawer: CustomDrawer(),
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
-          appBar: CustomAppBar(context, "Sustainable Mapping"),
+          appBar: CustomAppBar(context, "Sustainable Mapping",),
           body: Column(
             children: [
               Container(

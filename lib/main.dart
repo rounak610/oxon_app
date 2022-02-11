@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
 import 'package:oxon_app/pages/preview_report.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return OrientationBuilder(builder: (context, orientation) {
       return LayoutBuilder(
 
@@ -57,5 +59,6 @@ class MyApp extends StatelessWidget {
             );
           });
     });
+
   }
 }

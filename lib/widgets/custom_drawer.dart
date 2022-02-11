@@ -95,7 +95,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 _tileItem('Profile', ProfilePage.routeName, context),
                 _tileItem('My Wallet', ComingSoon.routeName, context),
-                _tileItem('Let\'s Shop', ProductsPage.routeName, context),
+                _tileItem('Let\'s Shop', ComingSoon.routeName, context),
                 _tileItem('Sustainable Mapping', SusMapping.routeName, context),
                 _tileItem('Donate a Dustbin', DonateDustbin.routeName, context),
                 _tileItem('Explore & Bid', ComingSoon.routeName, context),
