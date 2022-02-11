@@ -330,20 +330,26 @@ class _SusMappingState extends State<SusMapping>
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.white,
+                              width: 3
                             ),
                             borderRadius: BorderRadius.circular(10.0),
+
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(
-                                1.2 * SizeConfig.responsiveMultiplier),
+                                2 * SizeConfig.responsiveMultiplier),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Text(
-                                      "What are you volunteering to locate?",
-                                      style: mAppTheme.textTheme.headline3),
+                                Expanded(child: SizedBox(
+                                  height: 10,
+                                )),
+                                Text(
+                                    "What are you volunteering to locate?",
+                                    style: mAppTheme.textTheme.headline3),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 Row(
                                   children: [
@@ -379,46 +385,78 @@ class _SusMappingState extends State<SusMapping>
                                     )
                                   ],
                                 ),
-                                Expanded(
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      11.71 *
+                                          SizeConfig.responsiveMultiplier,
+                                      1.46 *
+                                          SizeConfig.responsiveMultiplier,
+                                      11.71 *
+                                          SizeConfig.responsiveMultiplier,
+                                      0.73 *
+                                          SizeConfig.responsiveMultiplier),
                                   child: Center(
-                                      child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          11.71 *
-                                              SizeConfig.responsiveMultiplier,
-                                          1.46 *
-                                              SizeConfig.responsiveMultiplier,
-                                          11.71 *
-                                              SizeConfig.responsiveMultiplier,
-                                          0.73 *
-                                              SizeConfig.responsiveMultiplier),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      "Adding the location...")));
-                                          getCurrLocationAndAdd(type);
-                                        },
-                                        child: Text(
-                                          "Locate",
-                                          style: mAppTheme.textTheme.headline3!
-                                              .copyWith(
-                                                  color: AppTheme
-                                                      .colors.oxonGreen),
-                                        ),
-                                        style: solidRoundButtonStyle,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) => AlertDialog(
+                                            titleTextStyle: AppTheme.define().textTheme.headline1!.copyWith(color: Colors.black),
+                                            title: const Text('Thank you!'),
+                                            content: Container(
+                                              height: SizeConfig.screenHeight * 0.45,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    height: SizeConfig.screenHeight * 0.3,
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: AssetImage("assets/images/badge_1.png"))),
+                                                  ),
+                                                  Text("\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
+                                                ],
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'OK');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        "Adding the location...",)));
+                                                getCurrLocationAndAdd(type);
+                                                }
+                                                ,
+                                                child: Center(child: Text('Show added location on map',
+                                                style: AppTheme.define().textTheme.headline6!.copyWith(color: AppTheme.colors.oxonGreen))),
+                                                style: solidRoundButtonStyle,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Locate",
+                                        style: mAppTheme.textTheme.headline3!
+                                            .copyWith(
+                                            color: AppTheme
+                                                .colors.oxonGreen),
                                       ),
+                                      style: solidRoundButtonStyle,
                                     ),
-                                  )),
+                                  ),
                                 ),
                                 Center(
                                   child: Text(
                                     "*stand near the $type before pressing the button.",
                                     style: mAppTheme.textTheme.headline6,
                                   ),
-                                )
+                                ),
+                                Expanded(child: SizedBox(height: 10,))
                               ],
                             ),
                           ),
