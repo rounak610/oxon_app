@@ -101,7 +101,7 @@ class _PreviewReportState extends State<PreviewReport> {
                     Row(
                       children: [
                         Text(
-                          "Twitter :",
+                          "Problem Category :",
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -111,7 +111,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           width: 15,
                         ),
                         Text(
-                          "@*******",
+                          "",
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -218,13 +218,6 @@ class _PreviewReportState extends State<PreviewReport> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Image.file(File(imagePath))
-                    ),
-                    Text(
-                      "*Note: A Twitter post will be uploaded on your handle with this report tagging the involved authorities.",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w100),
                     ),
                     SizedBox(
                       height: 20,

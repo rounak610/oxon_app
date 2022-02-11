@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
@@ -97,7 +98,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Container(
                       child: OutlinedButton(
-                        onPressed: () {},
+                    onPressed: () {
+                       Navigator.push(context, MaterialPageRoute(builder: (context) => ComingSoon()));
+                      },
                         child: Container(
                           child: Text(
                             "Check Your Wallet",
