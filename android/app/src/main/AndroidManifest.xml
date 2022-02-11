@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.oxon_app">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
    <application
         android:label="oxon_app"
         android:icon="@mipmap/ic_launcher">
@@ -38,7 +42,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyA5g2UYGLDIKrpRidLtgG7UCLkcfCC0Z6w"/>
+           android:value="AIzaSyCcywbZyeAkGWf3qkJ-Tc1e_58d7oQVvaE"/>
+<!--           android:value="AIzaSyA5g2UYGLDIKrpRidLtgG7UCLkcfCC0Z6w"/> restricted api key-->
        <meta-data
            android:name="com.facebook.sdk.ApplicationId"
            android:value="@string/facebook_app_id" />

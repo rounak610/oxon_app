@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/size_config.dart';
+
 import 'package:oxon_app/pages/cart_pg.dart';
+
 import 'package:oxon_app/widgets/custom_appbar.dart';
 
 import '../widgets/custom_drawer.dart';
@@ -31,8 +34,8 @@ class _ProductsPageState extends State<ProductsPage> {
                       Navigator.of(context).pushNamed(CartPage.routeName);
                     },
                     icon: Container(
-                      width: 43,
-                      height: 43,
+                      width: 6.29 * SizeConfig.responsiveMultiplier,
+                      height: 6.29 * SizeConfig.responsiveMultiplier,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           image: DecorationImage(

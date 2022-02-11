@@ -10,7 +10,6 @@ import '../models/concern.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
-
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
 
@@ -102,7 +101,7 @@ class _PreviewReportState extends State<PreviewReport> {
                     Row(
                       children: [
                         Text(
-                          "Twitter :",
+                          "Problem Category :",
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -112,7 +111,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           width: 15,
                         ),
                         Text(
-                          "@*******",
+                          "",
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -220,13 +219,6 @@ class _PreviewReportState extends State<PreviewReport> {
                         ),
                         child: Image.file(File(imagePath))
                     ),
-                    Text(
-                      "*Note: A Twitter post will be uploaded on your handle with this report tagging the involved authorities.",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w100),
-                    ),
                     SizedBox(
                       height: 20,
                     ),
@@ -235,7 +227,7 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => _onShare(context,imagePath, issueType, description),
+                          onPressed: () {},
                           child: Text(
                             'Confirm',
                             style: TextStyle(
@@ -259,9 +251,9 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => _onShare(context,imagePath, issueType, description),
                           child: Text(
-                            'Share via...',
+                            'Share via Twitter',
                             style: TextStyle(
                                 fontSize: 30,
                                 color: Colors.green[900],

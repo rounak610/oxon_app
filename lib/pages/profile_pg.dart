@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/coming_soon.dart';
+import 'package:oxon_app/pages/update_profile.dart';
+import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
@@ -22,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String userResidence = "Pilani";
     String userMobileNo = "98********";
 
-    final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle();
+    final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(146.32 * SizeConfig.responsiveMultiplier, 7.61 * SizeConfig.responsiveMultiplier));
 
     return SafeArea(
       child: Scaffold(
@@ -38,14 +41,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         fit: BoxFit.cover)),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(36, 0, 36, 0),
+                margin: EdgeInsets.fromLTRB(5.27 * SizeConfig.responsiveMultiplier, 0, 5.27 * SizeConfig.responsiveMultiplier, 0),
                 child: Center(
                   child: Column(children: [
                     SizedBox(
-                      height: 40,
+                      height: 5.85 * SizeConfig.responsiveMultiplier,
                     ),
                     Table(
-                      defaultColumnWidth: FixedColumnWidth(160),
+                      defaultColumnWidth: FixedColumnWidth(23.41 * SizeConfig.responsiveMultiplier),
                       children: [
                         TableRow(children: [
                           Text("Name: ",
@@ -80,7 +83,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Container(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile()));
+                        },
                         child: Text(
                           "Update Details",
                           style: Theme.of(context)
@@ -96,7 +101,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Container(
                       child: OutlinedButton(
-                        onPressed: () {},
+                    onPressed: () {
+                       Navigator.push(context, MaterialPageRoute(builder: (context) => ComingSoon()));
+                      },
                         child: Container(
                           child: Text(
                             "Check Your Wallet",
