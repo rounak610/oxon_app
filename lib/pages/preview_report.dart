@@ -231,7 +231,7 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => _onShare(context,imagePath, issueType, description),
+                          onPressed: () {},
                           child: Text(
                             'Confirm',
                             style: TextStyle(
@@ -255,9 +255,9 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => _onShare(context,imagePath, issueType, description),
                           child: Text(
-                            'Share via...',
+                            'Share via Twitter',
                             style: TextStyle(
                                 fontSize: 30,
                                 color: Colors.green[900],
