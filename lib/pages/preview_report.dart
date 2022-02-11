@@ -10,7 +10,10 @@ import '../models/concern.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8689697f0f08737b19bb658a9f69957e4c09ba25
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
 
