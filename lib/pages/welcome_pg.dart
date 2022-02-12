@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:oxon_app/pages/otpscreen.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 
