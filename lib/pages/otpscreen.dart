@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
+import 'package:path/path.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -28,8 +29,35 @@ class _OTPScreenState extends State<OTPScreen> {
       color: const Color.fromRGBO(126, 203, 224, 1),
     ),
   );
+
   @override
   Widget build(BuildContext context) {
+    void signinWithPhoneAuthCredential(
+        PhoneAuthCredential phoneAuthCredential) async {
+      setState(() {
+        showLoading = true;
+      });
+      try {
+        final authCredential = await FirebaseAuth.instance
+            .signInWithCredential(phoneAuthCredential);
+        setState(() {
+          showLoading = false;
+        });
+        if (authCredential?.user != null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SusMapping()));
+        }
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          showLoading = false;
+        });
+        FocusScope.of(context).unfocus();
+        _scaffoldkey.currentState
+            // ignore: deprecated_member_use
+            ?.showSnackBar(SnackBar(content: Text("Invaild OTP")));
+      }
+    }
+
     return Scaffold(
         key: _scaffoldkey,
         appBar: AppBarotpscreen(context, "OTP Verification"),
@@ -87,7 +115,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               _scaffoldkey.currentState
                                   // ignore: deprecated_member_use
                                   ?.showSnackBar(
-                                      SnackBar(content: Text('invalid OTP')));
+                                      SnackBar(content: Text('Invalid OTP')));
                             }
                           },
                         ),
