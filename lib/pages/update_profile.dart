@@ -14,7 +14,7 @@ class UpdateProfile extends StatefulWidget {
   _UpdateProfileState createState() => _UpdateProfileState();
 }
 
-final _formKey = GlobalKey<FormState>();
+GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _UpdateProfileState extends State<UpdateProfile> {
 
