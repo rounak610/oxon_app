@@ -204,7 +204,7 @@ class _SusMappingState extends State<SusMapping>
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
           appBar: CustomAppBar(
             context,
-            "Dustbin and Urinals",
+            "Dustbin and Toilets",
           ),
           body: Column(
             children: [
