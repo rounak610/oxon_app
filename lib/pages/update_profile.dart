@@ -134,6 +134,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             labelText: 'Contact number',
                             labelStyle: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300),
                           ),
+                          maxLength: 10,
+                          keyboardType: TextInputType.number,
                           onChanged: (value){
                             setState(() {
                               mobile=value;
