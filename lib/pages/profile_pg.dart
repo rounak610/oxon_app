@@ -6,6 +6,8 @@ import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key); //, required this.title
@@ -20,13 +22,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+
+  String userName = "Aikagra";
+  String userCity = "Pilani";
+  String userMobileNo = "98********";
+
   Widget build(BuildContext context) {
-    String userName = "Aikagra";
-    String userResidence = "Pilani";
-    String userMobileNo = "98********";
-
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(146.32 * SizeConfig.responsiveMultiplier, 7.61 * SizeConfig.responsiveMultiplier));
-
     return SafeArea(
       child: Scaffold(
           drawer: CustomDrawer(),
@@ -63,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         TableRow(children: [
                           Text("Residence: ",
                               style: Theme.of(context).textTheme.headline2),
-                          Text(userResidence,
+                          Text(userCity,
                               style: Theme.of(context).textTheme.headline2)
                         ]),
                         TableRow(children: [
@@ -120,7 +122,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               )
             ],
-          )),
+          )
+      ),
     );
   }
+
+
 }

@@ -66,11 +66,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             width: 190, height: 60),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        OTPScreen(_controller.toString())));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsPage()));
                           },
                           child: Text(
                             "Send OTP",
