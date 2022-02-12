@@ -1,14 +1,20 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:oxon_app/models/concern.dart';
+import 'package:oxon_app/repositories/maps_repository.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
-import '../models/concern.dart';
+
 //import 'package:flutter_share_me/flutter_share_me.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../models/concern.dart';
 
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
@@ -20,7 +26,36 @@ class PreviewReport extends StatefulWidget {
 }
 
 class _PreviewReportState extends State<PreviewReport> {
+  Location location = Location();
 
+  late bool _serviceEnabled;
+  late PermissionStatus _permissionGranted;
+  LocationData? _locationData = null;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void onLayoutDone(Duration timeStamp) async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    _locationData = await location.getLocation();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +182,8 @@ class _PreviewReportState extends State<PreviewReport> {
                       height: 10,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Location :",
@@ -158,13 +195,39 @@ class _PreviewReportState extends State<PreviewReport> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                          "XXXXXXXXX",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        )
+                        FutureBuilder<String>(
+                          future: getCurrentLocationAddress(),
+                          // a previously-obtained Future<String> or null
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            if (snapshot.hasData) {
+                              return Expanded(child: Text("${snapshot.data}", style: AppTheme.define().textTheme.headline4));
+                            } else if (snapshot.hasError) {
+                              return Text("Error fetching location. Ensure device location is turned on and please try again");
+                            } else {
+                              try {
+                                return Row(
+                                  children: [
+                                    Text(
+                                        "Getting location data...\nPlease wait..", style: AppTheme.define().textTheme.headline2,),
+                                    CircularProgressIndicator()
+                                  ],
+                                );
+                              } catch (e, s) {
+                                print(s);
+                              }
+                            }
+                            return Text("Error fetching location. Ensure device location is turned on and please try again");
+                          },
+                        ),
+                        // Text(
+                        //   "XXXXXX",
+                        //   // todo current location
+                        //   style: TextStyle(
+                        //       fontSize: 20,
+                        //       color: Colors.white,
+                        //       fontWeight: FontWeight.w300),
+                        // )
                       ],
                     ),
                     SizedBox(
@@ -217,8 +280,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           border: Border.all(color: Colors.white, width: 2),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Image.file(File(imagePath))
-                    ),
+                        child: Image.file(File(imagePath))),
                     SizedBox(
                       height: 20,
                     ),
@@ -251,7 +313,8 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => _onShare(context,imagePath, issueType, description),
+                          onPressed: () => _onShare(
+                              context, imagePath, issueType, description),
                           child: Text(
                             'Share via Twitter',
                             style: TextStyle(
@@ -293,30 +356,44 @@ class _PreviewReportState extends State<PreviewReport> {
                       ),
                     ),
                   ],
-                )
-            ),
+                )),
           )
         ],
       ),
-    )
-    );
+    ));
   }
-  void _onShare(BuildContext context, String imagePath, String issueType, String description) async {
+
+  void _onShare(BuildContext context, String imagePath, String issueType,
+      String description) async {
+    final locationStr = await getCurrentLocationAddress(); // Todo add this address where you want @Rounak
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
-    String str = "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n$issueType \n$description \nComplaint posted by @oxon_life";
+    String str =
+        "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n$issueType \n$description \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
-
-      await Share.shareFiles(
-        imagePaths,
-          text: str,
+      await Share.shareFiles(imagePaths,
+          text: str, //
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     } else {
       await Share.share(issueType,
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
-
   }
 
+  Future<String> getCurrentLocationAddress() async {
+    const errorMessage = "Error fetching location data. Ensure device location and internet is switched on and please try again.";
+    _locationData = await location.getLocation();
+
+    if (_locationData == null || _locationData!.latitude == null) {
+      return errorMessage;
+    }
+
+    final geoCodedData = await MapsRepository().convertLatLngToGeoCodedLoc(LatLng(_locationData!.latitude!, _locationData!.longitude!));
+
+    if (geoCodedData == null) {
+      return errorMessage;
+    }
+    return "${geoCodedData.formattedAddress} (${geoCodedData.compoundPlusCode})";
+  }
 }
