@@ -57,9 +57,10 @@ class _WelcomePageState extends State<WelcomePage> {
                           controller: _controller,
                         ),
                       ),
-                      padding: EdgeInsets.all(32.0),
+                      padding: EdgeInsets.all(10.0),
                     ),
                     Container(
+                      padding: const EdgeInsets.only(bottom: 60),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(
                             width: 190, height: 60),

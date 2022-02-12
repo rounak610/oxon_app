@@ -72,7 +72,7 @@ class _OTPScreenState extends State<OTPScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WelcomePage()),
+                                  builder: (context) => SusMapping()),
                               (route) => false);
                         }
                       });
@@ -99,6 +99,7 @@ class _OTPScreenState extends State<OTPScreen> {
               .signInWithCredential(credential)
               .then((value) async {
             if (value.user != null) {
+              print("user logged in");
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => SusMapping()),
