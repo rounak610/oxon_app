@@ -6,7 +6,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:oxon_app/models/loc_data.dart';
 import 'package:oxon_app/repositories/loc_data_repository.dart';
-import 'package:oxon_app/repositories/maps_repository.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
@@ -67,28 +66,6 @@ class _SusMappingState extends State<SusMapping>
     setCustomMarker();
     selectedRadio = 0;
   }
-
-  //temp
-  Future<String> getCurrentLocationAddress() async {
-    const errorMessage =
-        "Error fetching location data. Ensure device location and internet is switched on and please try again.";
-    _locationData = await location.getLocation();
-    print("${_locationData!.latitude!},${_locationData!.longitude!}");
-
-    if (_locationData == null || _locationData!.latitude == null) {
-      return errorMessage;
-    }
-
-    final geoCodedData = await MapsRepository().convertLatLngToGeoCodedLoc(
-        LatLng(_locationData!.latitude!, _locationData!.longitude!));
-
-    if (geoCodedData == null) {
-      return errorMessage;
-    }
-    return "${geoCodedData.formattedAddress} (${geoCodedData.compoundPlusCode})";
-  }
-
-  //temp end
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -196,10 +173,7 @@ class _SusMappingState extends State<SusMapping>
     }
 
     _locationData = await location.getLocation();
-    //temp
-    print("this is the location data");
-    print(await getCurrentLocationAddress());
-    //temp end
+
     setState(() {});
   }
 
@@ -357,7 +331,6 @@ class _SusMappingState extends State<SusMapping>
                             padding: EdgeInsets.all(
                                 2 * SizeConfig.responsiveMultiplier),
                             child: Column(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text("What are you volunteering to locate?",
@@ -368,7 +341,6 @@ class _SusMappingState extends State<SusMapping>
                                 Row(
                                   children: [
                                     Radio(
-                                        // visualDensity: VisualDensity.compact,
                                         visualDensity: VisualDensity(
                                           horizontal:
                                               VisualDensity.minimumDensity,
@@ -391,8 +363,6 @@ class _SusMappingState extends State<SusMapping>
                                 Row(
                                   children: [
                                     Radio(
-
-                                        // visualDensity: VisualDensity.compact,
                                         visualDensity: VisualDensity(
                                           horizontal:
                                               VisualDensity.minimumDensity,
@@ -412,19 +382,7 @@ class _SusMappingState extends State<SusMapping>
                                     )
                                   ],
                                 ),
-                                // SizedBox(
-                                //   height: 1.46*SizeConfig.responsiveMultiplier,
-                                // ),
                                 Container(
-                                  // margin: EdgeInsets.fromLTRB(
-                                  //     11.71 *
-                                  //         SizeConfig.responsiveMultiplier,
-                                  //     1.46 *
-                                  //         SizeConfig.responsiveMultiplier,
-                                  //     11.71 *
-                                  //         SizeConfig.responsiveMultiplier,
-                                  //     0.73 *
-                                  //         SizeConfig.responsiveMultiplier),
                                   child: Center(
                                     child: ElevatedButton(
                                       onPressed: () {
@@ -443,7 +401,8 @@ class _SusMappingState extends State<SusMapping>
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                     height: SizeConfig

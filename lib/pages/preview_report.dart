@@ -9,9 +9,6 @@ import 'package:oxon_app/repositories/maps_repository.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
-
-//import 'package:flutter_share_me/flutter_share_me.dart';
-//import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../models/concern.dart';
@@ -197,19 +194,26 @@ class _PreviewReportState extends State<PreviewReport> {
                         ),
                         FutureBuilder<String>(
                           future: getCurrentLocationAddress(),
-                          // a previously-obtained Future<String> or null
                           builder: (BuildContext context,
                               AsyncSnapshot<String> snapshot) {
                             if (snapshot.hasData) {
-                              return Expanded(child: Text("${snapshot.data}", style: AppTheme.define().textTheme.headline4));
+                              return Expanded(
+                                  child: Text("${snapshot.data}",
+                                      style: AppTheme.define()
+                                          .textTheme
+                                          .headline4));
                             } else if (snapshot.hasError) {
-                              return Text("Error fetching location. Ensure device location is turned on and please try again");
+                              return Text(
+                                  "Error fetching location. Ensure device location is turned on and please try again");
                             } else {
                               try {
                                 return Row(
                                   children: [
                                     Text(
-                                        "Getting location data...\nPlease wait..", style: AppTheme.define().textTheme.headline2,),
+                                      "Getting location data...\nPlease wait..",
+                                      style:
+                                          AppTheme.define().textTheme.headline2,
+                                    ),
                                     CircularProgressIndicator()
                                   ],
                                 );
@@ -217,17 +221,10 @@ class _PreviewReportState extends State<PreviewReport> {
                                 print(s);
                               }
                             }
-                            return Text("Error fetching location. Ensure device location is turned on and please try again");
+                            return Text(
+                                "Error fetching location. Ensure device location is turned on and please try again");
                           },
                         ),
-                        // Text(
-                        //   "XXXXXX",
-                        //   // todo current location
-                        //   style: TextStyle(
-                        //       fontSize: 20,
-                        //       color: Colors.white,
-                        //       fontWeight: FontWeight.w300),
-                        // )
                       ],
                     ),
                     SizedBox(
@@ -365,7 +362,7 @@ class _PreviewReportState extends State<PreviewReport> {
 
   void _onShare(BuildContext context, String imagePath, String issueType,
       String description) async {
-    final locationStr = await getCurrentLocationAddress(); // Todo add this address where you want @Rounak
+    final locationAddress = await getCurrentLocationAddress(); // todo: @Rounak add it where you wanted to
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
@@ -382,14 +379,16 @@ class _PreviewReportState extends State<PreviewReport> {
   }
 
   Future<String> getCurrentLocationAddress() async {
-    const errorMessage = "Error fetching location data. Ensure device location and internet is switched on and please try again.";
+    const errorMessage =
+        "Error fetching location data. Ensure device location and internet is switched on and please try again.";
     _locationData = await location.getLocation();
 
     if (_locationData == null || _locationData!.latitude == null) {
       return errorMessage;
     }
 
-    final geoCodedData = await MapsRepository().convertLatLngToGeoCodedLoc(LatLng(_locationData!.latitude!, _locationData!.longitude!));
+    final geoCodedData = await MapsRepository().convertLatLngToGeoCodedLoc(
+        LatLng(_locationData!.latitude!, _locationData!.longitude!));
 
     if (geoCodedData == null) {
       return errorMessage;
