@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:path/path.dart' as Path;
@@ -164,8 +165,15 @@ class _OTPScreenState extends State<OTPScreen> {
     }
   }
 
+  Future<void> initializefirebase() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+  }
+
   @override
   void initState() {
+    initializefirebase();
+
     // TODO: implement initState
     super.initState();
     _verifyPhone();
