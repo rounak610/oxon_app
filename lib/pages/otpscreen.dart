@@ -69,11 +69,11 @@ class _OTPScreenState extends State<OTPScreen> {
                               verificationId: _verificationCode, smsCode: pin))
                           .then((value) async {
                         if (value.user != null) {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SusMapping()),
-                              (route) => false);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SusMapping()),
+                          );
                         }
                       });
                     } catch (e) {
@@ -100,10 +100,8 @@ class _OTPScreenState extends State<OTPScreen> {
               .then((value) async {
             if (value.user != null) {
               print("user logged in");
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => SusMapping()),
-                  (route) => false);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SusMapping()));
             }
           });
         },
