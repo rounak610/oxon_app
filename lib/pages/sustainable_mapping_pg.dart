@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:oxon_app/models/loc_data.dart';
+import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/repositories/loc_data_repository.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/styles/button_styles.dart';
@@ -437,7 +438,10 @@ class _SusMappingState extends State<SusMapping>
                     11.71 * SizeConfig.responsiveMultiplier,
                     2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushReplacementNamed(ComingSoon.routeName);
+                    },
                     child: Text(
                       "Guide The Way",
                       style: Theme.of(context)
@@ -454,7 +458,10 @@ class _SusMappingState extends State<SusMapping>
                     11.71 * SizeConfig.responsiveMultiplier,
                     2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushReplacementNamed(ComingSoon.routeName);
+                    },
                     child: Text(
                       "Open In Maps",
                       style: Theme.of(context)
