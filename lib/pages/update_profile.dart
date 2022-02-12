@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
-import 'package:oxon_app/services/users.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
