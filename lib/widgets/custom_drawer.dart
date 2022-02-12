@@ -35,8 +35,8 @@ class CustomDrawer extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
                     height: MediaQuery.of(context).size.height,
-
             child: Column(
+              
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(

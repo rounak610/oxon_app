@@ -25,14 +25,13 @@ class PreviewReport extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _PreviewReportState extends State<PreviewReport> {
-
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
     final description = args.description;
     final issueType = args.issueType;
     final imagePath = args.imagePath;
+    final problem = args.authorityType;
 
     return SafeArea(
         child: Scaffold(
@@ -116,7 +115,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           width: 15,
                         ),
                         Text(
-                          "",
+                          issueType,
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -140,7 +139,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           width: 15,
                         ),
                         Text(
-                          issueType,
+                          problem,
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -222,8 +221,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           border: Border.all(color: Colors.white, width: 2),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Image.file(File(imagePath))
-                    ),
+                        child: Image.file(File(imagePath))),
                     SizedBox(
                       height: 20,
                     ),
@@ -234,29 +232,33 @@ class _PreviewReportState extends State<PreviewReport> {
                           constraints: const BoxConstraints.tightFor(
                               width: 250, height: 60),
                           child: ElevatedButton(
-                            onPressed: () async
-                            {
-
-                              if(_formKey.currentState!.validate())
-                              {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
-                                  duration: Duration( seconds: 2),
-                                ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
+                                    duration: Duration(seconds: 2),
+                                  ),
                                 );
                               }
-                              FirebaseFirestore.instance.collection('complaints').add({'description':description, 'issueType':issueType, 'image':imagePath}).then((value)
-                                {
-                                  if(value != null)
-                                  {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductsPage()));
-                                  }
+                              FirebaseFirestore.instance
+                                  .collection('complaints')
+                                  .add({
+                                'description': description,
+                                'issueType': issueType,
+                                'image': imagePath
+                              }).then((value) {
+                                if (value != null) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductsPage()));
                                 }
-
-                                )
-                                    .catchError((e){
-                                  print(e);
-                                }
-                                );
+                              }).catchError((e) {
+                                print(e);
+                              });
                             },
                             child: Text(
                               'Confirm',
@@ -282,7 +284,8 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 300, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => _onShare(context,imagePath, issueType, description),
+                          onPressed: () => _onShare(
+                              context, imagePath, issueType, description),
                           child: Text(
                             'Share via Twitter',
                             style: TextStyle(
@@ -324,22 +327,21 @@ class _PreviewReportState extends State<PreviewReport> {
                       ),
                     ),
                   ],
-                )
-            ),
+                )),
           )
         ],
       ),
-    )
-    );
+    ));
   }
-  void _onShare(BuildContext context, String imagePath, String issueType, String description) async {
+
+  void _onShare(BuildContext context, String imagePath, String issueType,
+      String description) async {
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
-    String str = "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n$issueType \n$description \nComplaint posted by @oxon_life";
+    String str =
+        "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n$issueType \n$description \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
-
-      await Share.shareFiles(
-        imagePaths,
+      await Share.shareFiles(imagePaths,
           text: str,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     } else {
@@ -347,7 +349,5 @@ class _PreviewReportState extends State<PreviewReport> {
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
-
   }
-
 }
