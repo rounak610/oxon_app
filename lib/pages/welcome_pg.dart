@@ -14,6 +14,7 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   TextEditingController _controller = TextEditingController();
+  bool showLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,14 @@ class _WelcomePageState extends State<WelcomePage> {
                             width: 190, height: 60),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsPage()));
+                            setState(() {
+                              showLoading = true;
+                            });
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProductsPage()));
                           },
                           child: Text(
                             "Send OTP",
