@@ -11,7 +11,6 @@ import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
-import 'package:permission_handler/permission_handler.dart' as permHandler;
 
 class SusMapping extends StatefulWidget {
   SusMapping({Key? key}) : super(key: key);
@@ -157,7 +156,6 @@ class _SusMappingState extends State<SusMapping>
   }
 
   void onLayoutDone(Duration timeStamp) async {
-    print("on layout done called");
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -175,10 +173,6 @@ class _SusMappingState extends State<SusMapping>
     }
 
     _locationData = await location.getLocation();
-
-    print("_locationData");
-
-    print((_locationData as LocationData).latitude);
 
     setState(() {});
   }
@@ -202,7 +196,10 @@ class _SusMappingState extends State<SusMapping>
       child: Scaffold(
           drawer: CustomDrawer(),
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
-          appBar: CustomAppBar(context, "Sustainable Mapping",),
+          appBar: CustomAppBar(
+            context,
+            "Sustainable Mapping",
+          ),
           body: Column(
             children: [
               Container(
@@ -298,8 +295,7 @@ class _SusMappingState extends State<SusMapping>
                                 mapType: MapType.normal,
                                 initialCameraPosition: cameraPosition,
                                 markers: dustbinMarkers,
-                                onMapCreated:
-                                    (GoogleMapController controller) {
+                                onMapCreated: (GoogleMapController controller) {
                                   _googleMapController = controller;
                                   _controller.complete(controller);
                                 },
@@ -328,33 +324,29 @@ class _SusMappingState extends State<SusMapping>
                             EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 3
-                            ),
+                            border: Border.all(color: Colors.white, width: 3),
                             borderRadius: BorderRadius.circular(10.0),
-
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(
                                 2 * SizeConfig.responsiveMultiplier),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Expanded(child: SizedBox(
-                                  height: 10,
-                                )),
-                                Text(
-                                    "What are you volunteering to locate?",
+                                Text("What are you volunteering to locate?",
                                     style: mAppTheme.textTheme.headline3),
                                 SizedBox(
-                                  height: 10,
+                                  height: SizeConfig.responsiveMultiplier,
                                 ),
                                 Row(
                                   children: [
                                     Radio(
-                                        visualDensity: VisualDensity.compact,
+                                        visualDensity: VisualDensity(
+                                          horizontal:
+                                              VisualDensity.minimumDensity,
+                                          vertical:
+                                              VisualDensity.minimumDensity,
+                                        ),
                                         value: 0,
                                         groupValue: selectedRadio,
                                         activeColor: Colors.white,
@@ -371,7 +363,12 @@ class _SusMappingState extends State<SusMapping>
                                 Row(
                                   children: [
                                     Radio(
-                                        visualDensity: VisualDensity.compact,
+                                        visualDensity: VisualDensity(
+                                          horizontal:
+                                              VisualDensity.minimumDensity,
+                                          vertical:
+                                              VisualDensity.minimumDensity,
+                                        ),
                                         value: 1,
                                         groupValue: selectedRadio,
                                         activeColor: Colors.white,
@@ -385,38 +382,39 @@ class _SusMappingState extends State<SusMapping>
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(
-                                      11.71 *
-                                          SizeConfig.responsiveMultiplier,
-                                      1.46 *
-                                          SizeConfig.responsiveMultiplier,
-                                      11.71 *
-                                          SizeConfig.responsiveMultiplier,
-                                      0.73 *
-                                          SizeConfig.responsiveMultiplier),
                                   child: Center(
                                     child: ElevatedButton(
                                       onPressed: () {
                                         showDialog<String>(
                                           context: context,
-                                          builder: (BuildContext context) => AlertDialog(
-                                            titleTextStyle: AppTheme.define().textTheme.headline1!.copyWith(color: Colors.black),
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            titleTextStyle: AppTheme.define()
+                                                .textTheme
+                                                .headline1!
+                                                .copyWith(color: Colors.black),
                                             title: const Text('Thank you!'),
                                             content: Container(
-                                              height: SizeConfig.screenHeight * 0.45,
+                                              height:
+                                                  SizeConfig.screenHeight * 0.5,
                                               child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
-                                                    height: SizeConfig.screenHeight * 0.3,
+                                                    height: SizeConfig
+                                                            .screenHeight *
+                                                        0.25,
                                                     decoration: BoxDecoration(
                                                         image: DecorationImage(
-                                                            image: AssetImage("assets/images/badge_1.png"))),
+                                                            image: AssetImage(
+                                                                "assets/images/badge_final.jpeg"))),
                                                   ),
-                                                  Text("\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
+                                                  Text(
+                                                      "\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
                                                 ],
                                               ),
                                             ),
@@ -424,15 +422,23 @@ class _SusMappingState extends State<SusMapping>
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.pop(context, 'OK');
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        "Adding the location...",)));
-                                                getCurrLocationAndAdd(type);
-                                                }
-                                                ,
-                                                child: Center(child: Text('Show added location on map',
-                                                style: AppTheme.define().textTheme.headline6!.copyWith(color: AppTheme.colors.oxonGreen))),
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                    "Adding the location...",
+                                                  )));
+                                                  getCurrLocationAndAdd(type);
+                                                },
+                                                child: Center(
+                                                    child: Text(
+                                                        'Show added location on map',
+                                                        style: AppTheme.define()
+                                                            .textTheme
+                                                            .headline5!
+                                                            .copyWith(
+                                                                color: AppTheme
+                                                                    .colors
+                                                                    .oxonGreen))),
                                                 style: solidRoundButtonStyle,
                                               ),
                                             ],
@@ -443,8 +449,8 @@ class _SusMappingState extends State<SusMapping>
                                         "Locate",
                                         style: mAppTheme.textTheme.headline3!
                                             .copyWith(
-                                            color: AppTheme
-                                                .colors.oxonGreen),
+                                                color:
+                                                    AppTheme.colors.oxonGreen),
                                       ),
                                       style: solidRoundButtonStyle,
                                     ),
@@ -456,7 +462,6 @@ class _SusMappingState extends State<SusMapping>
                                     style: mAppTheme.textTheme.headline6,
                                   ),
                                 ),
-                                Expanded(child: SizedBox(height: 10,))
                               ],
                             ),
                           ),
