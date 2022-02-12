@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -43,7 +43,7 @@ class _OTPScreenState extends State<OTPScreen> {
         setState(() {
           showLoading = false;
         });
-        if (authCredential?.user != null) {
+        if (authCredential.user != null) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SusMapping()));
         }
@@ -116,15 +116,7 @@ class _OTPScreenState extends State<OTPScreen> {
           setState(() {
             showLoading = false;
           });
-          await FirebaseAuth.instance
-              .signInWithCredential(credential)
-              .then((value) async {
-            if (value.user != null) {
-              print("user logged in");
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SusMapping()));
-            }
-          });
+          signinWithPhoneAuthCredential(credential);
         },
         verificationFailed: (FirebaseAuthException e) async {
           setState(() {
@@ -144,6 +136,32 @@ class _OTPScreenState extends State<OTPScreen> {
           });
         },
         timeout: Duration(seconds: 120));
+  }
+
+  void signinWithPhoneAuthCredential(
+      PhoneAuthCredential phoneAuthCredential) async {
+    setState(() {
+      showLoading = true;
+    });
+    try {
+      final authCredential =
+          await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      setState(() {
+        showLoading = false;
+      });
+      if (authCredential.user != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SusMapping()));
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        showLoading = false;
+      });
+      FocusScope.of(context).unfocus();
+      _scaffoldkey.currentState
+          // ignore: deprecated_member_use
+          ?.showSnackBar(SnackBar(content: Text("Invaild OTP")));
+    }
   }
 
   @override

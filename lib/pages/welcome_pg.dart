@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:oxon_app/pages/otpscreen.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -74,7 +75,8 @@ class _WelcomePageState extends State<WelcomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProductsPage()));
+                                    builder: (context) =>
+                                        OTPScreen(_controller.text)));
                           },
                           child: Text(
                             "Send OTP",
