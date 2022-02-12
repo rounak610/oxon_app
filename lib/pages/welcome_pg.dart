@@ -66,7 +66,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             width: 190, height: 60),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsPage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => SusMapping()));
                           },
                           child: Text(
                             "Send OTP",

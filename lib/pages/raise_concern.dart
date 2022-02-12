@@ -85,7 +85,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                             color: Colors.white,
                           ),
                           items: <String>[
-                            'select',
+                            'Select',
                             'Dustbin',
                             'Sewerage Problem',
                             'Road Light',
@@ -232,9 +232,9 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                           Navigator.of(context).pushNamed(
                               TakePictureScreen.routeName,
                               arguments: Concern(
-                                  description: descriptionController.text,
-                                  authorityType: issueSubTypeDropdownValue,
-                                  issueType: issueTypeDropdownValue,
+                                  description: descriptionController.text == null ? 'No description' :descriptionController.text ,
+                                  authorityType: issueSubTypeDropdownValue  == null ? 'Not selected' :issueSubTypeDropdownValue ,
+                                  issueType: issueTypeDropdownValue  == null ? 'Not selected' : issueTypeDropdownValue ,
                                   imagePath: 'assets/images/oxon_logo.png'));
                         },
                         child: Text(
