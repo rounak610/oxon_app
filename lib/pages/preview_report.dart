@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/models/concern.dart';
+import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
@@ -18,6 +21,8 @@ class PreviewReport extends StatefulWidget {
   @override
   _PreviewReportState createState() => _PreviewReportState();
 }
+
+final _formKey = GlobalKey<FormState>();
 
 class _PreviewReportState extends State<PreviewReport> {
 
@@ -222,24 +227,50 @@ class _PreviewReportState extends State<PreviewReport> {
                     SizedBox(
                       height: 20,
                     ),
-                    Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(
-                            width: 250, height: 60),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.green[900],
-                                fontWeight: FontWeight.bold),
+                    Form(
+                      key: _formKey,
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints.tightFor(
+                              width: 250, height: 60),
+                          child: ElevatedButton(
+                            onPressed: () async
+                            {
+
+                              if(_formKey.currentState!.validate())
+                              {
+                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
+                                  duration: Duration( seconds: 2),
+                                ),
+                                );
+                              }
+                              FirebaseFirestore.instance.collection('complaints').add({'description':description, 'issueType':issueType, 'image':imagePath}).then((value)
+                                {
+                                  if(value != null)
+                                  {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductsPage()));
+                                  }
+                                }
+
+                                )
+                                    .catchError((e){
+                                  print(e);
+                                }
+                                );
+                            },
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.green[900],
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.green[50],
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(35.0))),
                           ),
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.green[50],
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(35.0))),
                         ),
                       ),
                     ),
@@ -249,7 +280,7 @@ class _PreviewReportState extends State<PreviewReport> {
                     Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(
-                            width: 250, height: 60),
+                            width: 300, height: 60),
                         child: ElevatedButton(
                           onPressed: () => _onShare(context,imagePath, issueType, description),
                           child: Text(
