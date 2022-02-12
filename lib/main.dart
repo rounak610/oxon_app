@@ -82,8 +82,12 @@ class _InitializerWidgetState extends State<InitializerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading? Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    ):_user==null?WelcomePage():SusMapping();
+    return isLoading
+        ? Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          )
+        : _user == null
+            ? WelcomePage()
+            : SusMapping();
   }
 }
