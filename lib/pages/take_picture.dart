@@ -50,9 +50,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
 
-    final description = args.description;
-    final issueType = args.issueType;
-    final authority = args.authorityType;
+    String description = args.description;
+    String issueType = args.issueType;
+    String authority = args.authorityType;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 34, 90, 0),
@@ -108,10 +108,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                           await Navigator.of(context).pushNamed(
                               PreviewReport.routeName,
                               arguments: Concern(
-                                  description: description,
-                                  authorityType: authority,
-                                  issueType: issueType,
-                                  imagePath: image.path)
+                                  description: description == null ?'No description' : description,
+                                  authorityType: authority == null? 'Not selected' : authority,
+                                  issueType: issueType == null? 'Not selected' : issueType,
+                                  imagePath: image.path == null? 'assets/images/oxon_logo.png' : image.path)
                           );
                         } catch (e) {
                           // If an error occurs, log the error to the console.

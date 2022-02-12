@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oxon_app/pages/otpscreen.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 
@@ -56,18 +57,16 @@ class _WelcomePageState extends State<WelcomePage> {
                           controller: _controller,
                         ),
                       ),
-                      padding: EdgeInsets.all(32.0),
+                      padding: EdgeInsets.all(10.0),
                     ),
                     Container(
+                      padding: const EdgeInsets.only(bottom: 60),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(
                             width: 190, height: 60),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SusMapping()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => SusMapping()));
                           },
                           child: Text(
                             "Send OTP",
