@@ -35,159 +35,186 @@ class _PreviewReportState extends State<PreviewReport> {
     final imagePath = args.imagePath;
 
     return SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Scaffold(
+        child: Scaffold(
       backgroundColor: AppTheme.colors.oxonGreen,
       drawer: CustomDrawer(),
       appBar: CustomAppBar(context, "Preview Your Report"),
       body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image:
-                          Image.asset('assets/images/products_pg_bg.png').image,
-                      fit: BoxFit.cover)),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Name :",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "Aikagra",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image:
+                        Image.asset('assets/images/products_pg_bg.png').image,
+                    fit: BoxFit.cover)),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Name :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          "Aikagra",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Mobile No. :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          "99*******",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Problem Category :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          "",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Issue :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          issueType,
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Location :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          "XXXXXXXXX",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Description :",
+                      style: TextStyle(
+                          fontSize: 28,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Mobile No. :",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "99*******",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Problem Category :",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Issue :",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            issueType,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Location :",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "XXXXXXXXX",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Description :",
+                      child: Text(
+                        description,
                         style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w200),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Photo Uploaded :",
+                      style: TextStyle(
+                          fontSize: 28,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
                         height: 200,
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.all(15),
@@ -195,41 +222,14 @@ class _PreviewReportState extends State<PreviewReport> {
                           border: Border.all(color: Colors.white, width: 2),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(
-                          description,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w200),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Photo Uploaded :",
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          height: 200,
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Image.file(File(imagePath))
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Center(
+                        child: Image.file(File(imagePath))
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Center(
                         child: ConstrainedBox(
                           constraints: const BoxConstraints.tightFor(
                               width: 250, height: 60),
@@ -273,63 +273,63 @@ class _PreviewReportState extends State<PreviewReport> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints.tightFor(
-                              width: 300, height: 60),
-                          child: ElevatedButton(
-                            onPressed: () => _onShare(context,imagePath, issueType, description),
-                            child: Text(
-                              'Share via Twitter',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.green[900],
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.green[50],
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(35.0))),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints.tightFor(
+                            width: 300, height: 60),
+                        child: ElevatedButton(
+                          onPressed: () => _onShare(context,imagePath, issueType, description),
+                          child: Text(
+                            'Share via Twitter',
+                            style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.green[900],
+                                fontWeight: FontWeight.bold),
                           ),
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.green[50],
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius:
+                                      new BorderRadius.circular(35.0))),
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints.tightFor(
-                              width: 250, height: 60),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Go back',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: Colors.white, width: 2),
-                                primary: Color.fromARGB(255, 34, 90, 0),
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(35.0))),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints.tightFor(
+                            width: 250, height: 60),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Go back',
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(color: Colors.white, width: 2),
+                              primary: Color.fromARGB(255, 34, 90, 0),
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius:
+                                      new BorderRadius.circular(35.0))),
                         ),
                       ),
-                    ],
-                  )
-              ),
-            )
-          ],
+                    ),
+                  ],
+                )
+            ),
+          )
+        ],
       ),
-    ),
-        )
+    )
     );
   }
   void _onShare(BuildContext context, String imagePath, String issueType, String description) async {
