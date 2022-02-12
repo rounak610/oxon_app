@@ -50,3 +50,4 @@ If you do need action buttons, call CustomAppBar(context, <title>, <list of widg
   ```
   margin: EdgeInsets.only(top: 11.71 * SizeConfig.responsiveMultiplier)
   ```
+  #use LinearProgressIndicator whereever necessary.

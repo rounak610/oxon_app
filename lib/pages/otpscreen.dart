@@ -71,7 +71,7 @@ class _OTPScreenState extends State<OTPScreen> {
           ),
           SingleChildScrollView(
             child: showLoading
-                ? Center(child: CircularProgressIndicator())
+                ? Center(child: LinearProgressIndicator())
                 : Column(
                     children: [
                       Container(

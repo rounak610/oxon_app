@@ -202,7 +202,10 @@ class _SusMappingState extends State<SusMapping>
       child: Scaffold(
           drawer: CustomDrawer(),
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
-          appBar: CustomAppBar(context, "Sustainable Mapping",),
+          appBar: CustomAppBar(
+            context,
+            "Dustbin and Urinals",
+          ),
           body: Column(
             children: [
               Container(
@@ -298,8 +301,7 @@ class _SusMappingState extends State<SusMapping>
                                 mapType: MapType.normal,
                                 initialCameraPosition: cameraPosition,
                                 markers: dustbinMarkers,
-                                onMapCreated:
-                                    (GoogleMapController controller) {
+                                onMapCreated: (GoogleMapController controller) {
                                   _googleMapController = controller;
                                   _controller.complete(controller);
                                 },

@@ -84,7 +84,7 @@ class _InitializerWidgetState extends State<InitializerWidget> {
   Widget build(BuildContext context) {
     return isLoading
         ? Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(child: LinearProgressIndicator()),
           )
         : _user == null
             ? WelcomePage()
