@@ -165,15 +165,8 @@ class _OTPScreenState extends State<OTPScreen> {
     }
   }
 
-  Future<void> initializefirebase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-  }
-
   @override
   void initState() {
-    initializefirebase();
-
     // TODO: implement initState
     super.initState();
     _verifyPhone();
