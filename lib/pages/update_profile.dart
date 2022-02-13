@@ -30,8 +30,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   Widget build(BuildContext context) {
 
-    //final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
-    //final mobile = args.mobile;
+    final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
+    final mobile = args.mobile;
 
     return SafeArea(
         child: Scaffold(
@@ -235,7 +235,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     .collection('users')
                                     .add({
                                   'name':name,
-                                  //'mobile':mobile,
+                                  'mobile':mobile,
                                   'gender': gender,
                                   'DOB': DOB,
                                   'city':city,
