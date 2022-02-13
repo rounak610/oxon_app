@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
-import 'package:path/path.dart' as Path;
+import '../models/mobile_number.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,8 +11,7 @@ import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 
 class OTPScreen extends StatefulWidget {
-  final String phone;
-  OTPScreen(this.phone);
+  static const routeName = '/otpscreen';
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -33,6 +32,9 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     void signinWithPhoneAuthCredential(
         PhoneAuthCredential phoneAuthCredential) async {
       setState(() {
@@ -60,6 +62,7 @@ class _OTPScreenState extends State<OTPScreen> {
     }
 
     return Scaffold(
+
         key: _scaffoldkey,
         appBar: AppBarotpscreen(context, "OTP Verification"),
         body: Stack(children: [
@@ -111,8 +114,10 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   _verifyPhone() async {
+    final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
+    final phone = args.mobile;
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+91${widget.phone}',
+        phoneNumber: '+91${phone}',
         verificationCompleted: (PhoneAuthCredential credential) async {
           setState(() {
             showLoading = false;

@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oxon_app/models/mobile_number.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
+import 'package:date_field/date_field.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({Key? key}) : super(key: key);
@@ -21,12 +23,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
   late String email;
   late String name;
   late String mobile;
-  late String DOB;
   late String city;
   String? gender;
+  DateTime? DOB;
 
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
+    final mobile = args.mobile;
+
     return SafeArea(
         child: Scaffold(
           backgroundColor: AppTheme.colors.oxonGreen,
@@ -69,73 +75,17 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             borderSide: BorderSide(color: Colors.white, width: 2.0),
                           ),
                           border: OutlineInputBorder(
-                             // borderSide: BorderSide(color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          hintText: 'Enter your email-id',
-                          hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                          labelText: 'Email-Id',
-                          labelStyle: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300),
-                        ),
-                        onChanged: (value){
-                          setState(() {
-                            email=value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      TextFormField(
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          border: OutlineInputBorder(
                             // borderSide: BorderSide(color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(20)
                           ),
                           hintText: 'Enter your full name',
                           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
                           labelText: 'Name',
-                          labelStyle: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300),
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                         ),
                         onChanged: (value){
                           setState(() {
                             name=value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      TextFormField(
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white, width: 2.0),
-                          ),
-                          border: OutlineInputBorder(
-                            // borderSide: BorderSide(color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          hintText: 'Enter your mobile number',
-                          hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                          labelText: 'Contact number',
-                          labelStyle: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300),
-                        ),
-                        maxLength: 10,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value){
-                          setState(() {
-                            mobile=value;
                           });
                         },
                       ),
@@ -158,22 +108,19 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           hintText: 'Enter your city name',
                           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
                           labelText: 'City',
-                          labelStyle: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300),
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                         ),
                         onChanged: (value){
                           setState(() {
                             city=value;
-                          });
+                          }
+                          );
                         },
                       ),
                       SizedBox(
                         height: 25,
                       ),
-                      TextFormField(
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                        autofocus: true,
+                      DateTimeFormField(
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white, width: 2.0),
@@ -182,12 +129,22 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             //borderSide: BorderSide(color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(20)
                           ),
-                          hintText: 'Enter your DOB (DD/MM/YYYY)',
+                          hintText: 'Select your date of birth',
                           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                          labelText: 'Date of Birth',
-                          labelStyle: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w300),
+                          labelText: 'Date OF Birth',
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
+                          suffixIcon: Icon(Icons.event_outlined,
+                          color: Colors.white,
+                          ),
                         ),
-                        onChanged: (value){
+                        mode: DateTimeFieldPickerMode.date,
+                        autovalidateMode: AutovalidateMode.always,
+                        validator: (DateTime? e) {
+                          return (e?.day ?? 0) == 1
+                              ? 'Please not the first day'
+                              : null;
+                        },
+                        onDateSelected: (DateTime value) {
                           setState(() {
                             DOB=value;
                           });
@@ -201,7 +158,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           hint: Text(
                             "Select your Gender",
                             style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 20,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w100),
                           ),
@@ -245,34 +202,36 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             constraints: const BoxConstraints.tightFor(
                                 width: 250, height: 60),
                             child: ElevatedButton(
-                              onPressed: () async
-                              {
-
-                                if(_formKey.currentState!.validate())
-                                {
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Processing data')),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Processing data....'),
+                                      duration: Duration(seconds: 1),
+                                    ),
                                   );
                                 }
-
-                                FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: mobile).then((signedInUser)
-                                {
-                                  FirebaseFirestore.instance.collection('users').add({'email':email,'name':name, 'pass':mobile, 'DOB':DOB, 'gender':gender, 'city':city}).then((value)
-                                  {
-                                    if(signedInUser != null)
-                                    {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
-                                    }
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .add({
+                                  'name':name,
+                                  'mobile':mobile,
+                                  'gender': gender,
+                                  'DOB': DOB,
+                                  'city':city,
+                                }).then((value) {
+                                  if (value != null) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfilePage()));
                                   }
-
-                                  )
-                                      .catchError((e){
-                                    print(e);
-                                  }
-                                  );
-                                }
-                                );
+                                }).catchError((e) {
+                                  print(e);
+                                });
                               },
-
                               child: Text(
                                 'Save Details',
                                 style: TextStyle(

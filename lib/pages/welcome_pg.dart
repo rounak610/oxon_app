@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oxon_app/models/mobile_number.dart';
 import 'package:oxon_app/pages/otpscreen.dart';
 import 'package:oxon_app/pages/products_pg.dart';
+import 'package:oxon_app/pages/profile_pg.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oxon_app/models/user_profile.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -71,13 +76,14 @@ class _WelcomePageState extends State<WelcomePage> {
                             setState(() {
                               showLoading = true;
                             });
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        OTPScreen(_controller.text)));
+                            Navigator.of(context).pushNamed(
+                                OTPScreen.routeName,
+                                arguments: MobileProfile(
+                                  mobile: _controller.text ,
+                                )
+                            );
                           },
+
                           child: Text(
                             "Send OTP",
                             style: TextStyle(color: Colors.black, fontSize: 20),
