@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
+import 'package:oxon_app/pages/otpscreen.dart';
 import 'package:oxon_app/pages/preview_report.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
@@ -40,8 +41,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
-          home: InitializerWidget(),
+          home: WelcomePage(),
           routes: {
+            OTPScreen.routeName:(context)=>OTPScreen(),
             RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
             TakePictureScreen.routeName: (context) =>
                 TakePictureScreen(camera: cameras[0]),
