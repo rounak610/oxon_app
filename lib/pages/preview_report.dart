@@ -102,74 +102,83 @@ class _PreviewReportState extends State<PreviewReport> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Problem Category :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          issueType,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        )
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Problem Category :",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            issueType,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Issue :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          problem,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        )
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Issue :",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            problem,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Location :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "XXXXXXXXX",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        )
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Location :",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "XXXXXXXXX",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 20,
