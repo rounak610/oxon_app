@@ -356,7 +356,7 @@ class _PreviewReportState extends State<PreviewReport> {
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
-        "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n${issueType} \n${problem} \n${description} \nComplaint posted by @oxon_life";
+        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
       await Share.shareFiles(imagePaths,
           text: str,
