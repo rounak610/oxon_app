@@ -23,15 +23,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
   late String email;
   late String name;
   late String city;
+  late String mobile;
   String? gender;
   DateTime? DOB;
 
   @override
   Widget build(BuildContext context) {
-
-    final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
-    final mobile = args.mobile;
-
     return SafeArea(
         child: Scaffold(
           backgroundColor: AppTheme.colors.oxonGreen,
@@ -95,6 +92,49 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             return 'Please enter your name';
                           }
                         },
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        maxLength: 10,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          ),
+                          border: OutlineInputBorder(
+                            // borderSide: BorderSide(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(20)
+                          ),
+                          hintText: 'Enter your mobile number',
+                          hintStyle: TextStyle(color: Colors.white, fontSize: 20),
+                          labelText: 'Mobile Number',
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
+                        ),
+                        onChanged: (value)
+                        {
+                          setState(() {
+                            mobile=value;
+                          });
+                        },
+                        validator: (value)
+                        {
+                          if(value==null)
+                          {
+                            return 'Please enter your mbile number';
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '*Enter the same number that you used for login',
+                        style: TextStyle(color: Colors.white, fontSize: 10, ),
                       ),
                       SizedBox(
                         height: 25,
