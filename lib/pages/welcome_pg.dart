@@ -76,12 +76,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             setState(() {
                               showLoading = true;
                             });
-                            Navigator.of(context).pushNamed(
-                                OTPScreen.routeName,
-                                arguments: MobileProfile(
-                                  mobile: int.parse(_controller.text) ,
-                                )
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => OTPScreen(_controller.text)));
                           },
 
                           child: Text(

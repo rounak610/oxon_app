@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: WelcomePage(),
           routes: {
-            OTPScreen.routeName:(context)=>OTPScreen(),
+            //OTPScreen.routeName:(context)=>OTPScreen(),
             RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
             TakePictureScreen.routeName: (context) =>
                 TakePictureScreen(camera: cameras[0]),

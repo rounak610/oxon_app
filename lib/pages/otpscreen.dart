@@ -11,6 +11,8 @@ import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 
 class OTPScreen extends StatefulWidget {
+  final String phone;
+  OTPScreen(this.phone);
   static const routeName = '/otpscreen';
   @override
   _OTPScreenState createState() => _OTPScreenState();
@@ -114,12 +116,8 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   _verifyPhone() async {
-
-    final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
-    final phone = args.mobile;
-
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+91${phone}',
+        phoneNumber: '+91${widget.phone}',
         verificationCompleted: (PhoneAuthCredential credential) async {
           setState(() {
             showLoading = false;
