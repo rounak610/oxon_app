@@ -22,7 +22,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   late String email;
   late String name;
-  late String mobile;
   late String city;
   String? gender;
   DateTime? DOB;

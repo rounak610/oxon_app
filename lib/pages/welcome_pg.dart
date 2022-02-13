@@ -79,7 +79,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             Navigator.of(context).pushNamed(
                                 OTPScreen.routeName,
                                 arguments: MobileProfile(
-                                  mobile: _controller.text ,
+                                  mobile: int.parse(_controller.text) ,
                                 )
                             );
                           },

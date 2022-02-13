@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class MobileProfile {
-  final String mobile;
+  final int mobile;
 
   MobileProfile({
     required this.mobile,
