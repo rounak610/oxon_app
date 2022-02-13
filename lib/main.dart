@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
-          home: WelcomePage(),
+          home: ProductsPage(),
           routes: {
             OTPScreen.routeName:(context)=>OTPScreen(),
             RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
