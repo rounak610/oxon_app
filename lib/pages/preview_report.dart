@@ -247,6 +247,7 @@ class _PreviewReportState extends State<PreviewReport> {
                                   .add({
                                 'description': description,
                                 'issueType': issueType,
+                                'problem':problem,
                                 'image': imagePath
                               }).then((value) {
                                 if (value != null) {
@@ -285,7 +286,7 @@ class _PreviewReportState extends State<PreviewReport> {
                             width: 300, height: 60),
                         child: ElevatedButton(
                           onPressed: () => _onShare(
-                              context, imagePath, issueType, description),
+                              context, imagePath, issueType, description, problem),
                           child: Text(
                             'Share via Twitter',
                             style: TextStyle(
@@ -335,11 +336,11 @@ class _PreviewReportState extends State<PreviewReport> {
   }
 
   void _onShare(BuildContext context, String imagePath, String issueType,
-      String description) async {
+      String description, String problem) async {
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
-        "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n$issueType \n$description \nComplaint posted by @oxon_life";
+        "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n${issueType} \n${problem} \n${description} \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
       await Share.shareFiles(imagePaths,
           text: str,
