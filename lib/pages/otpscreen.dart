@@ -13,7 +13,6 @@ import 'package:oxon_app/theme/app_theme.dart';
 class OTPScreen extends StatefulWidget {
   final String phone;
   OTPScreen(this.phone);
-  static const routeName = '/otpscreen';
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }

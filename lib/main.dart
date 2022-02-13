@@ -41,9 +41,8 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
-          home: WelcomePage(),
+          home: InitializerWidget(),
           routes: {
-            //OTPScreen.routeName:(context)=>OTPScreen(),
             RaiseConcernDirect.routeName: (context) => RaiseConcernDirect(),
             TakePictureScreen.routeName: (context) =>
                 TakePictureScreen(camera: cameras[0]),

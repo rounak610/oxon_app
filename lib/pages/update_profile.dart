@@ -125,19 +125,21 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         {
                           if(value==null)
                           {
-                            return 'Please enter your mbile number';
+                            return 'Please enter your mobile number';
                           }
                         },
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
-                      Text(
-                        '*Enter the same number that you used for login',
-                        style: TextStyle(color: Colors.white, fontSize: 10, ),
+                      Container(
+                        child: Text(
+                          '*Enter the same number that you used for login',
+                          style: TextStyle(color: Colors.white, fontSize: 15, ),
+                        ),
                       ),
                       SizedBox(
-                        height: 25,
+                        height: 34,
                       ),
                       TextFormField(
                         style: TextStyle(
