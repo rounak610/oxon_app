@@ -48,7 +48,7 @@ class CustomDrawer extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 35,
                         backgroundImage: Image.asset(
-                                'assets/images/profile_pic.jpg')
+                                'assets/images/user_img.png')
                             .image, //TO BE REPLACED WITH USER'S NETWORK IMAGE//
                       ),
                     ),

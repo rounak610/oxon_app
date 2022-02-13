@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/models/concern.dart';
 import 'package:oxon_app/pages/products_pg.dart';
+import 'package:oxon_app/pages/raise_concern.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
@@ -320,7 +321,12 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RaiseConcernDirect()));
+                          },
                           child: Text(
                             'Go back',
                             style: TextStyle(
