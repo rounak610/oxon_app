@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/models/concern.dart';
 import 'package:oxon_app/pages/products_pg.dart';
+import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
@@ -247,7 +248,7 @@ class _PreviewReportState extends State<PreviewReport> {
                                   const SnackBar(
                                     content: Text(
                                         'Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
-                                    duration: Duration(seconds: 2),
+                                    duration: Duration(seconds: 8),
                                   ),
                                 );
                               }
@@ -264,7 +265,7 @@ class _PreviewReportState extends State<PreviewReport> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              ProductsPage()));
+                                              SusMapping()));
                                 }
                               }).catchError((e) {
                                 print(e);
