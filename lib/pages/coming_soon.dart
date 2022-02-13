@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
@@ -13,20 +14,23 @@ class ComingSoon extends StatelessWidget {
       backgroundColor: AppTheme.colors.oxonGreen,
       appBar: CustomAppBar(context, 'Feature not available'),
       drawer: CustomDrawer(),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/products_pg_bg.png"),
-                    fit: BoxFit.cover)),
-          ),
-          Center(
-              child: Text(
-            'Coming Soon!',
-            style: TextStyle(color: Colors.white, fontSize: 30),
-          ))
-        ],
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(content: Text('Press again to exit the app'),duration: Duration(seconds:2)),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/products_pg_bg.png"),
+                      fit: BoxFit.cover)),
+            ),
+            Center(
+                child: Text(
+              'Coming Soon!',
+              style: TextStyle(color: Colors.white, fontSize: 30),
+            ))
+          ],
+        ),
       ),
     );
   }

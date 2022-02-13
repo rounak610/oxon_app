@@ -86,22 +86,29 @@ class CustomDrawer extends StatelessWidget {
                         context, RaiseConcernDirect.routeName);
                   },
                   child: Text(
-                    'Raise a Concern',
+                    'Report a complaint',
                     style: TextStyle(fontSize: 22),
                   ),
-                  style: ElevatedButton.styleFrom(primary: Colors.green[900]),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.green[900],
+                      shape: new RoundedRectangleBorder(
+                          borderRadius:
+                          new BorderRadius.circular(35.0))
+                  ),
                 ),
               ),
               _tileItem('Profile', ProfilePage.routeName, context),
-              _tileItem('My Wallet', ComingSoon.routeName, context),
-              _tileItem('Let\'s Shop', ComingSoon.routeName, context),
+
+              //_tileItem('Let\'s Shop', ComingSoon.routeName, context),
               _tileItem('Dustbin and Toilets', SusMapping.routeName, context),
+              _tileItem('Van Tracking', ComingSoon.routeName, context),
+              _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Donate a Dustbin', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
-              _tileItem('Van Tracking', ComingSoon.routeName, context),
+
               Expanded(
                 child: Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.center,
                   child: Container(
                     height: 120,
                     padding: EdgeInsets.all(15),

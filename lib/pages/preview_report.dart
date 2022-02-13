@@ -303,7 +303,7 @@ class _PreviewReportState extends State<PreviewReport> {
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.green[900],
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.w900),
                           ),
                           style: ElevatedButton.styleFrom(
                               primary: Colors.green[50],
@@ -325,12 +325,12 @@ class _PreviewReportState extends State<PreviewReport> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => RaiseConcernDirect()));
+                                    builder: (context) => SusMapping()));
                           },
                           child: Text(
-                            'Go back',
+                            'Go back to home',
                             style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 20,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),

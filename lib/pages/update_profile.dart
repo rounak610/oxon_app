@@ -305,7 +305,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   primary: Colors.green[50],
                                   shape: new RoundedRectangleBorder(
                                       borderRadius:
-                                      new BorderRadius.circular(35.0))),
+                                      new BorderRadius.circular(35.0))
+                              ),
                             ),
                           ),
                         ),
