@@ -30,8 +30,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   Widget build(BuildContext context) {
 
-    final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
-    final mobile = args.mobile;
+    //final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
+    //final mobile = args.mobile;
 
     return SafeArea(
         child: Scaffold(
@@ -91,7 +91,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         },
                         validator: (value)
                         {
-                          if(value!.isEmpty)
+                          if(value==null)
                           {
                             return 'Please enter your name';
                           }
@@ -127,7 +127,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         },
                         validator: (value)
                         {
-                          if(value!.isEmpty)
+                          if(value==null)
                           {
                             return 'Please enter your city name';
                           }
@@ -147,7 +147,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           ),
                           hintText: 'Select your date of birth',
                           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                          labelText: 'Date OF Birth',
+                          labelText: 'Date of Birth',
                           labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                           suffixIcon: Icon(Icons.event_outlined,
                           color: Colors.white,
@@ -163,9 +163,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           });
                         },
                         validator: (DateTime? e) {
-                          return (e?.day ?? 0) == 1
-                              ? 'Please not the first day'
-                              : null;
+                          if(e==null)
+                            {
+                              return 'Please enter your date of birth';
+                            }
                         },
                       ),
                       SizedBox(
@@ -234,7 +235,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     .collection('users')
                                     .add({
                                   'name':name,
-                                  'mobile':mobile,
+                                  //'mobile':mobile,
                                   'gender': gender,
                                   'DOB': DOB,
                                   'city':city,
