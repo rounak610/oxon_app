@@ -6,6 +6,7 @@ import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key); //, required this.title
@@ -21,11 +22,27 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    // final FirebaseAuth auth = FirebaseAuth.instance;
+
+    // User? user;
+    // String? uid;
+    // void setData() {
+    //   user = auth?.currentUser;
+    //   uid = user?.uid;
+    // }
+
     String userName = "Aikagra";
     String userResidence = "Pilani";
     String userMobileNo = "98********";
 
-    final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(146.32 * SizeConfig.responsiveMultiplier, 7.61 * SizeConfig.responsiveMultiplier));
+    final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(
+        146.32 * SizeConfig.responsiveMultiplier,
+        7.61 * SizeConfig.responsiveMultiplier));
+    @override
+    initState() {
+      // setData();
+      super.initState();
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -41,14 +58,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         fit: BoxFit.cover)),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(5.27 * SizeConfig.responsiveMultiplier, 0, 5.27 * SizeConfig.responsiveMultiplier, 0),
+                margin: EdgeInsets.fromLTRB(
+                    5.27 * SizeConfig.responsiveMultiplier,
+                    0,
+                    5.27 * SizeConfig.responsiveMultiplier,
+                    0),
                 child: Center(
                   child: Column(children: [
                     SizedBox(
                       height: 5.85 * SizeConfig.responsiveMultiplier,
                     ),
                     Table(
-                      defaultColumnWidth: FixedColumnWidth(23.41 * SizeConfig.responsiveMultiplier),
+                      defaultColumnWidth: FixedColumnWidth(
+                          23.41 * SizeConfig.responsiveMultiplier),
                       children: [
                         TableRow(children: [
                           Text("Name: ",
@@ -84,7 +106,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       child: OutlinedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdateProfile()));
                         },
                         child: Text(
                           "Update Details",
@@ -101,9 +126,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Container(
                       child: OutlinedButton(
-                    onPressed: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (context) => ComingSoon()));
-                      },
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ComingSoon()));
+                        },
                         child: Container(
                           child: Text(
                             "Check Your Wallet",
