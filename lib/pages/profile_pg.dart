@@ -7,6 +7,7 @@ import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key); //, required this.title
@@ -26,9 +27,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
     // User? user;
     // String? uid;
-    // void setData() {
+    // void setData() async {
     //   user = auth?.currentUser;
     //   uid = user?.uid;
+    // setState(() async {
+    //   await FirebaseFirestore.instance.collection('users/uid').doc(uid).get().then((dataSnapshot) {
+    //   userResidence = dataSnapshot.data()!['address'];
+    //   userMobileNo = dataSnapshot.data()!['number'];
+    // })
+    // }); 
     // }
 
     String userName = "Aikagra";
