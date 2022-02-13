@@ -83,10 +83,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           labelText: 'Name',
                           labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                         ),
-                        onChanged: (value){
+                        onChanged: (value)
+                        {
                           setState(() {
                             name=value;
                           });
+                        },
+                        validator: (value)
+                        {
+                          if(value!.isEmpty)
+                          {
+                            return 'Please enter your name';
+                          }
                         },
                       ),
                       SizedBox(
@@ -110,11 +118,19 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           labelText: 'City',
                           labelStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                         ),
-                        onChanged: (value){
+                        onChanged: (value)
+                        {
                           setState(() {
                             city=value;
                           }
                           );
+                        },
+                        validator: (value)
+                        {
+                          if(value!.isEmpty)
+                          {
+                            return 'Please enter your city name';
+                          }
                         },
                       ),
                       SizedBox(
@@ -139,15 +155,17 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         ),
                         mode: DateTimeFieldPickerMode.date,
                         autovalidateMode: AutovalidateMode.always,
+
+                        onDateSelected: (DateTime value)
+                        {
+                          setState(() {
+                            DOB=value;
+                          });
+                        },
                         validator: (DateTime? e) {
                           return (e?.day ?? 0) == 1
                               ? 'Please not the first day'
                               : null;
-                        },
-                        onDateSelected: (DateTime value) {
-                          setState(() {
-                            DOB=value;
-                          });
                         },
                       ),
                       SizedBox(
