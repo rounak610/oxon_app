@@ -299,7 +299,7 @@ class _PreviewReportState extends State<PreviewReport> {
                           child: Text(
                             'Share via Twitter',
                             style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 20,
                                 color: Colors.green[900],
                                 fontWeight: FontWeight.bold),
                           ),
