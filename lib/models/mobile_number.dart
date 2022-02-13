@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class MobileProfile with ChangeNotifier {
+class MobileProfile {
   final String mobile;
 
   MobileProfile({
