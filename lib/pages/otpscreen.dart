@@ -114,8 +114,10 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   _verifyPhone() async {
+
     final args = ModalRoute.of(context)!.settings.arguments as MobileProfile;
     final phone = args.mobile;
+
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+91${phone}',
         verificationCompleted: (PhoneAuthCredential credential) async {
