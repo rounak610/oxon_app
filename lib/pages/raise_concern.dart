@@ -79,6 +79,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Non- Classification of Dustbins',
     'Place of Dustbins',
     'Not managed properly',
+    'Garbage collection van didn\'t come today'
   ];
   List<String> sewer = [
     'Overfilled drainage systems',

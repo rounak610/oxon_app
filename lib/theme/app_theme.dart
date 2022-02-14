@@ -16,7 +16,7 @@ class AppTheme {
           headline1:
               TextStyle(fontSize: 3.95 * SizeConfig.responsiveMultiplier),
           headline2:
-              TextStyle(fontSize: 3.66 * SizeConfig.responsiveMultiplier),
+              TextStyle(fontSize: 3.25 * SizeConfig.responsiveMultiplier),
           headline3:
               TextStyle(fontSize: 3.22 * SizeConfig.responsiveMultiplier),
           headline4:
