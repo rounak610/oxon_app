@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/sign_out.dart';
+import 'package:oxon_app/pages/welcome_pg.dart';
 
 import '../pages/donate_dustbin.dart';
 import '../pages/products_pg.dart';
@@ -34,6 +36,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
+
   String userName = "Not Updated";
   _fetch() async {
     final user = await FirebaseAuth.instance.currentUser;
@@ -87,19 +90,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: FutureBuilder(
-                            future: _fetch(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState !=
-                                  ConnectionState.done)
-                                return Text('Loading');
-                                return Text(userName,
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green[900]),
-                              );
-                            }
-                          ),
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text(
+                                  userName,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green[900]),
+                                );
+                              }),
                         )
                       ],
                     )
@@ -121,9 +124,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   style: ElevatedButton.styleFrom(
                       primary: Colors.green[900],
                       shape: new RoundedRectangleBorder(
-                          borderRadius:
-                          new BorderRadius.circular(35.0))
-                  ),
+                          borderRadius: new BorderRadius.circular(35.0))),
                 ),
               ),
               _tileItem('Profile', ProfilePage.routeName, context),
@@ -134,6 +135,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
+              _tileItem('Log Out', SignOut.routeName, context),
 
               Expanded(
                 child: Align(

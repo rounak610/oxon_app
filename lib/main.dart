@@ -16,6 +16,7 @@ import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oxon_app/pages/sign_out.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -55,7 +56,9 @@ class MyApp extends StatelessWidget {
             ProductsPage.routeName: (context) => ProductsPage(),
             ComingSoon.routeName: (context) => ComingSoon(),
             PreviewReport.routeName: (context) => PreviewReport(),
-            UpdateProfile.routeName: (context) => UpdateProfile() 
+            UpdateProfile.routeName: (context) => UpdateProfile(),
+            WelcomePage.routeName: (context) => WelcomePage(),
+            SignOut.routeName: (context) => SignOut(),
           },
         );
       });
