@@ -24,7 +24,7 @@ class SusMapping extends StatefulWidget {
 
 class _SusMappingState extends State<SusMapping>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  var userName = "to init";
+  late String userName;
   final FirebaseAuth auth = FirebaseAuth.instance;
   late String uid;
 
