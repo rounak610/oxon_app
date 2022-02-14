@@ -39,8 +39,38 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     if (issueType == 'Water Related Problems') return waterRelated;
     if (issueType == 'Enroachment') return enroachment;
 
-    return <String>['Other'];
+    return select;
   }
+
+  List<String> allCombined = ['Dustbin unavailable in locality',
+    'Dustbins overfilled',
+    'Non- Classification of Dustbins',
+    'Place of Dustbins',
+    'Not managed properly',
+    'Overfilled drainage systems',
+    'Lack of proper sewarage system',
+    'Uncleaned sewerage',
+    'Leakage of sewerage chambers',
+    'Sewerage pipes',
+    'Unavailability of road lights',
+    'Defect in road lights',
+    'Lights at always ON Mode',
+    'Roads are broken or unbuilt',
+    'Narrow roads',
+    'Too many speed breakers on the road',
+    'Unavailability of roads',
+    'Encroached roads',
+    'No or very little water supply',
+    'Irregular schedule of water supply',
+    'Undrinkable & dirty water',
+    'Leakage of pipes',
+    'Water & Electricity supply Balance',
+    'Encroachment over private property',
+    'Encroachment over public property',
+    'Encroachment over roads',
+    'Built of stairs & Ramp',
+    'Absence of Parking',
+    'Absence of property documentation',];
 
   List<String> select = ['Other'];
   List<String> dustbin = [
@@ -49,7 +79,6 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Non- Classification of Dustbins',
     'Place of Dustbins',
     'Not managed properly',
-    'Other (Please specify)'
   ];
   List<String> sewer = [
     'Overfilled drainage systems',
@@ -57,13 +86,11 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Uncleaned sewerage',
     'Leakage of sewerage chambers',
     'Sewerage pipes',
-    'Other (Please specify)'
   ];
   List<String> roadLight = [
     'Unavailability of road lights',
     'Defect in road lights',
     'Lights at always ON Mode',
-    'Other (Please specify)'
   ];
   List<String> roadRelated = [
     'Roads are broken or unbuilt',
@@ -71,7 +98,6 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Too many speed breakers on the road',
     'Unavailability of roads',
     'Encroached roads',
-    'Other (Please specify)'
   ];
   List<String> waterRelated = [
     'No or very little water supply',
@@ -79,7 +105,6 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Undrinkable & dirty water',
     'Leakage of pipes',
     'Water & Electricity supply Balance',
-    'Other (Please specify)'
   ];
   List<String> enroachment = [
     'Encroachment over private property',
@@ -88,7 +113,6 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Built of stairs & Ramp',
     'Absence of Parking',
     'Absence of property documentation',
-    'Other (Please specify)'
   ];
   List<String> other = ['Other'];
 

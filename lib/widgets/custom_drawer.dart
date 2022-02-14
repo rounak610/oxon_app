@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/donate_dustbin.dart';
@@ -7,9 +9,14 @@ import '../pages/sustainable_mapping_pg.dart';
 import '../pages/raise_concern.dart';
 import '../pages/coming_soon.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
 
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
   Widget _tileItem(String text, String routeName, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -26,6 +33,21 @@ class CustomDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+  String userName = "Not Updated";
+  _fetch() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((ds) {
+        userName = ds.data()!['name'];
+      }).catchError((e) {
+        print(e);
+      });
+    }
   }
 
   @override
@@ -64,12 +86,19 @@ class CustomDrawer extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
-                          child: Text(
-                            'John Doe', //TO BE REPLACED WITH USER'S NAME//
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green[900]),
+                          child: FutureBuilder(
+                            future: _fetch(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState !=
+                                  ConnectionState.done)
+                                return Text('Loading');
+                                return Text(userName,
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green[900]),
+                              );
+                            }
                           ),
                         )
                       ],
