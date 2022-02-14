@@ -6,7 +6,7 @@ import 'package:oxon_app/pages/welcome_pg.dart';
 
 class SignOut extends StatefulWidget {
   const SignOut({Key? key}) : super(key: key);
-  static const routeName = '/sign-out';
+  static const routeName = 'sign-out';
 
   @override
   _SignOutState createState() => _SignOutState();
