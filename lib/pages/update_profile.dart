@@ -307,7 +307,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               'city': city,
                             }).then((value) {
                               Navigator.of(context)
-                                  .pushNamed(SusMapping.routeName);
+                                  .pushNamed(ProfilePage.routeName);
                             }).catchError((e) {
                               print(e);
                             });
