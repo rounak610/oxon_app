@@ -410,10 +410,7 @@ class _PreviewReportState extends State<PreviewReport> {
 
   void _onShare(BuildContext context, String imagePath, String issueType,
       String description, String problem) async {
-    // void _onShare(BuildContext context, String imagePath, String issueType,
-    //     String description) async {
-    final locationAddress =
-        await getCurrentLocationAddress(); // todo: @Rounak add it where you wanted to
+    final locationAddress = await getCurrentLocationAddress();
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
@@ -447,4 +444,3 @@ class _PreviewReportState extends State<PreviewReport> {
     return "${geoCodedData.formattedAddress} (${geoCodedData.compoundPlusCode})";
   }
 }
-// }
