@@ -9,6 +9,7 @@ import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
 import 'package:oxon_app/theme/app_theme.dart';
+import 'package:timer_button/timer_button.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -33,9 +34,6 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     void signinWithPhoneAuthCredential(
         PhoneAuthCredential phoneAuthCredential) async {
       setState(() {
@@ -63,7 +61,6 @@ class _OTPScreenState extends State<OTPScreen> {
     }
 
     return Scaffold(
-
         key: _scaffoldkey,
         appBar: AppBarotpscreen(context, "OTP Verification"),
         body: Stack(children: [
@@ -107,7 +104,19 @@ class _OTPScreenState extends State<OTPScreen> {
                               signinWithPhoneAuthCredential(
                                   phoneAuthCredential);
                             }),
-                      )
+                      ),
+                      Text("Didn't receive OTP?"),
+                      TimerButton(
+                        label: "Resend OTP",
+                        timeOutInSeconds: 30,
+                        onPressed: () {},
+                        disabledColor: Colors.red,
+                        color: AppTheme.colors.oxonGreen,
+                        buttonType: ButtonType.OutlinedButton,
+                        disabledTextStyle: new TextStyle(fontSize: 20.0),
+                        activeTextStyle:
+                            new TextStyle(fontSize: 20.0, color: Colors.white),
+                      ),
                     ],
                   ),
           ),
@@ -140,7 +149,7 @@ class _OTPScreenState extends State<OTPScreen> {
             _verificationCode = verificationID;
           });
         },
-        timeout: Duration(seconds: 120));
+        timeout: Duration(seconds: 35));
   }
 
   void signinWithPhoneAuthCredential(

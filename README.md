@@ -1,6 +1,6 @@
 # Using reusable objects:
 
-- To use oxonGreen color- color:AppTheme.colors.oxonGree
+- To use oxonGreen color- color:AppTheme.colors.oxonGreen
 - To create the standard rounded button- style: SolidRoundButtonStyle()
 - To style text- style: Theme.of(context).textTheme.headline2
 - T0 style text with different color- style: Theme.of(context).textTheme.headline2!.copyWith(color: AppTheme.colors.oxonGreen)
