@@ -156,6 +156,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                               'select',
                               'Dustbin unavailable in locality',
                               'Dustbins overfilled ',
+                              'Waste collection van did not come today',
                               'Roads are broken or unbuilt',
                               'Narrow roads ',
                               'Too many speed breakers on the road',

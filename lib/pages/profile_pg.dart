@@ -31,38 +31,39 @@ class _ProfilePageState extends State<ProfilePage> {
 
     User? user;
     String? uid;
+
+    var doc;
+    var docData;
+
     Future<void> setUserData() async {
       user = auth?.currentUser;
       uid = user?.uid;
     }
 
-    var doc;
-
     Future<void> setDocData() async {
-      doc = await FirebaseFirestore.instance.collection('users').doc(uid);
-      print(doc);
-      if (doc != null) {
-        userName = doc!['name'];
-        userResidence = doc!['city'];
-        userMobileNo = doc!['mobile'];
-        setState((){});
-      }
-      else{
-        userName = "Not set1";
-        userResidence = "Not set1";
-        userMobileNo = "Not set1";
-        setState((){});
-
-      }
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          print('Document data: ${documentSnapshot.data()}');
+          userName = documentSnapshot['name'];
+          userResidence = documentSnapshot['city'];
+          userMobileNo = documentSnapshot['mobile'];
+        } else {
+          print('Document does not exist on the database');
+        }
+      });
     }
 
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(
         146.32 * SizeConfig.responsiveMultiplier,
         7.61 * SizeConfig.responsiveMultiplier));
     @override
-    void initState() async {
-      await setUserData();
-      await setDocData();
+    void initState() {
+      setUserData();
+      setDocData();
       super.initState();
     }
 
