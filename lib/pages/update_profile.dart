@@ -32,7 +32,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   User? user;
   String? uid;
   void setData() async {
-    user = auth?.currentUser;
+    user = auth.currentUser;
     uid = user?.uid;
     setState(() async {
       await FirebaseFirestore.instance

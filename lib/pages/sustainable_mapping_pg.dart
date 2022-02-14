@@ -24,7 +24,7 @@ class SusMapping extends StatefulWidget {
 
 class _SusMappingState extends State<SusMapping>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  late String userName;
+  String? userName;
   final FirebaseAuth auth = FirebaseAuth.instance;
   late String uid;
 
@@ -74,15 +74,7 @@ class _SusMappingState extends State<SusMapping>
   @override
   void initState() {
     super.initState();
-
-    try {
-      userName = auth.currentUser!.displayName!;
-      uid = auth.currentUser!.uid;
-    } catch (e) {
-      userName = "";
-      uid = "123";
-    }
-
+    getUserData();
     WidgetsBinding.instance?.addObserver(this);
     _tabController = new TabController(length: 3, vsync: this);
     onLayoutDone(Duration());
@@ -158,7 +150,7 @@ class _SusMappingState extends State<SusMapping>
                             _currLocData!.upvote = _currLocData!.upvote + 1;
                             repository.updateLocData(_currLocData!);
                             toiletMarkers.add(createMarkerFromLocData(
-                                _currLocData, dustbinMarkers.length + 1, type));
+                                _currLocData, toiletMarkers.length + 1, type));
                             setState(() {});
                           }
                         },
@@ -187,7 +179,7 @@ class _SusMappingState extends State<SusMapping>
                             _currLocData!.downvote = _currLocData!.downvote + 1;
                             repository.updateLocData(_currLocData!);
                             toiletMarkers.add(createMarkerFromLocData(
-                                _currLocData, dustbinMarkers.length + 1, type));
+                                _currLocData, toiletMarkers.length + 1, type));
                             setState(() {});
                           }
                         },
@@ -208,17 +200,11 @@ class _SusMappingState extends State<SusMapping>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("APP_STATE: $state");
-
     if (state == AppLifecycleState.resumed) {
-      print("in xyz resumed");
+      _googleMapController.setMapStyle("[]");
     } else if (state == AppLifecycleState.inactive) {
-      print("in xyz inactive");
     } else if (state == AppLifecycleState.paused) {
-      print("in xyz paused");
-    } else if (state == AppLifecycleState.detached) {
-      print("in xyz detached");
-    }
+    } else if (state == AppLifecycleState.detached) {}
   }
 
   void onTapMarker(LocData locData, count) {
@@ -227,47 +213,33 @@ class _SusMappingState extends State<SusMapping>
           LatLng(locData.location.latitude, locData.location.longitude);
 
       if (_currMarker == markerTappedLatLng && locData.u_id == uid) {
-        switch (deleteCount) {
-          case 0:
-            {
-              deleteCount += 1;
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content:
-                      Text("Press on the marker one more time to delete it.")));
-            }
-            break;
+        if (deleteCount == 1) {
+          if (_currLocData != null &&
+              auth.currentUser != null &&
+              _currLocData?.u_id == uid) {
 
-          case 1:
-            {
-              print("in case 1");
-              if (_currLocData != null &&
-                  auth.currentUser != null &&
-                  _currLocData?.u_id == uid) {
-                repository.deleteLocData(_currLocData!);
-                if (locData.type == "toilet") {
-                  toiletMarkers.removeWhere(
-                      (element) => element.markerId == _currMarkerId);
-                } else {
-                  dustbinMarkers.removeWhere(
-                      (element) => element.markerId == _currMarkerId);
-                }
-              }
+            repository.deleteLocData(_currLocData!);
+
+            if (locData.type == "toilet") {
+              toiletMarkers
+                  .removeWhere((element) => element.markerId == _currMarkerId);
+            } else {
+              dustbinMarkers
+                  .removeWhere((element) => element.markerId == _currMarkerId);
             }
-            break;
+            setState(() {});
+          }
+          deleteCount = 0;
         }
-        deleteCount += 1;
-      } else {
-        deleteCount = 0;
+        if (deleteCount == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text("Press on the marker one more time to delete it.")));
+          deleteCount += 1;
+        }
       }
-      if (deleteMarker == null) {
-        deleteMarker ==
-            LatLng(locData.location.latitude, locData.location.longitude);
-      }
-      if (deleteMarker != _currMarker) {
-        deleteCount = 0;
-        deleteMarker ==
-            LatLng(locData.location.latitude, locData.location.longitude);
-      }
+
+
 
       shouldAskFeedback = true;
       _currMarker = markerTappedLatLng;
@@ -282,6 +254,7 @@ class _SusMappingState extends State<SusMapping>
     snapshot!.forEach((element) {
       count += 1;
       final locData = LocData.fromSnapshot(element);
+
       if (locData.is_displayed) {
         if (locData.type == "dustbin") {
           dustbinMarkers
@@ -316,18 +289,19 @@ class _SusMappingState extends State<SusMapping>
   }
 
   Future<String> getCurrLocationAndAdd(String type) async {
-    print('in future asyn getcurrloc and add');
     _locationData = await location.getLocation();
+
+
+
     final id = await repository.addLocData(LocData(
         downvote: 0,
         is_displayed: true,
         location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
-        name: userName,
+        name: userName != null ? userName! : "Anonymous",
         type: type,
         sub_type: "ordinary",
         u_id: uid,
         upvote: 0));
-    print("The id: ${id.toString()}");
 
     return type;
   }
@@ -601,7 +575,7 @@ class _SusMappingState extends State<SusMapping>
                                                                         "assets/images/badge_final.jpeg"))),
                                                           ),
                                                           Text(
-                                                              "\nThank you $userName for your contribution.\n\nOur world needs more people like you :)")
+                                                              "\nThank you ${userName != null ? '${userName} ' : ''}for your contribution.\n\nOur world needs more people like you :)")
                                                         ],
                                                       ),
                                                     ),
@@ -656,10 +630,9 @@ class _SusMappingState extends State<SusMapping>
                                                         ],
                                                       ),
                                                     );
-                                                  } catch (e, s) {
-                                                    print(s);
-                                                  }
+                                                  } catch (e, s) {}
                                                 }
+
                                                 return Text(
                                                     "Error fetching location. Ensure device location and internet is turned on and please try again");
                                               },
@@ -743,6 +716,10 @@ class _SusMappingState extends State<SusMapping>
         zoom: 16));
     CameraUpdate zoom = CameraUpdate.zoomTo(16);
     _googleMapController.animateCamera(update);
+    shouldAskFeedback = false;
+    setState(() {
+
+    });
   }
 
   void _launchMapUrl() async {
@@ -758,9 +735,8 @@ class _SusMappingState extends State<SusMapping>
       'dir_action=navigate'
     ].join('&');
 
-    final url = 'https://www.google.com/maps/dir/?api=1&$mapOptions';
-    print(url);
-    print("above url");
+    final url = 'https:www.google.com/maps/dir/?api=1&$mapOptions';
+
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -778,8 +754,6 @@ class _SusMappingState extends State<SusMapping>
 
     final url =
         'https://www.google.com/maps/search/?api=1&query=${_currMarker!.latitude},${_currMarker!.longitude}';
-    print(url);
-    print("above url");
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -808,5 +782,24 @@ class _SusMappingState extends State<SusMapping>
         icon: type == "dustbin" ? dustbinIcon : toiletIcon,
         position:
             LatLng(locData.location.latitude, locData.location.longitude));
+  }
+
+  void getUserData() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      uid = user.uid;
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((ds) {
+        userName = ds.data()!['name'];
+      }).catchError((e) {
+        userName = null;
+      });
+    }
+
+    setState(() {});
   }
 }
