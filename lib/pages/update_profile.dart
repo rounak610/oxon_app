@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oxon_app/models/mobile_number.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
+import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
@@ -297,14 +298,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             }
                             FirebaseFirestore.instance
                                 .collection('users')
-                                .doc(uid).set({
+                                .doc(uid)
+                                .set({
                               'name': name,
                               'mobile': mobile,
                               'gender': gender,
                               'DOB': DOB,
                               'city': city,
                             }).then((value) {
-                                Navigator.of(context).pushNamed(ProfilePage.routeName);
+                              Navigator.of(context)
+                                  .pushNamed(ProfilePage.routeName);
                             }).catchError((e) {
                               print(e);
                             });
