@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
+import 'package:oxon_app/pages/update_profile.dart';
 import '../models/mobile_number.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -179,7 +180,7 @@ class _OTPScreenState extends State<OTPScreen> {
       });
       if (authCredential.user != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SusMapping()));
+            context, MaterialPageRoute(builder: (context) => UpdateProfile()));
       }
     } on FirebaseAuthException catch (e) {
       setState(() {

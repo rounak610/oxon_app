@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:oxon_app/pages/update_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -209,7 +209,9 @@ class _SusMappingState extends State<SusMapping>
             "Dustbin and Toilets",
           ),
           body: DoubleBackToCloseApp(
-            snackBar: const SnackBar(content: Text('Press again to exit the app'),duration: Duration(seconds:2)),
+            snackBar: const SnackBar(
+                content: Text('Press again to exit the app'),
+                duration: Duration(seconds: 2)),
             child: Column(
               children: [
                 Container(
@@ -220,7 +222,8 @@ class _SusMappingState extends State<SusMapping>
                     indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(width: 1.0, color: Colors.white),
                         insets: EdgeInsets.symmetric(
-                            horizontal: 7.32 * SizeConfig.responsiveMultiplier)),
+                            horizontal:
+                                7.32 * SizeConfig.responsiveMultiplier)),
                     controller: _tabController,
                     tabs: [
                       Column(
@@ -305,7 +308,8 @@ class _SusMappingState extends State<SusMapping>
                                   mapType: MapType.normal,
                                   initialCameraPosition: cameraPosition,
                                   markers: dustbinMarkers,
-                                  onMapCreated: (GoogleMapController controller) {
+                                  onMapCreated:
+                                      (GoogleMapController controller) {
                                     _googleMapController = controller;
                                     _controller.complete(controller);
                                   },
@@ -330,8 +334,8 @@ class _SusMappingState extends State<SusMapping>
                               );
                             }),
                         Padding(
-                          padding:
-                              EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
+                          padding: EdgeInsets.all(
+                              1 * SizeConfig.responsiveMultiplier),
                           child: Container(
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -398,7 +402,8 @@ class _SusMappingState extends State<SusMapping>
                                             11.71 *
                                                 SizeConfig.responsiveMultiplier,
                                             0.73 *
-                                                SizeConfig.responsiveMultiplier),
+                                                SizeConfig
+                                                    .responsiveMultiplier),
                                         child: ElevatedButton(
                                           onPressed: () {
                                             ScaffoldMessenger.of(context)
@@ -409,7 +414,8 @@ class _SusMappingState extends State<SusMapping>
                                           },
                                           child: Text(
                                             "Locate",
-                                            style: mAppTheme.textTheme.headline3!
+                                            style: mAppTheme
+                                                .textTheme.headline3!
                                                 .copyWith(
                                                     color: AppTheme
                                                         .colors.oxonGreen),
