@@ -243,16 +243,21 @@ class _PreviewReportState extends State<PreviewReport> {
                             future: getCurrentLocationAddress(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<String> snapshot) {
-                              if (snapshot.hasData) {
+                              if (snapshot.hasData)
+                              {
                                 return Expanded(
                                     child: Text("${snapshot.data}",
                                         style: AppTheme.define()
                                             .textTheme
-                                            .headline4));
-                              } else if (snapshot.hasError) {
+                                            .headline4)
+                                );
+                              }
+                              else if (snapshot.hasError)
+                              {
                                 return Text(
                                     "Error fetching location. Ensure device location is turned on and please try again");
-                              } else {
+                              }
+                              else {
                                 try {
                                   return Row(
                                     children: [
@@ -449,12 +454,15 @@ class _PreviewReportState extends State<PreviewReport> {
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
-        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nAddress: ${locationAddress} \nComplaint posted by @oxon_life";
-    if (imagePath.isNotEmpty) {
+        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at ${locationAddress} \n${description} \nComplaint posted by @oxon_life";
+    if (imagePath.isNotEmpty)
+    {
       await Share.shareFiles(imagePaths,
           text: str,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
-    } else {
+    }
+    else
+      {
       await Share.share(issueType,
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
