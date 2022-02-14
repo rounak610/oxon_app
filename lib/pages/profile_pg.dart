@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
+import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/pages/update_profile.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/styles/button_styles.dart';
@@ -156,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   return Text('Loading');
                                 return Text(userMobileNo,
                                     style:
-                                    Theme.of(context).textTheme.headline2);
+                                        Theme.of(context).textTheme.headline2);
                               },
                             )
                           ]),
@@ -173,6 +174,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                           child: Text(
                             "Update Details",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: AppTheme.colors.oxonGreen),
+                          ),
+                          style: solidRoundButtonStyle,
+                        ),
+                      ),
+                      Container(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(SusMapping.routeName);
+                          },
+                          child: Text(
+                            "Dustbins and Urinals",
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
