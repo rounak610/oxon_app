@@ -11,6 +11,7 @@ import 'package:oxon_app/pages/profile_pg.dart';
 import 'package:oxon_app/pages/raise_concern.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/pages/take_picture.dart';
+import 'package:oxon_app/pages/update_profile.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
@@ -53,7 +54,8 @@ class MyApp extends StatelessWidget {
             DonateDustbin.routeName: (context) => DonateDustbin(),
             ProductsPage.routeName: (context) => ProductsPage(),
             ComingSoon.routeName: (context) => ComingSoon(),
-            PreviewReport.routeName: (context) => PreviewReport()
+            PreviewReport.routeName: (context) => PreviewReport(),
+            UpdateProfile.routeName: (context) => UpdateProfile() 
           },
         );
       });

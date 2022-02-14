@@ -24,31 +24,37 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // final FirebaseAuth auth = FirebaseAuth.instance;
+    String userName = "Not set";
+    String userResidence = "Not set";
+    String userMobileNo = "Not set";
+    final FirebaseAuth auth = FirebaseAuth.instance;
 
-    // User? user;
-    // String? uid;
-    // void setData() async {
-    //   user = auth?.currentUser;
-    //   uid = user?.uid;
-    // setState(() async {
-    //   await FirebaseFirestore.instance.collection('users/uid').doc(uid).get().then((dataSnapshot) {
-    //   userResidence = dataSnapshot.data()!['address'];
-    //   userMobileNo = dataSnapshot.data()!['number'];
-    // })
-    // }); 
-    // }
-
-    String userName = "Aikagra";
-    String userResidence = "Pilani";
-    String userMobileNo = "98********";
+    User? user;
+    String? uid;
+    void setData() async {
+      user = auth?.currentUser;
+      uid = user?.uid;
+      setState(() async {
+        await FirebaseFirestore.instance
+            .collection('users/$uid')
+            .doc(uid)
+            .get()
+            .then((dataSnapshot) {
+          setState(() {
+            userResidence = dataSnapshot.data()!['address'];
+            userMobileNo = dataSnapshot.data()!['number'];
+            userName = dataSnapshot.data()!['name'];
+          });
+        });
+      });
+    }
 
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(
         146.32 * SizeConfig.responsiveMultiplier,
         7.61 * SizeConfig.responsiveMultiplier));
     @override
     initState() {
-      // setData();
+      setData();
       super.initState();
     }
 
@@ -58,7 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
           appBar: CustomAppBar(context, "Profile"),
           body: DoubleBackToCloseApp(
-            snackBar: const SnackBar(content: Text('Press again to exit the app'),duration: Duration(seconds:2)),
+            snackBar: const SnackBar(
+                content: Text('Press again to exit the app'),
+                duration: Duration(seconds: 2)),
             child: Stack(
               children: [
                 Container(
@@ -116,10 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         child: OutlinedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UpdateProfile()));
+                            Navigator.of(context)
+                                .pushNamed(UpdateProfile.routeName);
                           },
                           child: Text(
                             "Update Details",
