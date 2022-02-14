@@ -24,7 +24,7 @@ class SusMapping extends StatefulWidget {
 
 class _SusMappingState extends State<SusMapping>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  late String userName;
+  String? userName;
   final FirebaseAuth auth = FirebaseAuth.instance;
   late String uid;
 
@@ -74,15 +74,7 @@ class _SusMappingState extends State<SusMapping>
   @override
   void initState() {
     super.initState();
-
-    try {
-      userName = auth.currentUser!.displayName!;
-      uid = auth.currentUser!.uid;
-    } catch (e) {
-      userName = "";
-      uid = "123";
-    }
-
+    getUserData();
     WidgetsBinding.instance?.addObserver(this);
     _tabController = new TabController(length: 3, vsync: this);
     onLayoutDone(Duration());
@@ -158,7 +150,7 @@ class _SusMappingState extends State<SusMapping>
                             _currLocData!.upvote = _currLocData!.upvote + 1;
                             repository.updateLocData(_currLocData!);
                             toiletMarkers.add(createMarkerFromLocData(
-                                _currLocData, dustbinMarkers.length + 1, type));
+                                _currLocData, toiletMarkers.length + 1, type));
                             setState(() {});
                           }
                         },
@@ -187,7 +179,7 @@ class _SusMappingState extends State<SusMapping>
                             _currLocData!.downvote = _currLocData!.downvote + 1;
                             repository.updateLocData(_currLocData!);
                             toiletMarkers.add(createMarkerFromLocData(
-                                _currLocData, dustbinMarkers.length + 1, type));
+                                _currLocData, toiletMarkers.length + 1, type));
                             setState(() {});
                           }
                         },
@@ -212,6 +204,7 @@ class _SusMappingState extends State<SusMapping>
 
     if (state == AppLifecycleState.resumed) {
       print("in xyz resumed");
+      _googleMapController.setMapStyle("[]");
     } else if (state == AppLifecycleState.inactive) {
       print("in xyz inactive");
     } else if (state == AppLifecycleState.paused) {
@@ -227,47 +220,81 @@ class _SusMappingState extends State<SusMapping>
           LatLng(locData.location.latitude, locData.location.longitude);
 
       if (_currMarker == markerTappedLatLng && locData.u_id == uid) {
-        switch (deleteCount) {
-          case 0:
-            {
-              deleteCount += 1;
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content:
-                      Text("Press on the marker one more time to delete it.")));
-            }
-            break;
+        if (deleteCount == 1) {
+          print("in case 1");
+          if (_currLocData != null &&
+              auth.currentUser != null &&
+              _currLocData?.u_id == uid) {
+            repository.deleteLocData(_currLocData!);
 
-          case 1:
-            {
-              print("in case 1");
-              if (_currLocData != null &&
-                  auth.currentUser != null &&
-                  _currLocData?.u_id == uid) {
-                repository.deleteLocData(_currLocData!);
-                if (locData.type == "toilet") {
-                  toiletMarkers.removeWhere(
-                      (element) => element.markerId == _currMarkerId);
-                } else {
-                  dustbinMarkers.removeWhere(
-                      (element) => element.markerId == _currMarkerId);
-                }
-              }
+            if (locData.type == "toilet") {
+              print("in toilet");
+              toiletMarkers
+                  .removeWhere((element) => element.markerId == _currMarkerId);
+            } else {
+              print("not toilet");
+
+              dustbinMarkers
+                  .removeWhere((element) => element.markerId == _currMarkerId);
+
+
             }
-            break;
+            setState(() {
+
+            });
+          }
+          deleteCount = 0;
         }
-        deleteCount += 1;
-      } else {
-        deleteCount = 0;
+        if (deleteCount == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text("Press on the marker one more time to delete it.")));
+          deleteCount += 1;
+        }
       }
-      if (deleteMarker == null) {
-        deleteMarker ==
-            LatLng(locData.location.latitude, locData.location.longitude);
-      }
-      if (deleteMarker != _currMarker) {
-        deleteCount = 0;
-        deleteMarker ==
-            LatLng(locData.location.latitude, locData.location.longitude);
-      }
+
+      // switch (deleteCount) {
+      //   case 0:
+      //     {
+      //       deleteCount += 1;
+      //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //           content:
+      //               Text("Press on the marker one more time to delete it.")));
+      //     }
+      //     break;
+      //
+      //   case 1:
+      //     {
+      //       print("in case 1");
+      //       if (_currLocData != null &&
+      //           auth.currentUser != null &&
+      //           _currLocData?.u_id == uid) {
+      //         repository.deleteLocData(_currLocData!);
+      //         if (locData.type == "toilet") {
+      //           toiletMarkers.removeWhere(
+      //               (element) => element.markerId == _currMarkerId);
+      //         } else {
+      //           dustbinMarkers.removeWhere(
+      //               (element) => element.markerId == _currMarkerId);
+      //         }
+      //       }
+      //     }
+      //     break;
+      // }
+      // deleteCount += 1;
+      // }
+      // else {
+      //   deleteCount = 0;
+      // }
+      // if (deleteMarker == null) {
+      //   deleteMarker ==
+      //       LatLng(locData.location.latitude, locData.location.longitude);
+      // }
+      // if (deleteMarker != _currMarker) {
+      //   deleteCount = 0;
+      //   deleteMarker ==
+      //       LatLng(locData.location.latitude, locData.location.longitude);
+      // }
 
       shouldAskFeedback = true;
       _currMarker = markerTappedLatLng;
@@ -282,6 +309,7 @@ class _SusMappingState extends State<SusMapping>
     snapshot!.forEach((element) {
       count += 1;
       final locData = LocData.fromSnapshot(element);
+
       if (locData.is_displayed) {
         if (locData.type == "dustbin") {
           dustbinMarkers
@@ -318,11 +346,17 @@ class _SusMappingState extends State<SusMapping>
   Future<String> getCurrLocationAndAdd(String type) async {
     print('in future asyn getcurrloc and add');
     _locationData = await location.getLocation();
+    // setState(() {
+    //
+    // });
+    print(_locationData?.latitude == null);
+    print('is location latitude null');
+    print("object $uid");
     final id = await repository.addLocData(LocData(
         downvote: 0,
         is_displayed: true,
         location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
-        name: userName,
+        name: userName != null ? userName! : "Anonymous",
         type: type,
         sub_type: "ordinary",
         u_id: uid,
@@ -601,7 +635,7 @@ class _SusMappingState extends State<SusMapping>
                                                                         "assets/images/badge_final.jpeg"))),
                                                           ),
                                                           Text(
-                                                              "\nThank you $userName for your contribution.\n\nOur world needs more people like you :)")
+                                                              "\nThank you ${userName != null ? '${userName} ' : ''}for your contribution.\n\nOur world needs more people like you :)")
                                                         ],
                                                       ),
                                                     ),
@@ -630,6 +664,7 @@ class _SusMappingState extends State<SusMapping>
                                                     ],
                                                   );
                                                 } else if (snapshot.hasError) {
+                                                  print("has error");
                                                   return AlertDialog(
                                                     content: Text(
                                                         "Error adding location. Ensure device location and internet is turned on and please try again"),
@@ -660,6 +695,7 @@ class _SusMappingState extends State<SusMapping>
                                                     print(s);
                                                   }
                                                 }
+                                                print("none");
                                                 return Text(
                                                     "Error fetching location. Ensure device location and internet is turned on and please try again");
                                               },
@@ -743,6 +779,7 @@ class _SusMappingState extends State<SusMapping>
         zoom: 16));
     CameraUpdate zoom = CameraUpdate.zoomTo(16);
     _googleMapController.animateCamera(update);
+    shouldAskFeedback = false;
   }
 
   void _launchMapUrl() async {
@@ -808,5 +845,32 @@ class _SusMappingState extends State<SusMapping>
         icon: type == "dustbin" ? dustbinIcon : toiletIcon,
         position:
             LatLng(locData.location.latitude, locData.location.longitude));
+  }
+
+  void getUserData() async {
+    print("in get user data");
+    final user = await FirebaseAuth.instance.currentUser;
+    print("user");
+    print(user!.uid);
+    if (user != null) {
+      uid = user.uid;
+      print(uid);
+
+      print("user not null");
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((ds) {
+        userName = ds.data()!['name'];
+        print("the user name");
+        print(userName);
+      }).catchError((e) {
+        print(e);
+        userName = null;
+      });
+    }
+
+    setState(() {});
   }
 }
