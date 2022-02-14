@@ -1,12 +1,7 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/models/concern.dart';
-import 'package:oxon_app/pages/products_pg.dart';
-import 'package:oxon_app/pages/raise_concern.dart';
-import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
@@ -14,7 +9,6 @@ import '../models/concern.dart';
 //import 'package:flutter_share_me/flutter_share_me.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
@@ -25,16 +19,44 @@ class PreviewReport extends StatefulWidget {
   _PreviewReportState createState() => _PreviewReportState();
 }
 
-final _formKey = GlobalKey<FormState>();
-
 class _PreviewReportState extends State<PreviewReport> {
+  Location location = Location();
+
+  late bool _serviceEnabled;
+  late PermissionStatus _permissionGranted;
+  LocationData? _locationData = null;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void onLayoutDone(Duration timeStamp) async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    _locationData = await location.getLocation();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
     final description = args.description;
     final issueType = args.issueType;
     final imagePath = args.imagePath;
-    final problem = args.authorityType;
 
     return SafeArea(
         child: Scaffold(
@@ -159,29 +181,54 @@ class _PreviewReportState extends State<PreviewReport> {
                     SizedBox(
                       height: 10,
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Text(
-                            "Location :",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "XXXXXXXXX",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Location :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        FutureBuilder<String>(
+                          future: getCurrentLocationAddress(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            if (snapshot.hasData) {
+                              return Expanded(
+                                  child: Text("${snapshot.data}",
+                                      style: AppTheme.define()
+                                          .textTheme
+                                          .headline4));
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                  "Error fetching location. Ensure device location is turned on and please try again");
+                            } else {
+                              try {
+                                return Row(
+                                  children: [
+                                    Text(
+                                      "Getting location data...\nPlease wait..",
+                                      style:
+                                          AppTheme.define().textTheme.headline2,
+                                    ),
+                                    CircularProgressIndicator()
+                                  ],
+                                );
+                              } catch (e, s) {
+                                print(s);
+                              }
+                            }
+                            return Text(
+                                "Error fetching location. Ensure device location is turned on and please try again");
+                          },
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 20,
@@ -350,6 +397,10 @@ class _PreviewReportState extends State<PreviewReport> {
 
   void _onShare(BuildContext context, String imagePath, String issueType,
       String description, String problem) async {
+
+  void _onShare(BuildContext context, String imagePath, String issueType,
+      String description) async {
+    final locationAddress = await getCurrentLocationAddress(); // todo: @Rounak add it where you wanted to
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
@@ -363,5 +414,24 @@ class _PreviewReportState extends State<PreviewReport> {
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
+  }
+  }
+
+  Future<String> getCurrentLocationAddress() async {
+    const errorMessage =
+        "Error fetching location data. Ensure device location and internet is switched on and please try again.";
+    _locationData = await location.getLocation();
+
+    if (_locationData == null || _locationData!.latitude == null) {
+      return errorMessage;
+    }
+
+    final geoCodedData = await MapsRepository().convertLatLngToGeoCodedLoc(
+        LatLng(_locationData!.latitude!, _locationData!.longitude!));
+
+    if (geoCodedData == null) {
+      return errorMessage;
+    }
+    return "${geoCodedData.formattedAddress} (${geoCodedData.compoundPlusCode})";
   }
 }
