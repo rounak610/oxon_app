@@ -150,11 +150,6 @@ class _SusMappingState extends State<SusMapping>
         upvote: 0));
     print("The id: ${id.toString()}");
 
-    // final snack = SnackBar(
-    //     content: Text("Location of the $type added to the map successfully"));
-    // ScaffoldMessenger.of(context).showSnackBar(snack);
-    // print("${_locationData!.latitude}");
-
     return type;
   }
 
@@ -426,60 +421,6 @@ class _SusMappingState extends State<SusMapping>
                                     )
                                   ],
                                 ),
-                                // AlertDialog(
-                                //   titleTextStyle: AppTheme.define()
-                                //       .textTheme
-                                //       .headline1!
-                                //       .copyWith(color: Colors.black),
-                                //   title: const Text('Thank you!'),
-                                //   content: Container(
-                                //     height:
-                                //     SizeConfig.screenHeight * 0.5,
-                                //     child: Column(
-                                //       mainAxisAlignment:
-                                //       MainAxisAlignment.center,
-                                //       crossAxisAlignment:
-                                //       CrossAxisAlignment.center,
-                                //       children: [
-                                //         Container(
-                                //           height: SizeConfig
-                                //               .screenHeight *
-                                //               0.25,
-                                //           decoration: BoxDecoration(
-                                //               image: DecorationImage(
-                                //                   image: AssetImage(
-                                //                       "assets/images/badge_final.jpeg"))),
-                                //         ),
-                                //         Text(
-                                //             "\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
-                                //       ],
-                                //     ),
-                                //   ),
-                                //   actions: <Widget>[
-                                //     TextButton(
-                                //       onPressed: () {
-                                //         Navigator.pop(context, 'OK');
-                                //         ScaffoldMessenger.of(context)
-                                //             .showSnackBar(SnackBar(
-                                //             content: Text(
-                                //               "Adding the location...",
-                                //             )));
-                                //         getCurrLocationAndAdd(type);
-                                //       },
-                                //       child: Center(
-                                //           child: Text(
-                                //               'Show added location on map',
-                                //               style: AppTheme.define()
-                                //                   .textTheme
-                                //                   .headline5!
-                                //                   .copyWith(
-                                //                   color: AppTheme
-                                //                       .colors
-                                //                       .oxonGreen))),
-                                //       style: solidRoundButtonStyle,
-                                //     ),
-                                //   ],
-                                // ),
                                 Container(
                                   child: Center(
                                     child: ElevatedButton(
@@ -527,7 +468,6 @@ class _SusMappingState extends State<SusMapping>
                                                           ),
                                                           Text(
                                                               "\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
-                                                          // todo: add user name here
                                                         ],
                                                       ),
                                                     ),
@@ -663,15 +603,12 @@ class _SusMappingState extends State<SusMapping>
   }
 
   goToCurrLoc() async {
-    // update current location
-    // update camera
     _locationData = await location.getLocation();
     CameraUpdate update = CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 16));
     CameraUpdate zoom = CameraUpdate.zoomTo(16);
     _googleMapController.animateCamera(update);
-    // _googleMapController.moveCamera(update);
   }
 
   void _launchMapUrl() async {
