@@ -13,6 +13,7 @@ import 'package:oxon_app/models/user_profile.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
+  static const routeName = '/welcome-page';
 
   @override
   _WelcomePageState createState() => _WelcomePageState();

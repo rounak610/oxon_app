@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/welcome_pg.dart';
 
 import '../pages/donate_dustbin.dart';
 import '../pages/products_pg.dart';
@@ -133,6 +134,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
+              _tileItem('Logout', WelcomePage.routeName, context),
 
               Expanded(
                 child: Align(
