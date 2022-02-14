@@ -11,6 +11,7 @@ import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SusMapping extends StatefulWidget {
   SusMapping({Key? key}) : super(key: key);
@@ -29,6 +30,9 @@ class _SusMappingState extends State<SusMapping>
 
   var cameraPosition =
       CameraPosition(target: LatLng(26.4723125, 76.7268125), zoom: 16);
+
+  LatLng? _currMarker;
+  MarkerId? _currMarkerId;
 
   setSelectedRadio(int val) {
     setState(() {
@@ -91,6 +95,11 @@ class _SusMappingState extends State<SusMapping>
         if (locData.type == "dustbin") {
           dustbinMarkers.add(Marker(
               markerId: MarkerId("${count}"),
+              onTap: () {
+                _currMarker = LatLng(
+                    locData.location.latitude, locData.location.longitude);
+                _currMarkerId = MarkerId(count.toString());
+              },
               infoWindow: InfoWindow(
                   title: "Dustbin located by ${locData.name}",
                   snippet: locData.upvote != 0
@@ -287,25 +296,52 @@ class _SusMappingState extends State<SusMapping>
                     physics: NeverScrollableScrollPhysics(),
                     controller: _tabController,
                     children: [
-                      Container(
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: repository.getStream(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData)
-                                return LinearProgressIndicator();
+                      Stack(
+                        children: [
+                          Container(
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: repository.getStream(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData)
+                                    return LinearProgressIndicator();
 
-                              _buildList(snapshot.data?.docs ?? []);
+                                  _buildList(snapshot.data?.docs ?? []);
 
-                              return GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition: cameraPosition,
-                                markers: dustbinMarkers,
-                                onMapCreated: (GoogleMapController controller) {
-                                  _googleMapController = controller;
-                                  _controller.complete(controller);
-                                },
-                              );
-                            }),
+                                  return GoogleMap(
+                                    mapType: MapType.normal,
+                                    initialCameraPosition: cameraPosition,
+                                    markers: dustbinMarkers,
+                                    onMapCreated:
+                                        (GoogleMapController controller) {
+                                      _googleMapController = controller;
+                                      _controller.complete(controller);
+                                    },
+                                    onTap: (loc) {
+                                      _currMarker = null;
+                                      _currMarkerId = null;
+                                    },
+                                  );
+                                }),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Positioned(
+                              top: 20,
+                              right: 20,
+                              child: IconButton(
+                                  iconSize:
+                                      8.45 * SizeConfig.responsiveMultiplier,
+                                  onPressed: () => goToCurrLoc(),
+                                  icon: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                "assets/icons/bigger_gray_bg.png"))),
+                                  )),
+                            ),
+                          ),
+                        ],
                       ),
                       StreamBuilder<QuerySnapshot>(
                           stream: repository.getStream(),
@@ -316,13 +352,16 @@ class _SusMappingState extends State<SusMapping>
                             _buildList(snapshot.data?.docs ?? []);
 
                             return GoogleMap(
-                              mapType: MapType.normal,
-                              initialCameraPosition: cameraPosition,
-                              markers: toiletMarkers,
-                              onMapCreated: (GoogleMapController controller) {
-                                _controller.complete(controller);
-                              },
-                            );
+                                mapType: MapType.normal,
+                                initialCameraPosition: cameraPosition,
+                                markers: toiletMarkers,
+                                onMapCreated: (GoogleMapController controller) {
+                                  _controller.complete(controller);
+                                },
+                                onTap: (loc) {
+                                  _currMarker = null;
+                                  _currMarkerId = null;
+                                });
                           }),
                       Padding(
                         padding:
@@ -525,14 +564,19 @@ class _SusMappingState extends State<SusMapping>
                                                   try {
                                                     return AlertDialog(
                                                       content: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
                                                           Text(
                                                             "Adding ${type} on map...\nPlease wait..",
                                                             style: AppTheme
                                                                     .define()
                                                                 .textTheme
-                                                                .headline6!.copyWith(color: Colors.black),
+                                                                .headline6!
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .black),
                                                           ),
                                                           CircularProgressIndicator()
                                                         ],
@@ -586,7 +630,7 @@ class _SusMappingState extends State<SusMapping>
                     11.71 * SizeConfig.responsiveMultiplier,
                     2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => _launchMapUrl(),
                     child: Text(
                       "Guide The Way",
                       style: Theme.of(context)
@@ -603,7 +647,7 @@ class _SusMappingState extends State<SusMapping>
                     11.71 * SizeConfig.responsiveMultiplier,
                     2.63 * SizeConfig.responsiveMultiplier),
                 child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => _openInMaps(),
                     child: Text(
                       "Open In Maps",
                       style: Theme.of(context)
@@ -616,5 +660,59 @@ class _SusMappingState extends State<SusMapping>
             ],
           )),
     );
+  }
+
+  goToCurrLoc() async {
+    // update current location
+    // update camera
+    _locationData = await location.getLocation();
+    CameraUpdate update = CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+        zoom: 16));
+    CameraUpdate zoom = CameraUpdate.zoomTo(16);
+    _googleMapController.animateCamera(update);
+    // _googleMapController.moveCamera(update);
+  }
+
+  void _launchMapUrl() async {
+    if (_currMarkerId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("No dustbin/toilet selected yet.")));
+      return;
+    }
+    _locationData = await location.getLocation();
+    String mapOptions = [
+      'origin=${_locationData!.latitude},${_locationData!.longitude}',
+      'destination=${_currMarker!.latitude},${_currMarker!.longitude}',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps/dir/?api=1&$mapOptions';
+    print(url);
+    print("above url");
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _openInMaps() async {
+    if (_currMarkerId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("No dustbin/toilet selected yet.")));
+      return;
+    }
+    _locationData = await location.getLocation();
+
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${_currMarker!.latitude},${_currMarker!.longitude}';
+    print(url);
+    print("above url");
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
