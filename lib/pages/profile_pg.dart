@@ -167,35 +167,41 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 32,
                       ),
                       Container(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(UpdateProfile.routeName);
-                          },
-                          child: Text(
-                            "Update Details",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .copyWith(color: AppTheme.colors.oxonGreen),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(UpdateProfile.routeName);
+                            },
+                            child: Text(
+                              "Update Details",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4!
+                                  .copyWith(color: AppTheme.colors.oxonGreen),
+                            ),
+                            style: solidRoundButtonStyle,
                           ),
-                          style: solidRoundButtonStyle,
                         ),
                       ),
                       Container(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(SusMapping.routeName);
-                          },
-                          child: Text(
-                            "Dustbins and Urinals",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .copyWith(color: AppTheme.colors.oxonGreen),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(SusMapping.routeName);
+                            },
+                            child: Text(
+                              "Dustbins and Urinals",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4!
+                                  .copyWith(color: AppTheme.colors.oxonGreen),
+                            ),
+                            style: solidRoundButtonStyle,
                           ),
-                          style: solidRoundButtonStyle,
                         ),
                       ),
                       SizedBox(
