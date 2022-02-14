@@ -200,18 +200,11 @@ class _SusMappingState extends State<SusMapping>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("APP_STATE: $state");
-
     if (state == AppLifecycleState.resumed) {
-      print("in xyz resumed");
       _googleMapController.setMapStyle("[]");
     } else if (state == AppLifecycleState.inactive) {
-      print("in xyz inactive");
     } else if (state == AppLifecycleState.paused) {
-      print("in xyz paused");
-    } else if (state == AppLifecycleState.detached) {
-      print("in xyz detached");
-    }
+    } else if (state == AppLifecycleState.detached) {}
   }
 
   void onTapMarker(LocData locData, count) {
@@ -221,27 +214,19 @@ class _SusMappingState extends State<SusMapping>
 
       if (_currMarker == markerTappedLatLng && locData.u_id == uid) {
         if (deleteCount == 1) {
-          print("in case 1");
           if (_currLocData != null &&
               auth.currentUser != null &&
               _currLocData?.u_id == uid) {
             repository.deleteLocData(_currLocData!);
 
             if (locData.type == "toilet") {
-              print("in toilet");
               toiletMarkers
                   .removeWhere((element) => element.markerId == _currMarkerId);
             } else {
-              print("not toilet");
-
               dustbinMarkers
                   .removeWhere((element) => element.markerId == _currMarkerId);
-
-
             }
-            setState(() {
-
-            });
+            setState(() {});
           }
           deleteCount = 0;
         }
@@ -253,48 +238,7 @@ class _SusMappingState extends State<SusMapping>
         }
       }
 
-      // switch (deleteCount) {
-      //   case 0:
-      //     {
-      //       deleteCount += 1;
-      //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //           content:
-      //               Text("Press on the marker one more time to delete it.")));
-      //     }
-      //     break;
       //
-      //   case 1:
-      //     {
-      //       print("in case 1");
-      //       if (_currLocData != null &&
-      //           auth.currentUser != null &&
-      //           _currLocData?.u_id == uid) {
-      //         repository.deleteLocData(_currLocData!);
-      //         if (locData.type == "toilet") {
-      //           toiletMarkers.removeWhere(
-      //               (element) => element.markerId == _currMarkerId);
-      //         } else {
-      //           dustbinMarkers.removeWhere(
-      //               (element) => element.markerId == _currMarkerId);
-      //         }
-      //       }
-      //     }
-      //     break;
-      // }
-      // deleteCount += 1;
-      // }
-      // else {
-      //   deleteCount = 0;
-      // }
-      // if (deleteMarker == null) {
-      //   deleteMarker ==
-      //       LatLng(locData.location.latitude, locData.location.longitude);
-      // }
-      // if (deleteMarker != _currMarker) {
-      //   deleteCount = 0;
-      //   deleteMarker ==
-      //       LatLng(locData.location.latitude, locData.location.longitude);
-      // }
 
       shouldAskFeedback = true;
       _currMarker = markerTappedLatLng;
@@ -344,14 +288,10 @@ class _SusMappingState extends State<SusMapping>
   }
 
   Future<String> getCurrLocationAndAdd(String type) async {
-    print('in future asyn getcurrloc and add');
     _locationData = await location.getLocation();
-    // setState(() {
+
     //
-    // });
-    print(_locationData?.latitude == null);
-    print('is location latitude null');
-    print("object $uid");
+
     final id = await repository.addLocData(LocData(
         downvote: 0,
         is_displayed: true,
@@ -361,7 +301,6 @@ class _SusMappingState extends State<SusMapping>
         sub_type: "ordinary",
         u_id: uid,
         upvote: 0));
-    print("The id: ${id.toString()}");
 
     return type;
   }
@@ -664,7 +603,6 @@ class _SusMappingState extends State<SusMapping>
                                                     ],
                                                   );
                                                 } else if (snapshot.hasError) {
-                                                  print("has error");
                                                   return AlertDialog(
                                                     content: Text(
                                                         "Error adding location. Ensure device location and internet is turned on and please try again"),
@@ -691,11 +629,9 @@ class _SusMappingState extends State<SusMapping>
                                                         ],
                                                       ),
                                                     );
-                                                  } catch (e, s) {
-                                                    print(s);
-                                                  }
+                                                  } catch (e, s) {}
                                                 }
-                                                print("none");
+
                                                 return Text(
                                                     "Error fetching location. Ensure device location and internet is turned on and please try again");
                                               },
@@ -796,8 +732,7 @@ class _SusMappingState extends State<SusMapping>
     ].join('&');
 
     final url = 'https://www.google.com/maps/dir/?api=1&$mapOptions';
-    print(url);
-    print("above url");
+
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -815,8 +750,6 @@ class _SusMappingState extends State<SusMapping>
 
     final url =
         'https://www.google.com/maps/search/?api=1&query=${_currMarker!.latitude},${_currMarker!.longitude}';
-    print(url);
-    print("above url");
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -848,25 +781,17 @@ class _SusMappingState extends State<SusMapping>
   }
 
   void getUserData() async {
-    print("in get user data");
     final user = await FirebaseAuth.instance.currentUser;
-    print("user");
-    print(user!.uid);
     if (user != null) {
       uid = user.uid;
-      print(uid);
 
-      print("user not null");
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .get()
           .then((ds) {
         userName = ds.data()!['name'];
-        print("the user name");
-        print(userName);
       }).catchError((e) {
-        print(e);
         userName = null;
       });
     }
