@@ -103,7 +103,7 @@ class CustomDrawer extends StatelessWidget {
               _tileItem('Dustbin and Toilets', SusMapping.routeName, context),
               _tileItem('Van Tracking', ComingSoon.routeName, context),
               _tileItem('My Wallet', ComingSoon.routeName, context),
-              _tileItem('Donate a Dustbin', ComingSoon.routeName, context),
+              _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
 
               Expanded(
