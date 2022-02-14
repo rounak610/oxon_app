@@ -203,12 +203,39 @@ class _PreviewReportState extends State<PreviewReport> {
                           SizedBox(
                             width: 15,
                           ),
-                          Text(
-                            "XXXXXXXXX",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
+                          FutureBuilder<String>(
+                            future: getCurrentLocationAddress(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              if (snapshot.hasData) {
+                                return Expanded(
+                                    child: Text("${snapshot.data}",
+                                        style: AppTheme.define()
+                                            .textTheme
+                                            .headline4));
+                              } else if (snapshot.hasError) {
+                                return Text(
+                                    "Error fetching location. Ensure device location is turned on and please try again");
+                              } else {
+                                try {
+                                  return Row(
+                                    children: [
+                                      Text(
+                                        "Getting location data...\nPlease wait..",
+                                        style: AppTheme.define()
+                                            .textTheme
+                                            .headline2,
+                                      ),
+                                      CircularProgressIndicator()
+                                    ],
+                                  );
+                                } catch (e, s) {
+                                  print(s);
+                                }
+                              }
+                              return Text(
+                                  "Error fetching location. Ensure device location is turned on and please try again");
+                            },
                           )
                         ],
                       ),
@@ -385,7 +412,7 @@ class _PreviewReportState extends State<PreviewReport> {
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
-        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nComplaint posted by @oxon_life";
+        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nAddress: ${locationAddress} \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
       await Share.shareFiles(imagePaths,
           text: str,
@@ -395,5 +422,23 @@ class _PreviewReportState extends State<PreviewReport> {
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
+  }
+
+  Future<String> getCurrentLocationAddress() async {
+    const errorMessage =
+        "Error fetching location data. Ensure device location and internet is switched on and please try again.";
+    _locationData = await location.getLocation();
+
+    if (_locationData == null || _locationData!.latitude == null) {
+      return errorMessage;
+    }
+
+    final geoCodedData = await MapsRepository().convertLatLngToGeoCodedLoc(
+        LatLng(_locationData!.latitude!, _locationData!.longitude!));
+
+    if (geoCodedData == null) {
+      return errorMessage;
+    }
+    return "${geoCodedData.formattedAddress} (${geoCodedData.compoundPlusCode})";
   }
 }
