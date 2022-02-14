@@ -29,43 +29,51 @@ class _ProfilePageState extends State<ProfilePage> {
     String userMobileNo = "Not set";
     final FirebaseAuth auth = FirebaseAuth.instance;
 
-    User? user;
-    String? uid;
+    _fetch() async {
+      final user = await FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get()
+            .then((ds) {
+          userName = ds.data()!['name'];
+          userResidence = ds.data()!['city'];
+          userMobileNo = ds.data()!['mobile'];
+        }).catchError((e) {
+          print(e);
+        });
+      }
+    }
 
     var doc;
     var docData;
 
-    Future<void> setUserData() async {
-      user = auth?.currentUser;
-      uid = user?.uid;
-    }
+    // Future<void> setUserData() async {
+    //   user = auth?.currentUser;
+    //   uid = user?.uid;
+    // }
 
-    Future<void> setDocData() async {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          print('Document data: ${documentSnapshot.data()}');
-          userName = documentSnapshot['name'];
-          userResidence = documentSnapshot['city'];
-          userMobileNo = documentSnapshot['mobile'];
-        } else {
-          print('Document does not exist on the database');
-        }
-      });
-    }
+    // Future<void> setDocData() async {
+    //   await FirebaseFirestore.instance
+    //       .collection('users')
+    //       .doc(uid)
+    //       .get()
+    //       .then((DocumentSnapshot documentSnapshot) {
+    //     if (documentSnapshot.exists) {
+    //       print('Document data: ${documentSnapshot.data()}');
+    //       userName = documentSnapshot['name'];
+    //       userResidence = documentSnapshot['city'];
+    //       userMobileNo = documentSnapshot['mobile'];
+    //     } else {
+    //       print('Document does not exist on the database');
+    //     }
+    //   });
+    // }
 
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(
         146.32 * SizeConfig.responsiveMultiplier,
         7.61 * SizeConfig.responsiveMultiplier));
-    @override
-    void initState() {
-      setUserData();
-      setDocData();
-      super.initState();
-    }
 
     return SafeArea(
       child: Scaffold(
@@ -102,8 +110,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           TableRow(children: [
                             Text("Name: ",
                                 style: Theme.of(context).textTheme.headline2),
-                            Text(userName,
-                                style: Theme.of(context).textTheme.headline2)
+                            FutureBuilder(
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text(userName,
+                                    style:
+                                        Theme.of(context).textTheme.headline2);
+                              },
+                            )
                           ]),
                           TableRow(children: [
                             SizedBox(height: 25),
@@ -112,8 +129,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           TableRow(children: [
                             Text("Residence: ",
                                 style: Theme.of(context).textTheme.headline2),
-                            Text(userResidence,
-                                style: Theme.of(context).textTheme.headline2)
+                            FutureBuilder(
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text(userResidence,
+                                    style:
+                                        Theme.of(context).textTheme.headline2);
+                              },
+                            )
                           ]),
                           TableRow(children: [
                             SizedBox(height: 25),
@@ -122,8 +148,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           TableRow(children: [
                             Text("Mobile No. : ",
                                 style: Theme.of(context).textTheme.headline2),
-                            Text(userMobileNo,
-                                style: Theme.of(context).textTheme.headline2)
+                            FutureBuilder(
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text(userMobileNo,
+                                    style:
+                                    Theme.of(context).textTheme.headline2);
+                              },
+                            )
                           ]),
                         ],
                       ),
