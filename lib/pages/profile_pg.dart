@@ -31,30 +31,38 @@ class _ProfilePageState extends State<ProfilePage> {
 
     User? user;
     String? uid;
-    void setData() async {
+    Future<void> setUserData() async {
       user = auth?.currentUser;
       uid = user?.uid;
-      setState(() async {
-        await FirebaseFirestore.instance
-            .collection('users/$uid')
-            .doc(uid)
-            .get()
-            .then((dataSnapshot) {
-          setState(() {
-            userResidence = dataSnapshot.data()!['address'];
-            userMobileNo = dataSnapshot.data()!['number'];
-            userName = dataSnapshot.data()!['name'];
-          });
-        });
-      });
+    }
+
+    var doc;
+
+    Future<void> setDocData() async {
+      doc = await FirebaseFirestore.instance.collection('users').doc(uid);
+      print(doc);
+      if (doc != null) {
+        userName = doc!['name'];
+        userResidence = doc!['city'];
+        userMobileNo = doc!['mobile'];
+        setState((){});
+      }
+      else{
+        userName = "Not set1";
+        userResidence = "Not set1";
+        userMobileNo = "Not set1";
+        setState((){});
+
+      }
     }
 
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(
         146.32 * SizeConfig.responsiveMultiplier,
         7.61 * SizeConfig.responsiveMultiplier));
     @override
-    initState() {
-      setData();
+    void initState() async {
+      await setUserData();
+      await setDocData();
       super.initState();
     }
 
@@ -140,8 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         height: 16,
                       ),
-                    ]
-                    ),
+                    ]),
                   ),
                 )
               ],

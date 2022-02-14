@@ -296,20 +296,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               );
                             }
                             FirebaseFirestore.instance
-                                .collection('users/$uid')
-                                .add({
+                                .collection('users')
+                                .doc(uid).set({
                               'name': name,
                               'mobile': mobile,
                               'gender': gender,
                               'DOB': DOB,
                               'city': city,
                             }).then((value) {
-                              if (value != null) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProfilePage()));
-                              }
+                                Navigator.of(context).pushNamed(ProfilePage.routeName);
                             }).catchError((e) {
                               print(e);
                             });
