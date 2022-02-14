@@ -20,6 +20,78 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
   String? issueTypeDropdownValue;
   String? value;
 
+  List<String> mainIssueTypes = [
+    'Select',
+    'Dustbin',
+    'Sewerage Problem',
+    'Road Light',
+    'Road Related Problems',
+    'Water Related Problems',
+    'Enroachment',
+    'Other'
+  ];
+
+  List<String> selectSubTypeList(String issueType) {
+    if (issueType == 'Dustbin') return dustbin;
+    if (issueType == 'Sewerage Problem') return sewer;
+    if (issueType == 'Road Light') return roadLight;
+    if (issueType == 'Road Related Problems') return roadRelated;
+    if (issueType == 'Water Related Problems') return waterRelated;
+    if (issueType == 'Enroachment') return enroachment;
+
+    return <String>['Other'];
+  }
+
+  List<String> select = ['Other'];
+  List<String> dustbin = [
+    'Dustbin unavailable in locality',
+    'Dustbins overfilled',
+    'Non- Classification of Dustbins',
+    'Place of Dustbins',
+    'Not managed properly',
+    'Other (Please specify)'
+  ];
+  List<String> sewer = [
+    'Overfilled drainage systems',
+    'Lack of proper sewarage system',
+    'Uncleaned sewerage',
+    'Leakage of sewerage chambers',
+    'Sewerage pipes',
+    'Other (Please specify)'
+  ];
+  List<String> roadLight = [
+    'Unavailability of road lights',
+    'Defect in road lights',
+    'Lights at always ON Mode',
+    'Other (Please specify)'
+  ];
+  List<String> roadRelated = [
+    'Roads are broken or unbuilt',
+    'Narrow roads',
+    'Too many speed breakers on the road',
+    'Unavailability of roads',
+    'Encroached roads',
+    'Other (Please specify)'
+  ];
+  List<String> waterRelated = [
+    'No or very little water supply',
+    'Irregular schedule of water supply',
+    'Undrinkable & dirty water',
+    'Leakage of pipes',
+    'Water & Electricity supply Balance',
+    'Other (Please specify)'
+  ];
+  List<String> enroachment = [
+    'Encroachment over private property',
+    'Encroachment over public property',
+    'Encroachment over roads',
+    'Built of stairs & Ramp',
+    'Absence of Parking',
+    'Absence of property documentation',
+    'Other (Please specify)'
+  ];
+  List<String> other = ['Other'];
+
   TextEditingController descriptionController = TextEditingController();
 
   @override
@@ -29,7 +101,9 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
         drawer: CustomDrawer(),
         appBar: CustomAppBar(context, "Raise a Concern"),
         body: DoubleBackToCloseApp(
-          snackBar: const SnackBar(content: Text('Press again to exit the app'),duration: Duration(seconds:2)),
+          snackBar: const SnackBar(
+              content: Text('Press again to exit the app'),
+              duration: Duration(seconds: 2)),
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(
@@ -86,16 +160,8 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                               Icons.arrow_drop_down,
                               color: Colors.white,
                             ),
-                            items: <String>[
-                              'Select',
-                              'Dustbin',
-                              'Sewerage Problem',
-                              'Road Light',
-                              'Road Related Problems',
-                              'Water Related Problems',
-                              'Enroachment',
-                              'Other'
-                            ].map((String issueTypeDropdownValue) {
+                            items: mainIssueTypes
+                                .map((String issueTypeDropdownValue) {
                               return DropdownMenuItem<String>(
                                 value: issueTypeDropdownValue,
                                 child: Text(
@@ -107,8 +173,9 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                                 ),
                               );
                             }).toList(),
-                            onChanged: (issueTypeDropdownValue) =>
-                                setState(() => this.issueTypeDropdownValue = issueTypeDropdownValue),
+                            onChanged: (issueTypeDropdownValue) => setState(
+                                () => this.issueTypeDropdownValue =
+                                    issueTypeDropdownValue),
                           ),
                         ),
                       ),
@@ -152,21 +219,11 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                               Icons.arrow_drop_down,
                               color: Colors.white,
                             ),
-                            items: <String>[
-                              'select',
-                              'Dustbin unavailable in locality',
-                              'Dustbins overfilled ',
-                              'Waste collection van did not come today',
-                              'Roads are broken or unbuilt',
-                              'Narrow roads ',
-                              'Too many speed breakers on the road',
-                              'No or very little water supply ',
-                              'Irregular schedule of water supply',
-                              'Undrinkable & dirty water',
-                              'Encroachment over private property',
-                              'Encroachment over public property',
-                              'Other'
-                            ].map((String issueSubTypeDropdownValue) {
+                            items: selectSubTypeList(
+                                    issueTypeDropdownValue == null
+                                        ? 'Select'
+                                        : issueTypeDropdownValue as String)
+                                .map((String issueSubTypeDropdownValue) {
                               return DropdownMenuItem<String>(
                                 value: issueSubTypeDropdownValue,
                                 child: Text(
@@ -178,8 +235,9 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                                 ),
                               );
                             }).toList(),
-                            onChanged: (issueSubTypeDropdownValue) =>
-                                setState(() => this.issueSubTypeDropdownValue = issueSubTypeDropdownValue),
+                            onChanged: (issueSubTypeDropdownValue) => setState(
+                                () => this.issueSubTypeDropdownValue =
+                                    issueSubTypeDropdownValue),
                           ),
                         ),
                       ),
@@ -235,19 +293,27 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                             Navigator.of(context).pushNamed(
                                 TakePictureScreen.routeName,
                                 arguments: Concern(
-                                    description: descriptionController.text == null ? 'No description' :descriptionController.text ,
-                                    authorityType: issueSubTypeDropdownValue  == null ? 'Not selected' :issueSubTypeDropdownValue ,
-                                    issueType: issueTypeDropdownValue  == null ? 'Not selected' : issueTypeDropdownValue ,
+                                    description:
+                                        descriptionController.text == null
+                                            ? 'No description'
+                                            : descriptionController.text,
+                                    authorityType:
+                                        issueSubTypeDropdownValue == null
+                                            ? 'Not selected'
+                                            : issueSubTypeDropdownValue,
+                                    issueType: issueTypeDropdownValue == null
+                                        ? 'Not selected'
+                                        : issueTypeDropdownValue,
                                     imagePath: 'assets/images/oxon_logo.png'));
                           },
                           child: Text(
                             'Proceed',
-                            style:
-                                TextStyle(color: Colors.green[900], fontSize: 20),
+                            style: TextStyle(
+                                color: Colors.green[900], fontSize: 20),
                           ),
                           style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.white),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(

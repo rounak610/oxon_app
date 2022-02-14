@@ -11,5 +11,7 @@ class Concern {
       {required this.description,
       required this.authorityType,
       required this.issueType,
-        required this.imagePath});
+      required this.imagePath});
+
+
 }
