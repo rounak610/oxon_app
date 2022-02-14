@@ -1,14 +1,20 @@
 import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:oxon_app/models/concern.dart';
+import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
+import 'package:oxon_app/repositories/maps_repository.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
-import '../models/concern.dart';
-//import 'package:flutter_share_me/flutter_share_me.dart';
-//import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../models/concern.dart';
 
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
@@ -18,6 +24,8 @@ class PreviewReport extends StatefulWidget {
   @override
   _PreviewReportState createState() => _PreviewReportState();
 }
+
+final _formKey = GlobalKey<FormState>();
 
 class _PreviewReportState extends State<PreviewReport> {
   Location location = Location();
@@ -57,6 +65,7 @@ class _PreviewReportState extends State<PreviewReport> {
     final description = args.description;
     final issueType = args.issueType;
     final imagePath = args.imagePath;
+    final problem = args.authorityType;
 
     return SafeArea(
         child: Scaffold(
@@ -181,54 +190,56 @@ class _PreviewReportState extends State<PreviewReport> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Location :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        FutureBuilder<String>(
-                          future: getCurrentLocationAddress(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<String> snapshot) {
-                            if (snapshot.hasData) {
-                              return Expanded(
-                                  child: Text("${snapshot.data}",
-                                      style: AppTheme.define()
-                                          .textTheme
-                                          .headline4));
-                            } else if (snapshot.hasError) {
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Location :",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          FutureBuilder<String>(
+                            future: getCurrentLocationAddress(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              if (snapshot.hasData) {
+                                return Expanded(
+                                    child: Text("${snapshot.data}",
+                                        style: AppTheme.define()
+                                            .textTheme
+                                            .headline4));
+                              } else if (snapshot.hasError) {
+                                return Text(
+                                    "Error fetching location. Ensure device location is turned on and please try again");
+                              } else {
+                                try {
+                                  return Row(
+                                    children: [
+                                      Text(
+                                        "Getting location data...\nPlease wait..",
+                                        style: AppTheme.define()
+                                            .textTheme
+                                            .headline2,
+                                      ),
+                                      CircularProgressIndicator()
+                                    ],
+                                  );
+                                } catch (e, s) {
+                                  print(s);
+                                }
+                              }
                               return Text(
                                   "Error fetching location. Ensure device location is turned on and please try again");
-                            } else {
-                              try {
-                                return Row(
-                                  children: [
-                                    Text(
-                                      "Getting location data...\nPlease wait..",
-                                      style:
-                                          AppTheme.define().textTheme.headline2,
-                                    ),
-                                    CircularProgressIndicator()
-                                  ],
-                                );
-                              } catch (e, s) {
-                                print(s);
-                              }
-                            }
-                            return Text(
-                                "Error fetching location. Ensure device location is turned on and please try again");
-                          },
-                        ),
-                      ],
+                            },
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 20,
@@ -306,11 +317,13 @@ class _PreviewReportState extends State<PreviewReport> {
                                   .add({
                                 'description': description,
                                 'issueType': issueType,
-                                'problem':problem,
+                                'problem': problem,
                                 'image': imagePath
                               }).then((value) {
                                 if (value != null) {
-                                  Fluttertoast.showToast(msg: 'Complaint posted successfully',gravity: ToastGravity.TOP);
+                                  Fluttertoast.showToast(
+                                      msg: 'Complaint posted successfully',
+                                      gravity: ToastGravity.TOP);
                                 }
                               }).catchError((e) {
                                 print(e);
@@ -340,8 +353,8 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 300, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => _onShare(
-                              context, imagePath, issueType, description, problem),
+                          onPressed: () => _onShare(context, imagePath,
+                              issueType, description, problem),
                           child: Text(
                             'Share via Twitter',
                             style: TextStyle(
@@ -397,14 +410,14 @@ class _PreviewReportState extends State<PreviewReport> {
 
   void _onShare(BuildContext context, String imagePath, String issueType,
       String description, String problem) async {
-
-  void _onShare(BuildContext context, String imagePath, String issueType,
-      String description) async {
-    final locationAddress = await getCurrentLocationAddress(); // todo: @Rounak add it where you wanted to
+    // void _onShare(BuildContext context, String imagePath, String issueType,
+    //     String description) async {
+    final locationAddress =
+        await getCurrentLocationAddress(); // todo: @Rounak add it where you wanted to
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
-        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nComplaint posted by @oxon_life";
+        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nAddress: ${locationAddress} \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
       await Share.shareFiles(imagePaths,
           text: str,
@@ -414,7 +427,6 @@ class _PreviewReportState extends State<PreviewReport> {
           subject: description,
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
-  }
   }
 
   Future<String> getCurrentLocationAddress() async {
@@ -435,3 +447,4 @@ class _PreviewReportState extends State<PreviewReport> {
     return "${geoCodedData.formattedAddress} (${geoCodedData.compoundPlusCode})";
   }
 }
+// }

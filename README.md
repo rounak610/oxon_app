@@ -50,4 +50,15 @@ If you do need action buttons, call CustomAppBar(context, <title>, <list of widg
   ```
   margin: EdgeInsets.only(top: 11.71 * SizeConfig.responsiveMultiplier)
   ```
-  #use LinearProgressIndicator whereever necessary.
+  #use LinearProgressIndicator whereever necessary. (the person who added this line. Could he elaborate?)
+
+# Guidelines for collaborative code development on GitHub
+- Ideally, master branch should contain the final, tried and tested, bug free code
+- If you want to edit it, create a new branch (name the branch that gives information about it and should have 
+contraction of your name. E.g. 'testing_maps_ved') from master branch. 
+- Code, debug, resolve, etc. on this branch.
+- When your development branch is bug free, and tried and tested, commit your changes. Then go to master branch.
+Pull changes from remote to the master branch. Then merge the master and your development branch.
+- In the merging process, all the conflicts should be resolved correctly. If you have any issues 
+with which version of code is correct, consult the person who did the latest commit on the master branch. Only
+after the conflicts are resolved, commit your changes and push it to the remote master branch.
