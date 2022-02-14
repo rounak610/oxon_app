@@ -127,7 +127,8 @@ class _SusMappingState extends State<SusMapping>
     setState(() {});
   }
 
-  void getCurrLocationAndAdd(String type) async {
+  Future<String> getCurrLocationAndAdd(String type) async {
+    print('in future asyn getcurrloc and add');
     _locationData = await location.getLocation();
     final id = await repository.addLocData(LocData(
         downvote: 0,
@@ -140,6 +141,15 @@ class _SusMappingState extends State<SusMapping>
         upvote: 0));
     print("The id: ${id.toString()}");
 
+    // final snack = SnackBar(
+    //     content: Text("Location of the $type added to the map successfully"));
+    // ScaffoldMessenger.of(context).showSnackBar(snack);
+    // print("${_locationData!.latitude}");
+
+    return type;
+  }
+
+  void moveCameraFromAddLoc(String type) {
     cameraPosition = CameraPosition(
         target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 16);
@@ -148,11 +158,6 @@ class _SusMappingState extends State<SusMapping>
       _tabController.animateTo(0);
     else
       _tabController.animateTo(1);
-
-    final snack = SnackBar(
-        content: Text("Location of the $type added to the map successfully"));
-    ScaffoldMessenger.of(context).showSnackBar(snack);
-    print("${_locationData!.latitude}");
   }
 
   void onLayoutDone(Duration timeStamp) async {
@@ -382,67 +387,170 @@ class _SusMappingState extends State<SusMapping>
                                     )
                                   ],
                                 ),
+                                // AlertDialog(
+                                //   titleTextStyle: AppTheme.define()
+                                //       .textTheme
+                                //       .headline1!
+                                //       .copyWith(color: Colors.black),
+                                //   title: const Text('Thank you!'),
+                                //   content: Container(
+                                //     height:
+                                //     SizeConfig.screenHeight * 0.5,
+                                //     child: Column(
+                                //       mainAxisAlignment:
+                                //       MainAxisAlignment.center,
+                                //       crossAxisAlignment:
+                                //       CrossAxisAlignment.center,
+                                //       children: [
+                                //         Container(
+                                //           height: SizeConfig
+                                //               .screenHeight *
+                                //               0.25,
+                                //           decoration: BoxDecoration(
+                                //               image: DecorationImage(
+                                //                   image: AssetImage(
+                                //                       "assets/images/badge_final.jpeg"))),
+                                //         ),
+                                //         Text(
+                                //             "\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
+                                //       ],
+                                //     ),
+                                //   ),
+                                //   actions: <Widget>[
+                                //     TextButton(
+                                //       onPressed: () {
+                                //         Navigator.pop(context, 'OK');
+                                //         ScaffoldMessenger.of(context)
+                                //             .showSnackBar(SnackBar(
+                                //             content: Text(
+                                //               "Adding the location...",
+                                //             )));
+                                //         getCurrLocationAndAdd(type);
+                                //       },
+                                //       child: Center(
+                                //           child: Text(
+                                //               'Show added location on map',
+                                //               style: AppTheme.define()
+                                //                   .textTheme
+                                //                   .headline5!
+                                //                   .copyWith(
+                                //                   color: AppTheme
+                                //                       .colors
+                                //                       .oxonGreen))),
+                                //       style: solidRoundButtonStyle,
+                                //     ),
+                                //   ],
+                                // ),
                                 Container(
                                   child: Center(
                                     child: ElevatedButton(
                                       onPressed: () {
                                         showDialog<String>(
                                           context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            titleTextStyle: AppTheme.define()
-                                                .textTheme
-                                                .headline1!
-                                                .copyWith(color: Colors.black),
-                                            title: const Text('Thank you!'),
-                                            content: Container(
-                                              height:
-                                                  SizeConfig.screenHeight * 0.5,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    height: SizeConfig
-                                                            .screenHeight *
-                                                        0.25,
-                                                    decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                                "assets/images/badge_final.jpeg"))),
-                                                  ),
-                                                  Text(
-                                                      "\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
-                                                ],
-                                              ),
-                                            ),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'OK');
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                          content: Text(
-                                                    "Adding the location...",
-                                                  )));
-                                                  getCurrLocationAndAdd(type);
-                                                },
-                                                child: Center(
-                                                    child: Text(
-                                                        'Show added location on map',
-                                                        style: AppTheme.define()
+                                          builder: (BuildContext context) {
+                                            return FutureBuilder<String>(
+                                              future:
+                                                  getCurrLocationAndAdd(type),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<String>
+                                                      snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return AlertDialog(
+                                                    titleTextStyle:
+                                                        AppTheme.define()
                                                             .textTheme
-                                                            .headline5!
+                                                            .headline1!
                                                             .copyWith(
-                                                                color: AppTheme
-                                                                    .colors
-                                                                    .oxonGreen))),
-                                                style: solidRoundButtonStyle,
-                                              ),
-                                            ],
-                                          ),
+                                                                color: Colors
+                                                                    .black),
+                                                    title: const Text(
+                                                        'Thank you!'),
+                                                    content: Container(
+                                                      height: SizeConfig
+                                                              .screenHeight *
+                                                          0.5,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Container(
+                                                            height: SizeConfig
+                                                                    .screenHeight *
+                                                                0.25,
+                                                            decoration: BoxDecoration(
+                                                                image: DecorationImage(
+                                                                    image: AssetImage(
+                                                                        "assets/images/badge_final.jpeg"))),
+                                                          ),
+                                                          Text(
+                                                              "\nThank you <username> for your contribution.\n\nOur world needs more people like you :)")
+                                                          // todo: add user name here
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context, 'OK');
+                                                          moveCameraFromAddLoc(
+                                                              type);
+                                                        },
+                                                        child: Center(
+                                                            child: Text(
+                                                                'Show added location on map',
+                                                                style: AppTheme
+                                                                        .define()
+                                                                    .textTheme
+                                                                    .headline5!
+                                                                    .copyWith(
+                                                                        color: AppTheme
+                                                                            .colors
+                                                                            .oxonGreen))),
+                                                        style:
+                                                            solidRoundButtonStyle,
+                                                      ),
+                                                    ],
+                                                  );
+                                                } else if (snapshot.hasError) {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                        "Error adding location. Ensure device location and internet is turned on and please try again"),
+                                                  );
+                                                } else {
+                                                  try {
+                                                    return AlertDialog(
+                                                      content: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            "Adding ${type} on map...\nPlease wait..",
+                                                            style: AppTheme
+                                                                    .define()
+                                                                .textTheme
+                                                                .headline6!.copyWith(color: Colors.black),
+                                                          ),
+                                                          CircularProgressIndicator()
+                                                        ],
+                                                      ),
+                                                    );
+                                                  } catch (e, s) {
+                                                    print(s);
+                                                  }
+                                                }
+                                                return Text(
+                                                    "Error fetching location. Ensure device location and internet is turned on and please try again");
+                                              },
+                                            );
+                                            return AlertDialog(
+                                              content: Text(
+                                                  "Error adding location. Ensure device location and internet is turned on and please try again"),
+                                            );
+                                          },
                                         );
                                       },
                                       child: Text(
