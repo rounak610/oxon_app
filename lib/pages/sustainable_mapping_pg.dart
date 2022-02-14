@@ -217,6 +217,7 @@ class _SusMappingState extends State<SusMapping>
           if (_currLocData != null &&
               auth.currentUser != null &&
               _currLocData?.u_id == uid) {
+
             repository.deleteLocData(_currLocData!);
 
             if (locData.type == "toilet") {
@@ -238,7 +239,7 @@ class _SusMappingState extends State<SusMapping>
         }
       }
 
-      //
+
 
       shouldAskFeedback = true;
       _currMarker = markerTappedLatLng;
@@ -290,7 +291,7 @@ class _SusMappingState extends State<SusMapping>
   Future<String> getCurrLocationAndAdd(String type) async {
     _locationData = await location.getLocation();
 
-    //
+
 
     final id = await repository.addLocData(LocData(
         downvote: 0,
@@ -716,6 +717,9 @@ class _SusMappingState extends State<SusMapping>
     CameraUpdate zoom = CameraUpdate.zoomTo(16);
     _googleMapController.animateCamera(update);
     shouldAskFeedback = false;
+    setState(() {
+
+    });
   }
 
   void _launchMapUrl() async {
@@ -731,7 +735,7 @@ class _SusMappingState extends State<SusMapping>
       'dir_action=navigate'
     ].join('&');
 
-    final url = 'https://www.google.com/maps/dir/?api=1&$mapOptions';
+    final url = 'https:www.google.com/maps/dir/?api=1&$mapOptions';
 
     if (await canLaunch(url)) {
       await launch(url);
