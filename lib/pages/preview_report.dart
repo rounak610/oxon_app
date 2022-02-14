@@ -14,6 +14,7 @@ import '../models/concern.dart';
 //import 'package:flutter_share_me/flutter_share_me.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PreviewReport extends StatefulWidget {
   const PreviewReport({Key? key}) : super(key: key);
@@ -262,11 +263,7 @@ class _PreviewReportState extends State<PreviewReport> {
                                 'image': imagePath
                               }).then((value) {
                                 if (value != null) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SusMapping()));
+                                  Fluttertoast.showToast(msg: 'Complaint posted successfully',gravity: ToastGravity.TOP);
                                 }
                               }).catchError((e) {
                                 print(e);

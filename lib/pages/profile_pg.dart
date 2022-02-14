@@ -134,27 +134,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         height: 16,
                       ),
-                      Container(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ComingSoon()));
-                          },
-                          child: Container(
-                            child: Text(
-                              "Check Your Wallet",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline1!
-                                  .copyWith(color: AppTheme.colors.oxonGreen),
-                            ),
-                          ),
-                          style: solidRoundButtonStyle,
-                        ),
-                      )
-                    ]),
+                    ]
+                    ),
                   ),
                 )
               ],
