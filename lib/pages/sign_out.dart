@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:oxon_app/pages/welcome_pg.dart';
+import 'package:oxon_app/pages/welcome_pg.dart';
 
 class SignOut extends StatefulWidget {
   const SignOut({Key? key}) : super(key: key);
@@ -12,50 +14,26 @@ class SignOut extends StatefulWidget {
 
 class _SignOutState extends State<SignOut> {
   FirebaseAuth auth = FirebaseAuth.instance;
-  @override
-  _signout() async {
-    await auth.signOut();
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(children: [
-      Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/images/products_pg_bg.png"),
-              fit: BoxFit.cover),
+    return AlertDialog(
+      title: const Text('Confirm Logout'),
+      content: const Text('Are you sure you want to logout?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('No'),
         ),
-      ),
-    ]));
+        TextButton(
+          onPressed: () async {
+            await auth.signOut();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => WelcomePage()));
+          },
+          child: const Text('Yes'),
+        ),
+      ],
+    );
   }
 }
