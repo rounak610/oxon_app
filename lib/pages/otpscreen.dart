@@ -4,7 +4,7 @@ import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import '../models/mobile_number.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
@@ -24,6 +24,7 @@ class _OTPScreenState extends State<OTPScreen> {
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   bool showLoading = false;
+  int? _resendToken;
   final BoxDecoration pinPutDecoration = BoxDecoration(
     color: const Color.fromRGBO(43, 46, 66, 1),
     borderRadius: BorderRadius.circular(10.0),
@@ -105,18 +106,29 @@ class _OTPScreenState extends State<OTPScreen> {
                                   phoneAuthCredential);
                             }),
                       ),
-                      Text("Didn't receive OTP?"),
+                      Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: Text(
+                          "Didn't receive code?",
+                          style: AppTheme.define().textTheme.headline4,
+                        ),
+                      ),
                       TimerButton(
                         label: "Resend OTP",
                         timeOutInSeconds: 30,
-                        onPressed: () {},
-                        disabledColor: Colors.red,
-                        color: AppTheme.colors.oxonGreen,
-                        buttonType: ButtonType.OutlinedButton,
-                        disabledTextStyle: new TextStyle(fontSize: 20.0),
-                        activeTextStyle:
-                            new TextStyle(fontSize: 20.0, color: Colors.white),
-                      ),
+                        onPressed: () async {
+                          _verifyPhone();
+                        },
+                        disabledColor: Colors.grey.shade300,
+                        color: Colors.white,
+                        buttonType: ButtonType.ElevatedButton,
+                        disabledTextStyle: new TextStyle(
+                            fontSize: 3.22 * SizeConfig.responsiveMultiplier,
+                            color: Colors.black),
+                        activeTextStyle: new TextStyle(
+                            fontSize: 3.22 * SizeConfig.responsiveMultiplier,
+                            color: Colors.black),
+                      )
                     ],
                   ),
           ),
@@ -142,6 +154,7 @@ class _OTPScreenState extends State<OTPScreen> {
           setState(() {
             showLoading = false;
             _verificationCode = verficationID;
+            _resendToken = resendToken;
           });
         },
         codeAutoRetrievalTimeout: (String verificationID) {
@@ -149,7 +162,8 @@ class _OTPScreenState extends State<OTPScreen> {
             _verificationCode = verificationID;
           });
         },
-        timeout: Duration(seconds: 35));
+        timeout: Duration(seconds: 120),
+        forceResendingToken: _resendToken);
   }
 
   void signinWithPhoneAuthCredential(
