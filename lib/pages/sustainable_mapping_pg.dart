@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -25,6 +26,11 @@ class SusMapping extends StatefulWidget {
 
 class _SusMappingState extends State<SusMapping>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  late String uid;
+  // final uid = auth.currentUser.uid;
+
   int selectedRadio = 1;
   String type = "dustbin";
 
@@ -63,6 +69,10 @@ class _SusMappingState extends State<SusMapping>
   void initState() {
     super.initState();
 
+    // f
+
+    uid = auth.currentUser!.uid;
+    print(uid);
     WidgetsBinding.instance?.addObserver(this);
     _tabController = new TabController(length: 3, vsync: this);
     onLayoutDone(Duration());
