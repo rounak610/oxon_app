@@ -186,6 +186,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             //borderSide: BorderSide(color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(20)
                           ),
+                          focusColor: Colors.white,
+                          fillColor: Colors.white,
                           hintText: 'Select your date of birth',
                           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
                           labelText: 'Date of Birth',
@@ -303,7 +305,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   primary: Colors.green[50],
                                   shape: new RoundedRectangleBorder(
                                       borderRadius:
-                                      new BorderRadius.circular(35.0))),
+                                      new BorderRadius.circular(35.0))
+                              ),
                             ),
                           ),
                         ),

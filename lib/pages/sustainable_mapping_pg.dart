@@ -12,6 +12,7 @@ import 'package:oxon_app/styles/button_styles.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:permission_handler/permission_handler.dart' as permHandler;
 
 class SusMapping extends StatefulWidget {
@@ -207,90 +208,111 @@ class _SusMappingState extends State<SusMapping>
             context,
             "Dustbin and Toilets",
           ),
-          body: Column(
-            children: [
-              Container(
-                child: TabBar(
-                  indicatorColor: Colors.white,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorWeight: 1,
-                  indicator: UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 1.0, color: Colors.white),
-                      insets: EdgeInsets.symmetric(
-                          horizontal: 7.32 * SizeConfig.responsiveMultiplier)),
-                  controller: _tabController,
-                  tabs: [
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () => _tabController.animateTo(0),
-                            icon: Container(
-                              width: 4.10 * SizeConfig.responsiveMultiplier,
-                              height: 4.10 * SizeConfig.responsiveMultiplier,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/dustbin.png"))),
-                            )),
-                        Text(
-                          "Dustbins",
-                          style: Theme.of(context).textTheme.headline6,
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () => _tabController.animateTo(1),
-                            icon: Container(
-                              width: 4.10 * SizeConfig.responsiveMultiplier,
-                              height: 4.10 * SizeConfig.responsiveMultiplier,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/toilet.png"))),
-                            )),
-                        Text(
-                          "Toilets",
-                          style: Theme.of(context).textTheme.headline6,
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () => _tabController.animateTo(2),
-                            icon: Container(
-                              width: 4.10 * SizeConfig.responsiveMultiplier,
-                              height: 4.10 * SizeConfig.responsiveMultiplier,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/suggest_loc.png"))),
-                            )),
-                        Text(
-                          "Suggest\nLocation",
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      top: 3.51 * SizeConfig.responsiveMultiplier),
-                  child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
+          body: DoubleBackToCloseApp(
+            snackBar: const SnackBar(content: Text('Press again to exit the app'),duration: Duration(seconds:2)),
+            child: Column(
+              children: [
+                Container(
+                  child: TabBar(
+                    indicatorColor: Colors.white,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorWeight: 1,
+                    indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(width: 1.0, color: Colors.white),
+                        insets: EdgeInsets.symmetric(
+                            horizontal: 7.32 * SizeConfig.responsiveMultiplier)),
                     controller: _tabController,
-                    children: [
-                      Container(
-                        child: StreamBuilder<QuerySnapshot>(
+                    tabs: [
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () => _tabController.animateTo(0),
+                              icon: Container(
+                                width: 4.10 * SizeConfig.responsiveMultiplier,
+                                height: 4.10 * SizeConfig.responsiveMultiplier,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/icons/dustbin.png"))),
+                              )),
+                          Text(
+                            "Dustbins",
+                            style: Theme.of(context).textTheme.headline6,
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () => _tabController.animateTo(1),
+                              icon: Container(
+                                width: 4.10 * SizeConfig.responsiveMultiplier,
+                                height: 4.10 * SizeConfig.responsiveMultiplier,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/icons/toilet.png"))),
+                              )),
+                          Text(
+                            "Toilets",
+                            style: Theme.of(context).textTheme.headline6,
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () => _tabController.animateTo(2),
+                              icon: Container(
+                                width: 4.10 * SizeConfig.responsiveMultiplier,
+                                height: 4.10 * SizeConfig.responsiveMultiplier,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/icons/suggest_loc.png"))),
+                              )),
+                          Text(
+                            "Suggest\nLocation",
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: 3.51 * SizeConfig.responsiveMultiplier),
+                    child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: _tabController,
+                      children: [
+                        Container(
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: repository.getStream(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData)
+                                  return LinearProgressIndicator();
+
+                                _buildList(snapshot.data?.docs ?? []);
+
+                                return GoogleMap(
+                                  mapType: MapType.normal,
+                                  initialCameraPosition: cameraPosition,
+                                  markers: dustbinMarkers,
+                                  onMapCreated: (GoogleMapController controller) {
+                                    _googleMapController = controller;
+                                    _controller.complete(controller);
+                                  },
+                                );
+                              }),
+                        ),
+                        StreamBuilder<QuerySnapshot>(
                             stream: repository.getStream(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
@@ -301,177 +323,159 @@ class _SusMappingState extends State<SusMapping>
                               return GoogleMap(
                                 mapType: MapType.normal,
                                 initialCameraPosition: cameraPosition,
-                                markers: dustbinMarkers,
+                                markers: toiletMarkers,
                                 onMapCreated: (GoogleMapController controller) {
-                                  _googleMapController = controller;
                                   _controller.complete(controller);
                                 },
                               );
                             }),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: repository.getStream(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                              return LinearProgressIndicator();
-
-                            _buildList(snapshot.data?.docs ?? []);
-
-                            return GoogleMap(
-                              mapType: MapType.normal,
-                              initialCameraPosition: cameraPosition,
-                              markers: toiletMarkers,
-                              onMapCreated: (GoogleMapController controller) {
-                                _controller.complete(controller);
-                              },
-                            );
-                          }),
-                      Padding(
-                        padding:
-                            EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.white,
+                        Padding(
+                          padding:
+                              EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                                1.2 * SizeConfig.responsiveMultiplier),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                      "What are you volunteering to locate?",
-                                      style: mAppTheme.textTheme.headline3),
-                                ),
-                                Row(
-                                  children: [
-                                    Radio(
-                                        visualDensity: VisualDensity.compact,
-                                        value: 0,
-                                        groupValue: selectedRadio,
-                                        activeColor: Colors.white,
-                                        fillColor: MaterialStateProperty.all(
-                                            Colors.white),
-                                        onChanged: (val) =>
-                                            setSelectedRadio(val as int)),
-                                    Text(
-                                      "Dustbin",
-                                      style: mAppTheme.textTheme.headline4,
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Radio(
-                                        visualDensity: VisualDensity.compact,
-                                        value: 1,
-                                        groupValue: selectedRadio,
-                                        activeColor: Colors.white,
-                                        fillColor: MaterialStateProperty.all(
-                                            Colors.white),
-                                        onChanged: (val) =>
-                                            setSelectedRadio(val as int)),
-                                    Text(
-                                      "Toilet",
-                                      style: mAppTheme.textTheme.headline4,
-                                    )
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Center(
-                                      child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          11.71 *
-                                              SizeConfig.responsiveMultiplier,
-                                          1.46 *
-                                              SizeConfig.responsiveMultiplier,
-                                          11.71 *
-                                              SizeConfig.responsiveMultiplier,
-                                          0.73 *
-                                              SizeConfig.responsiveMultiplier),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      "Adding the location...")));
-                                          getCurrLocationAndAdd(type);
-                                        },
-                                        child: Text(
-                                          "Locate",
-                                          style: mAppTheme.textTheme.headline3!
-                                              .copyWith(
-                                                  color: AppTheme
-                                                      .colors.oxonGreen),
-                                        ),
-                                        style: solidRoundButtonStyle,
-                                      ),
-                                    ),
-                                  )),
-                                ),
-                                Center(
-                                  child: Text(
-                                    "*stand near the $type before pressing the button.",
-                                    style: mAppTheme.textTheme.headline6,
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  1.2 * SizeConfig.responsiveMultiplier),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                        "What are you volunteering to locate?",
+                                        style: mAppTheme.textTheme.headline3),
                                   ),
-                                )
-                              ],
+                                  Row(
+                                    children: [
+                                      Radio(
+                                          visualDensity: VisualDensity.compact,
+                                          value: 0,
+                                          groupValue: selectedRadio,
+                                          activeColor: Colors.white,
+                                          fillColor: MaterialStateProperty.all(
+                                              Colors.white),
+                                          onChanged: (val) =>
+                                              setSelectedRadio(val as int)),
+                                      Text(
+                                        "Dustbin",
+                                        style: mAppTheme.textTheme.headline4,
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Radio(
+                                          visualDensity: VisualDensity.compact,
+                                          value: 1,
+                                          groupValue: selectedRadio,
+                                          activeColor: Colors.white,
+                                          fillColor: MaterialStateProperty.all(
+                                              Colors.white),
+                                          onChanged: (val) =>
+                                              setSelectedRadio(val as int)),
+                                      Text(
+                                        "Toilet",
+                                        style: mAppTheme.textTheme.headline4,
+                                      )
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                        child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            11.71 *
+                                                SizeConfig.responsiveMultiplier,
+                                            1.46 *
+                                                SizeConfig.responsiveMultiplier,
+                                            11.71 *
+                                                SizeConfig.responsiveMultiplier,
+                                            0.73 *
+                                                SizeConfig.responsiveMultiplier),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        "Adding the location...")));
+                                            getCurrLocationAndAdd(type);
+                                          },
+                                          child: Text(
+                                            "Locate",
+                                            style: mAppTheme.textTheme.headline3!
+                                                .copyWith(
+                                                    color: AppTheme
+                                                        .colors.oxonGreen),
+                                          ),
+                                          style: solidRoundButtonStyle,
+                                        ),
+                                      ),
+                                    )),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "*stand near the $type before pressing the button.",
+                                      style: mAppTheme.textTheme.headline6,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(
-                    11.71 * SizeConfig.responsiveMultiplier,
-                    2.63 * SizeConfig.responsiveMultiplier,
-                    11.71 * SizeConfig.responsiveMultiplier,
-                    2.63 * SizeConfig.responsiveMultiplier),
-                child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(ComingSoon.routeName);
-                    },
-                    child: Text(
-                      "Guide The Way",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
-                    ),
-                    style: solidRoundButtonStyleMinSize),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(
-                    11.71 * SizeConfig.responsiveMultiplier,
-                    0,
-                    11.71 * SizeConfig.responsiveMultiplier,
-                    2.63 * SizeConfig.responsiveMultiplier),
-                child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(ComingSoon.routeName);
-                    },
-                    child: Text(
-                      "Open In Maps",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
-                    ),
-                    style: solidRoundButtonStyleMinSize),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      11.71 * SizeConfig.responsiveMultiplier,
+                      2.63 * SizeConfig.responsiveMultiplier,
+                      11.71 * SizeConfig.responsiveMultiplier,
+                      2.63 * SizeConfig.responsiveMultiplier),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(ComingSoon.routeName);
+                      },
+                      child: Text(
+                        "Guide The Way",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3!
+                            .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
+                      ),
+                      style: solidRoundButtonStyleMinSize),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      11.71 * SizeConfig.responsiveMultiplier,
+                      0,
+                      11.71 * SizeConfig.responsiveMultiplier,
+                      2.63 * SizeConfig.responsiveMultiplier),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(ComingSoon.routeName);
+                      },
+                      child: Text(
+                        "Open In Maps",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3!
+                            .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
+                      ),
+                      style: solidRoundButtonStyleMinSize),
+                ),
+              ],
+            ),
           )),
     );
   }

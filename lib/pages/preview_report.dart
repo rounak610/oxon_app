@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/models/concern.dart';
 import 'package:oxon_app/pages/products_pg.dart';
+import 'package:oxon_app/pages/raise_concern.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
@@ -302,7 +303,7 @@ class _PreviewReportState extends State<PreviewReport> {
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.green[900],
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.w900),
                           ),
                           style: ElevatedButton.styleFrom(
                               primary: Colors.green[50],
@@ -320,11 +321,16 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 250, height: 60),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SusMapping()));
+                          },
                           child: Text(
-                            'Go back',
+                            'Go back to home',
                             style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 20,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -350,7 +356,7 @@ class _PreviewReportState extends State<PreviewReport> {
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
     String str =
-        "@JyotilNC13 @AnitaBhandelajm @bhajanlaljatav @JaipurNigam \n${issueType} \n${problem} \n${description} \nComplaint posted by @oxon_life";
+        "@AshokChandnaINC @drsubhashg @DrJitendraSingh @RajSampark @_PParashar \nI have a issue with ${issueType} \nWe have ${problem} at \n${description} \nComplaint posted by @oxon_life";
     if (imagePath.isNotEmpty) {
       await Share.shareFiles(imagePaths,
           text: str,
