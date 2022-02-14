@@ -28,6 +28,24 @@ class PreviewReport extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _PreviewReportState extends State<PreviewReport> {
+  String userName = "Not Updated";
+  String mobile = "Not updated";
+  _fetch() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((ds) {
+        userName = ds.data()!['name'];
+        mobile = ds.data()!['mobile'];
+      }).catchError((e) {
+        print(e);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Concern;
@@ -69,13 +87,19 @@ class _PreviewReportState extends State<PreviewReport> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                          "Aikagra",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        )
+                        FutureBuilder(
+                            future: _fetch(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState !=
+                                  ConnectionState.done) return Text('Loading');
+                              return Text(
+                                userName,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w300),
+                              );
+                            })
                       ],
                     ),
                     SizedBox(
@@ -93,13 +117,19 @@ class _PreviewReportState extends State<PreviewReport> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                          "99*******",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
-                        )
+                        FutureBuilder(
+                            future: _fetch(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState !=
+                                  ConnectionState.done) return Text('Loading');
+                              return Text(
+                                mobile,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w300),
+                              );
+                            })
                       ],
                     ),
                     SizedBox(
@@ -259,11 +289,13 @@ class _PreviewReportState extends State<PreviewReport> {
                                   .add({
                                 'description': description,
                                 'issueType': issueType,
-                                'problem':problem,
+                                'problem': problem,
                                 'image': imagePath
                               }).then((value) {
                                 if (value != null) {
-                                  Fluttertoast.showToast(msg: 'Complaint posted successfully',gravity: ToastGravity.TOP);
+                                  Fluttertoast.showToast(
+                                      msg: 'Complaint posted successfully',
+                                      gravity: ToastGravity.TOP);
                                 }
                               }).catchError((e) {
                                 print(e);
@@ -293,8 +325,8 @@ class _PreviewReportState extends State<PreviewReport> {
                         constraints: const BoxConstraints.tightFor(
                             width: 300, height: 60),
                         child: ElevatedButton(
-                          onPressed: () => _onShare(
-                              context, imagePath, issueType, description, problem),
+                          onPressed: () => _onShare(context, imagePath,
+                              issueType, description, problem),
                           child: Text(
                             'Share via Twitter',
                             style: TextStyle(
