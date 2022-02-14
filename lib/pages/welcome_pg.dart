@@ -21,6 +21,7 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   TextEditingController _controller = TextEditingController();
   bool showLoading = false;
+  late int phonenumber;
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +77,23 @@ class _WelcomePageState extends State<WelcomePage> {
                             setState(() {
                               showLoading = true;
                             });
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => OTPScreen(_controller.text)));
-                          },
 
+                            _controller.text.length == 10
+                                ? {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OTPScreen(_controller.text)))
+                                  }
+                                : {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                          "Enter a valid 10 digit phone number"),
+                                    ))
+                                  };
+                          },
                           child: Text(
                             "Send OTP",
                             style: TextStyle(color: Colors.black, fontSize: 20),
