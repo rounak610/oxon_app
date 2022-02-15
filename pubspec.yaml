@@ -55,6 +55,7 @@ dependencies:
   http: ^0.13.4
   timer_button: ^2.0.0
   fluttertoast: ^8.0.8
+  firebase_storage: ^10.2.7
 
 dev_dependencies:
   flutter_test:
