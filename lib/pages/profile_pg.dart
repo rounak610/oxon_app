@@ -45,8 +45,8 @@ class _ProfilePageState extends State<ProfilePage> {
           userName = ds.data()!['name'];
           userResidence = ds.data()!['city'];
           userMobileNo = ds.data()!['mobile'];
-          userDOB = DateTime.fromMicrosecondsSinceEpoch(
-                  ds.data()!['DOB'].microsecondsSinceEpoch)
+          userDOB = DateTime.fromMillisecondsSinceEpoch(
+                  ds.data()!['DOB'].millisecondsSinceEpoch)
               .toString();
           userGender = ds.data()!['gender'];
         }).catchError((e) {
@@ -157,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 if (snapshot.connectionState !=
                                     ConnectionState.done)
                                   return Text('Loading');
-                                return Text(userDOB,
+                                return Text(userDOB.substring(0, 10),
                                     style:
                                         Theme.of(context).textTheme.headline2);
                               },
