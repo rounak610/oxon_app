@@ -10,6 +10,7 @@ import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key); //, required this.title
@@ -28,6 +29,9 @@ class _ProfilePageState extends State<ProfilePage> {
     String userName = "Not set";
     String userResidence = "Not set";
     String userMobileNo = "Not set";
+    String userGender = "Not set";
+    var userDOB = "Not set";
+
     final FirebaseAuth auth = FirebaseAuth.instance;
 
     _fetch() async {
@@ -41,15 +45,15 @@ class _ProfilePageState extends State<ProfilePage> {
           userName = ds.data()!['name'];
           userResidence = ds.data()!['city'];
           userMobileNo = ds.data()!['mobile'];
+          userDOB = DateTime.fromMicrosecondsSinceEpoch(
+                  ds.data()!['DOB'].microsecondsSinceEpoch)
+              .toString();
+          userGender = ds.data()!['gender'];
         }).catchError((e) {
           print(e);
         });
       }
     }
-
-    var doc;
-    var docData;
-
 
     final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle(Size(
         146.32 * SizeConfig.responsiveMultiplier,
@@ -135,6 +139,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ConnectionState.done)
                                   return Text('Loading');
                                 return Text(userMobileNo,
+                                    style:
+                                        Theme.of(context).textTheme.headline2);
+                              },
+                            )
+                          ]),
+                          TableRow(children: [
+                            SizedBox(height: 25),
+                            SizedBox(height: 25)
+                          ]),
+                          TableRow(children: [
+                            Text("DOB: ",
+                                style: Theme.of(context).textTheme.headline2),
+                            FutureBuilder(
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text(userDOB,
+                                    style:
+                                        Theme.of(context).textTheme.headline2);
+                              },
+                            )
+                          ]),
+                          TableRow(children: [
+                            SizedBox(height: 25),
+                            SizedBox(height: 25)
+                          ]),
+                          TableRow(children: [
+                            Text("Gender: ",
+                                style: Theme.of(context).textTheme.headline2),
+                            FutureBuilder(
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text(userGender,
                                     style:
                                         Theme.of(context).textTheme.headline2);
                               },
