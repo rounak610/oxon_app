@@ -40,6 +40,11 @@ class _OTPScreenState extends State<OTPScreen> {
   Widget build(BuildContext context) {
     void signinWithPhoneAuthCredential(
         PhoneAuthCredential phoneAuthCredential) async {
+      final QuerySnapshot result = await firestore
+          .collection('users')
+          .where('mobile', isEqualTo: widget.phone)
+          .limit(1)
+          .get();
       setState(() {
         showLoading = true;
       });
@@ -49,9 +54,17 @@ class _OTPScreenState extends State<OTPScreen> {
         setState(() {
           showLoading = false;
         });
-        if (authCredential.user != null) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SusMapping()));
+
+        if (result != null) {
+          if (authCredential.user != null) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SusMapping()));
+          }
+        } else {
+          if (authCredential.user != null) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => UpdateProfile()));
+          }
         }
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -187,11 +200,11 @@ class _OTPScreenState extends State<OTPScreen> {
       });
 
       if (result != null) {
-      } else {
         if (authCredential.user != null) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SusMapping()));
         }
+      } else {
         if (authCredential.user != null) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => UpdateProfile()));
