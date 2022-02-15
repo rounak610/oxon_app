@@ -288,10 +288,17 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             width: 250, height: 60),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate() && mobile.length == 10 && name.length != 0) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Processing data....'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            } else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please update all fields correctly save your details.'),
                                   duration: Duration(seconds: 1),
                                 ),
                               );
