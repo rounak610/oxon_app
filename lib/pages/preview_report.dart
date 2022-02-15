@@ -65,6 +65,7 @@ class _PreviewReportState extends State<PreviewReport> {
 
   String userName = "Not Updated";
   String mobile = "Not updated";
+  late String twitter;
 
   _fetch() async {
     final user = await FirebaseAuth.instance.currentUser;
@@ -335,6 +336,45 @@ class _PreviewReportState extends State<PreviewReport> {
                     SizedBox(
                       height: 20,
                     ),
+                    TextFormField(
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        border: OutlineInputBorder(
+                          //borderSide: BorderSide(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular(20)),
+                        hintText: 'Enter your twitter username',
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 20),
+                        labelText: 'Twitter username',
+                        labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          twitter = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please enter your twitter user name';
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('*Enter your twitter username only when you do not belong to the Gangapur City',
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 15, fontWeight: FontWeight.w200
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Form(
                       key: _formKey,
                       child: Center(
@@ -358,7 +398,8 @@ class _PreviewReportState extends State<PreviewReport> {
                                 'description': description,
                                 'issueType': issueType,
                                 'problem': problem,
-                                'image': imagePath
+                                'image': imagePath,
+                                'twitter username':twitter
                               }).then((value) {
                                 if (value != null) {
                                   Fluttertoast.showToast(
