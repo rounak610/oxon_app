@@ -11,6 +11,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:timer_button/timer_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -20,6 +21,7 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends State<OTPScreen> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   late String _verificationCode;
   final TextEditingController _pinPutController = TextEditingController();
@@ -169,6 +171,11 @@ class _OTPScreenState extends State<OTPScreen> {
 
   void signinWithPhoneAuthCredential(
       PhoneAuthCredential phoneAuthCredential) async {
+    final QuerySnapshot result = await firestore
+        .collection('users')
+        .where('mobile', isEqualTo: widget.phone)
+        .limit(1)
+        .get();
     setState(() {
       showLoading = true;
     });
@@ -178,9 +185,17 @@ class _OTPScreenState extends State<OTPScreen> {
       setState(() {
         showLoading = false;
       });
-      if (authCredential.user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => UpdateProfile()));
+
+      if (result != null) {
+      } else {
+        if (authCredential.user != null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SusMapping()));
+        }
+        if (authCredential.user != null) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => UpdateProfile()));
+        }
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
