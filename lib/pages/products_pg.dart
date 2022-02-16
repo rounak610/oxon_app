@@ -95,7 +95,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: Image.asset(
-                                                        "assets/images/oxon.png")
+                                                        "assets/images/oxon_app.png")
                                                     .image)),
                                         Text(
                                           "Product",
@@ -137,7 +137,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -178,7 +178,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -219,7 +219,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -260,7 +260,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -301,7 +301,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -360,7 +360,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -401,7 +401,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -442,7 +442,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -483,7 +483,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -524,7 +524,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -565,7 +565,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -624,7 +624,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -665,7 +665,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -706,7 +706,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -747,7 +747,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -788,7 +788,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(
@@ -829,7 +829,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             width: 80,
                                             child: Image(
                                                 image: AssetImage(
-                                                    "assets/images/oxon.png"))),
+                                                    "assets/images/oxon_app.png"))),
                                         Text(
                                           "Product",
                                           style: TextStyle(

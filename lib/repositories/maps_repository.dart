@@ -8,7 +8,7 @@ class MapsRepository {
 
   final Dio _dio;
 
-  static const googleAPIKey = "AIzaSyCcywbZyeAkGWf3qkJ-Tc1e_58d7oQVvaE";
+  static const googleAPIKey = "AIzaSyBDY5afB5ZnIg3eO4O7bOFocAyeX0cl2ME";
 
   MapsRepository({Dio? dio}) : _dio = dio ?? Dio();
 
