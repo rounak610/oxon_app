@@ -3,7 +3,8 @@ import 'package:oxon_app/models/loc_data.dart';
 
 class LocDataRepository {
   final CollectionReference collection = FirebaseFirestore
-      .instance.collection('loc_data_test');
+      .instance.collection('loc_data');
+      // .instance.collection('loc_data_test');
 
   Stream<QuerySnapshot> getStream() {
     return collection.snapshots();
@@ -17,7 +18,9 @@ class LocDataRepository {
     await collection.doc(locData.referenceId).update(locData.toJson());
   }
 
-  void deleteLocData(LocData locData) async {
+  Future<String> deleteLocData(LocData locData) async {
     await collection.doc(locData.referenceId).delete();
+
+    return "deleted";
   }
 }

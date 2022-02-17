@@ -11,6 +11,7 @@ class LocData {
   int upvote;
 
   String? referenceId;
+  List<dynamic> usersVoted;
 
   LocData(
       {required this.downvote,
@@ -21,7 +22,9 @@ class LocData {
       required this.sub_type,
       required this.u_id,
       required this.upvote,
-      this.referenceId});
+      this.referenceId,
+      required this.usersVoted
+      });
 
   factory LocData.fromSnapshot(DocumentSnapshot snapshot) {
     final newLocData = LocData.fromJson(snapshot.data() as Map<String, dynamic>);
@@ -45,7 +48,9 @@ LocData _locDataFromJson(Map<String, dynamic> json) {
     sub_type: json['sub_type'],
     u_id: json['u_id'],
     upvote: json['upvote'],
-    referenceId: json['reference_id']
+    referenceId: json['reference_id'],
+    usersVoted: json['users_voted']
+    // usersVoted: json.containsKey('users_voted') ? json['users_voted'] : List<dynamic>.empty() //['-999'] //
   );
 }
 
@@ -59,5 +64,6 @@ Map<String, dynamic> _locDataToJson(LocData instance) => <String, dynamic>{
       'sub_type': instance.sub_type,
       'u_id': instance.u_id,
       'upvote': instance.upvote,
-      'reference_id': instance.referenceId
+      'reference_id': instance.referenceId,
+      'users_voted': instance.usersVoted
     };

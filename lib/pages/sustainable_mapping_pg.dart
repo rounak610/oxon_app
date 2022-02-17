@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -95,6 +96,9 @@ class _SusMappingState extends State<SusMapping>
           onMapCreated: (GoogleMapController controller) {
             _googleMapController = controller;
             _controller.complete(controller);
+            setState(() {
+
+            });
           },
           onTap: (loc) {
             deleteCount = 0;
@@ -107,20 +111,16 @@ class _SusMappingState extends State<SusMapping>
         ),
         Align(
           alignment: Alignment.topRight,
-          child: Positioned(
-            top: 20,
-            right: 20,
-            child: IconButton(
-                iconSize: 8.45 * SizeConfig.responsiveMultiplier,
-                onPressed: () => goToCurrLoc(),
-                icon: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image:
-                              AssetImage("assets/icons/bigger_gray_bg.png"))),
-                )),
-          ),
+          child: IconButton(
+              iconSize: 8.45 * SizeConfig.responsiveMultiplier,
+              onPressed: () => goToCurrLoc(),
+              icon: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image:
+                        AssetImage("assets/icons/bigger_gray_bg.png"))),
+              )),
         ),
         Align(
           alignment: Alignment.bottomLeft,
@@ -134,24 +134,31 @@ class _SusMappingState extends State<SusMapping>
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          thankForFeedback();
+                          thankForFeedback(_currLocData!);
 
                           if (type == "dustbin") {
-                            dustbinMarkers.removeWhere(
-                                (element) => element.markerId == _currMarkerId);
+                            print("before ${dustbinMarkers.length}");
+                            dustbinMarkers.removeWhere((element) =>
+                                element.markerId.value == _currMarkerId!.value);
                             _currLocData!.upvote = _currLocData!.upvote + 1;
                             repository.updateLocData(_currLocData!);
                             dustbinMarkers.add(createMarkerFromLocData(
                                 _currLocData, dustbinMarkers.length + 1, type));
                             setState(() {});
+
+                            print("after ${dustbinMarkers.length}");
                           } else {
-                            toiletMarkers.removeWhere(
-                                (element) => element.markerId == _currMarkerId);
+                            print("before ${dustbinMarkers.length}");
+
+                            toiletMarkers.removeWhere((element) =>
+                                element.markerId.value == _currMarkerId!.value);
                             _currLocData!.upvote = _currLocData!.upvote + 1;
                             repository.updateLocData(_currLocData!);
                             toiletMarkers.add(createMarkerFromLocData(
                                 _currLocData, toiletMarkers.length + 1, type));
                             setState(() {});
+
+                            print("after ${dustbinMarkers.length}");
                           }
                         },
                         child: Row(
@@ -163,7 +170,7 @@ class _SusMappingState extends State<SusMapping>
                         )),
                     ElevatedButton(
                         onPressed: () {
-                          thankForFeedback();
+                          thankForFeedback(_currLocData!);
 
                           if (type == "dustbin") {
                             dustbinMarkers.removeWhere(
@@ -207,41 +214,104 @@ class _SusMappingState extends State<SusMapping>
     } else if (state == AppLifecycleState.detached) {}
   }
 
-  void onTapMarker(LocData locData, count) {
+  Future<void> onTapMarker(LocData locData, count) async {
     {
       final markerTappedLatLng =
           LatLng(locData.location.latitude, locData.location.longitude);
 
       if (_currMarker == markerTappedLatLng && locData.u_id == uid) {
+        print("del count $deleteCount");
         if (deleteCount == 1) {
           if (_currLocData != null &&
               auth.currentUser != null &&
               _currLocData?.u_id == uid) {
 
-            repository.deleteLocData(_currLocData!);
+            _googleMapController.hideMarkerInfoWindow(_currMarkerId!);
 
             if (locData.type == "toilet") {
+              print('true');
+              print("before ${toiletMarkers.length}");
+
+              print('_currMarkerId $_currMarkerId');
               toiletMarkers
                   .removeWhere((element) => element.markerId == _currMarkerId);
+
+              print("after ${toiletMarkers.length}");
             } else {
               dustbinMarkers
                   .removeWhere((element) => element.markerId == _currMarkerId);
             }
+            deleteCount = 0;
+            // setState(() {});
+
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) {
+                return FutureBuilder<String>(
+                  future: repository.deleteLocData(_currLocData!),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return AlertDialog(
+                        content:
+                            Text("Marker deleted", textAlign: TextAlign.center),
+                      );
+                    } else if (snapshot.hasError) {
+                      return AlertDialog(
+                        content: Text(
+                          "Error deleting. Make sure internet is on.",
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else {
+                      try {
+                        return AlertDialog(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Deleting marker... Please wait...",
+                                  style: AppTheme.define()
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(color: Colors.black),
+                                  textAlign: TextAlign.center),
+                              CircularProgressIndicator()
+                            ],
+                          ),
+                        );
+                      } catch (e, s) {}
+                    }
+
+                    return Text("Error deleting. Make sure internet is on.");
+                  },
+                );
+                return AlertDialog(
+                  content: Text(
+                      "Error adding location. Ensure device location and internet is turned on and please try again"),
+                );
+              },
+            );
             setState(() {});
           }
-          deleteCount = 0;
         }
         if (deleteCount == 0) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text("Press on the marker one more time to delete it.")));
+            content: Text("Press on the marker one more time to delete it."),
+            duration: Duration(seconds: 1),
+          ));
           deleteCount += 1;
         }
+      } else if (locData.u_id == uid) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Press on the marker 2 more times to delete it."),
+            duration: Duration(seconds: 1)));
       }
 
+      if (!locData.usersVoted.contains(uid))
+        shouldAskFeedback = true;
+      else
+        shouldAskFeedback = false;
 
-
-      shouldAskFeedback = true;
       _currMarker = markerTappedLatLng;
       _currLocData = locData;
       _currMarkerId = MarkerId(count.toString());
@@ -291,7 +361,8 @@ class _SusMappingState extends State<SusMapping>
   Future<String> getCurrLocationAndAdd(String type) async {
     _locationData = await location.getLocation();
 
-
+    // print("uid $uid");
+    // print("in get cuur loc");
 
     final id = await repository.addLocData(LocData(
         downvote: 0,
@@ -301,7 +372,8 @@ class _SusMappingState extends State<SusMapping>
         type: type,
         sub_type: "ordinary",
         u_id: uid,
-        upvote: 0));
+        upvote: 0,
+        usersVoted: [uid]));
 
     return type;
   }
@@ -310,11 +382,21 @@ class _SusMappingState extends State<SusMapping>
     cameraPosition = CameraPosition(
         target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 16);
-    setState(() {});
-    if (type == "dustbin")
+    cameraPosition2 = CameraPosition(
+        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+        zoom: 16);
+    // cameraPosition2 = CameraPosition(
+    //     target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+    //     zoom: 16);
+    if (type == "dustbin") {
+      resetCurrentData();
       _tabController.animateTo(0);
-    else
+    } else {
+      resetCurrentData();
       _tabController.animateTo(1);
+    }
+
+    setState(() {});
   }
 
   void onLayoutDone(Duration timeStamp) async {
@@ -360,7 +442,8 @@ class _SusMappingState extends State<SusMapping>
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
           appBar: CustomAppBar(
             context,
-            "Sustainable Mapping",
+            // "Sustainable Mapping",
+            "Dustbins and Toilets",
           ),
           body: Column(
             children: [
@@ -378,7 +461,10 @@ class _SusMappingState extends State<SusMapping>
                     Column(
                       children: [
                         IconButton(
-                            onPressed: () => _tabController.animateTo(0),
+                            onPressed: () {
+                              _tabController.animateTo(0);
+                              resetCurrentData();
+                            },
                             icon: Container(
                               width: 4.10 * SizeConfig.responsiveMultiplier,
                               height: 4.10 * SizeConfig.responsiveMultiplier,
@@ -397,7 +483,10 @@ class _SusMappingState extends State<SusMapping>
                     Column(
                       children: [
                         IconButton(
-                            onPressed: () => _tabController.animateTo(1),
+                            onPressed: () {
+                              _tabController.animateTo(1);
+                              resetCurrentData();
+                            },
                             icon: Container(
                               width: 4.10 * SizeConfig.responsiveMultiplier,
                               height: 4.10 * SizeConfig.responsiveMultiplier,
@@ -717,9 +806,7 @@ class _SusMappingState extends State<SusMapping>
     CameraUpdate zoom = CameraUpdate.zoomTo(16);
     _googleMapController.animateCamera(update);
     shouldAskFeedback = false;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void _launchMapUrl() async {
@@ -761,8 +848,16 @@ class _SusMappingState extends State<SusMapping>
     }
   }
 
-  void thankForFeedback() {
+  void thankForFeedback(LocData locData) {
     shouldAskFeedback = false;
+    setState(() {});
+
+    locData.usersVoted.add(uid);
+    print(locData.usersVoted);
+    repository.updateLocData(locData);
+    print("thisz ${locData.usersVoted}");
+
+    // shouldAskFeedback = false;
     setState(() {});
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
@@ -801,5 +896,16 @@ class _SusMappingState extends State<SusMapping>
     }
 
     setState(() {});
+  }
+
+  void resetCurrentData() {
+    dustbinMarkers = {};
+    toiletMarkers = {};
+    _currLocData = null;
+    _currMarker = null;
+    _currMarkerId = null;
+    shouldAskFeedback = false;
+    deleteCount = 0;
+    deleteMarker = null;
   }
 }
