@@ -1,22 +1,20 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
-import 'package:oxon_app/pages/otpscreen.dart';
 import 'package:oxon_app/pages/preview_report.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
 import 'package:oxon_app/pages/raise_concern.dart';
+import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/pages/take_picture.dart';
 import 'package:oxon_app/pages/update_profile.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oxon_app/pages/sign_out.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -49,9 +47,7 @@ class MyApp extends StatelessWidget {
             TakePictureScreen.routeName: (context) =>
                 TakePictureScreen(camera: cameras[0]),
             ProfilePage.routeName: (context) => ProfilePage(),
-            //Change later //title: 'John Doe'
             SusMapping.routeName: (context) => SusMapping(),
-            //Change Later //title: 'Title'
             DonateDustbin.routeName: (context) => DonateDustbin(),
             ProductsPage.routeName: (context) => ProductsPage(),
             ComingSoon.routeName: (context) => ComingSoon(),
@@ -77,9 +73,9 @@ class _InitializerWidgetState extends State<InitializerWidget> {
   late FirebaseAuth _auth;
   late User? _user;
   bool isLoading = true;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _auth = FirebaseAuth.instance;
     _user = _auth.currentUser;

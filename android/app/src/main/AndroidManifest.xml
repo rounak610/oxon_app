@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.oxon_app">
+    package="com.oxonlife.oxon_app">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
@@ -13,7 +13,9 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
+<!--            testing exported true-->
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -42,7 +44,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyCcywbZyeAkGWf3qkJ-Tc1e_58d7oQVvaE"/>
+           android:value="AIzaSyBDY5afB5ZnIg3eO4O7bOFocAyeX0cl2ME"/>
+<!--           android:value="AIzaSyCcywbZyeAkGWf3qkJ-Tc1e_58d7oQVvaE"/>-->
 <!--           android:value="AIzaSyA5g2UYGLDIKrpRidLtgG7UCLkcfCC0Z6w"/> restricted api key-->
        <meta-data
            android:name="com.facebook.sdk.ApplicationId"

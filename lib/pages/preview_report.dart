@@ -13,6 +13,7 @@ import 'package:oxon_app/repositories/maps_repository.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon_app/api/firebase_api.dart';
 
 //import 'package:flutter_share_me/flutter_share_me.dart';
 //import 'package:url_launcher/url_launcher.dart';
@@ -65,6 +66,7 @@ class _PreviewReportState extends State<PreviewReport> {
 
   String userName = "Not Updated";
   String mobile = "Not updated";
+  late String twitter;
 
   _fetch() async {
     final user = await FirebaseAuth.instance.currentUser;
@@ -335,6 +337,45 @@ class _PreviewReportState extends State<PreviewReport> {
                     SizedBox(
                       height: 20,
                     ),
+                    TextFormField(
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        border: OutlineInputBorder(
+                          //borderSide: BorderSide(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular(20)),
+                        hintText: 'Enter your twitter username',
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 20),
+                        labelText: 'Twitter username',
+                        labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          twitter = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please enter your twitter user name';
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('*Enter your twitter username only when you do not belong to the Gangapur City',
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 15, fontWeight: FontWeight.w200
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Form(
                       key: _formKey,
                       child: Center(
@@ -352,14 +393,9 @@ class _PreviewReportState extends State<PreviewReport> {
                                   ),
                                 );
                               }
-                              FirebaseFirestore.instance
-                                  .collection('complaints')
-                                  .add({
-                                'description': description,
-                                'issueType': issueType,
-                                'problem': problem,
-                                'image': imagePath
-                              }).then((value) {
+                              uploadFile(File(imagePath), userName);
+                              FirebaseFirestore.instance.collection('complaints').add({'description': description, 'issueType': issueType, 'problem': problem, 'twitter username':twitter})
+                                  .then((value) {
                                 if (value != null) {
                                   Fluttertoast.showToast(
                                       msg: 'Complaint posted successfully',
@@ -449,7 +485,8 @@ class _PreviewReportState extends State<PreviewReport> {
   }
 
   void _onShare(BuildContext context, String imagePath, String issueType,
-      String description, String problem) async {
+      String description, String problem) async
+  {
     final locationAddress = await getCurrentLocationAddress();
     final box = context.findRenderObject() as RenderBox?;
     List<String> imagePaths = [imagePath];
@@ -469,7 +506,17 @@ class _PreviewReportState extends State<PreviewReport> {
     }
   }
 
-  Future<String> getCurrentLocationAddress() async {
+  //to upload the image taken by the user to the firebase storage
+  Future uploadFile(File image_path, String username) async
+  {
+    final fileName = 'uploaded by ${username}';
+    final destination = 'images/$fileName';
+    FirebaseApi.uploadFile(destination, image_path);
+    setState(() {});
+  }
+
+  Future<String> getCurrentLocationAddress() async
+  {
     const errorMessage =
         "Error fetching location data. Ensure device location and internet is switched on and please try again.";
     _locationData = await location.getLocation();

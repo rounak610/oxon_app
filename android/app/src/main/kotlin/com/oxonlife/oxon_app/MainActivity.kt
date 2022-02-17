@@ -1,4 +1,4 @@
-package com.example.oxon_app
+package com.oxonlife.oxon_app
 
 import io.flutter.embedding.android.FlutterActivity
 

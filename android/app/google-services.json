@@ -14,7 +14,47 @@
       },
       "oauth_client": [
         {
-          "client_id": "480965234325-473uhbro88c7jqv17l60c5n3p01s3bpj.apps.googleusercontent.com",
+          "client_id": "480965234325-50gps872go01cf2bqrmts2u7e2ua5scg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oxon_app",
+            "certificate_hash": "834014f9fb9eb92c2cf6c47c94904ef0a280a15a"
+          }
+        },
+        {
+          "client_id": "480965234325-6s29rpsqnsf6gjijpf5ut3u5974acoi2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oxon_app",
+            "certificate_hash": "e27a1910d8030d0a720c3fffb25bd58ae7ed4351"
+          }
+        },
+        {
+          "client_id": "480965234325-b9egovfel9aug7b6rh5of3ncv8cder31.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oxon_app",
+            "certificate_hash": "dc6a9cf0d76fb6c26880fcfdf602ddbab8dc33c1"
+          }
+        },
+        {
+          "client_id": "480965234325-chjnhmed47suek57h0tcedeal7knjije.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oxon_app",
+            "certificate_hash": "c47b077c3315a28056140c2969e5eed700bbb1a0"
+          }
+        },
+        {
+          "client_id": "480965234325-js21ro04lmhnv0q1d73692cael798347.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oxon_app",
+            "certificate_hash": "d7f6b97ea24251ed987aba860642d540377196e6"
+          }
+        },
+        {
+          "client_id": "480965234325-jsusp1b89ebrpehrjka1cdq66ikfclk5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.oxon_app",
@@ -37,6 +77,85 @@
             {
               "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "480965234325-m2ioo4ssbatgv4suafi24kphkfs142q0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.oxonApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480965234325:android:d681ae0e8adff8c9c5159c",
+        "android_client_info": {
+          "package_name": "com.oxonlife.oxon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKTRLF565EvrfbvcN-J0fPwFYLoBFQXps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "480965234325-m2ioo4ssbatgv4suafi24kphkfs142q0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.oxonApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480965234325:android:8b826b5149fbb365c5159c",
+        "android_client_info": {
+          "package_name": "com.oxonlife.oxon_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKTRLF565EvrfbvcN-J0fPwFYLoBFQXps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "480965234325-2k1hgqr5v6jrqvqg5r0tc8u8mbhnq7t6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "480965234325-m2ioo4ssbatgv4suafi24kphkfs142q0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.oxonApp"
+              }
             }
           ]
         }
