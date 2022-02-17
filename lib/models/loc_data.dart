@@ -23,11 +23,11 @@ class LocData {
       required this.u_id,
       required this.upvote,
       this.referenceId,
-      required this.usersVoted
-      });
+      required this.usersVoted});
 
   factory LocData.fromSnapshot(DocumentSnapshot snapshot) {
-    final newLocData = LocData.fromJson(snapshot.data() as Map<String, dynamic>);
+    final newLocData =
+        LocData.fromJson(snapshot.data() as Map<String, dynamic>);
     newLocData.referenceId = snapshot.reference.id;
     return newLocData;
   }
@@ -37,23 +37,19 @@ class LocData {
   Map<String, dynamic> toJson() => _locDataToJson(this);
 }
 
-
 LocData _locDataFromJson(Map<String, dynamic> json) {
   return LocData(
-    downvote: json['downvote'],
-    is_displayed: json['is_displayed'],
-    location: json['location'],
-    name: json['name'],
-    type: json['type'],
-    sub_type: json['sub_type'],
-    u_id: json['u_id'],
-    upvote: json['upvote'],
-    referenceId: json['reference_id'],
-    usersVoted: json['users_voted']
-    // usersVoted: json.containsKey('users_voted') ? json['users_voted'] : List<dynamic>.empty() //['-999'] //
-  );
+      downvote: json['downvote'],
+      is_displayed: json['is_displayed'],
+      location: json['location'],
+      name: json['name'],
+      type: json['type'],
+      sub_type: json['sub_type'],
+      u_id: json['u_id'],
+      upvote: json['upvote'],
+      referenceId: json['reference_id'],
+      usersVoted: json['users_voted']);
 }
-
 
 Map<String, dynamic> _locDataToJson(LocData instance) => <String, dynamic>{
       'downvote': instance.downvote,

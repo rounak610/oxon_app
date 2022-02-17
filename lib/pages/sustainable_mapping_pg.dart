@@ -96,9 +96,7 @@ class _SusMappingState extends State<SusMapping>
           onMapCreated: (GoogleMapController controller) {
             _googleMapController = controller;
             _controller.complete(controller);
-            setState(() {
-
-            });
+            setState(() {});
           },
           onTap: (loc) {
             deleteCount = 0;
@@ -118,8 +116,7 @@ class _SusMappingState extends State<SusMapping>
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image:
-                        AssetImage("assets/icons/bigger_gray_bg.png"))),
+                        image: AssetImage("assets/icons/bigger_gray_bg.png"))),
               )),
         ),
         Align(
@@ -225,7 +222,6 @@ class _SusMappingState extends State<SusMapping>
           if (_currLocData != null &&
               auth.currentUser != null &&
               _currLocData?.u_id == uid) {
-
             _googleMapController.hideMarkerInfoWindow(_currMarkerId!);
 
             if (locData.type == "toilet") {
@@ -242,7 +238,6 @@ class _SusMappingState extends State<SusMapping>
                   .removeWhere((element) => element.markerId == _currMarkerId);
             }
             deleteCount = 0;
-            // setState(() {});
 
             showDialog<String>(
               context: context,
@@ -361,9 +356,6 @@ class _SusMappingState extends State<SusMapping>
   Future<String> getCurrLocationAndAdd(String type) async {
     _locationData = await location.getLocation();
 
-    // print("uid $uid");
-    // print("in get cuur loc");
-
     final id = await repository.addLocData(LocData(
         downvote: 0,
         is_displayed: true,
@@ -385,9 +377,7 @@ class _SusMappingState extends State<SusMapping>
     cameraPosition2 = CameraPosition(
         target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 16);
-    // cameraPosition2 = CameraPosition(
-    //     target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
-    //     zoom: 16);
+
     if (type == "dustbin") {
       resetCurrentData();
       _tabController.animateTo(0);
@@ -442,7 +432,6 @@ class _SusMappingState extends State<SusMapping>
           backgroundColor: Color.fromARGB(255, 34, 90, 0),
           appBar: CustomAppBar(
             context,
-            // "Sustainable Mapping",
             "Dustbins and Toilets",
           ),
           body: Column(
@@ -822,7 +811,7 @@ class _SusMappingState extends State<SusMapping>
       'dir_action=navigate'
     ].join('&');
 
-    final url = 'https:www.google.com/maps/dir/?api=1&$mapOptions';
+    final url = 'https://www.google.com/maps/dir/?api=1&$mapOptions';
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -857,7 +846,6 @@ class _SusMappingState extends State<SusMapping>
     repository.updateLocData(locData);
     print("thisz ${locData.usersVoted}");
 
-    // shouldAskFeedback = false;
     setState(() {});
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));

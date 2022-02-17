@@ -4,7 +4,6 @@ import 'package:oxon_app/models/loc_data.dart';
 class LocDataRepository {
   final CollectionReference collection = FirebaseFirestore
       .instance.collection('loc_data');
-      // .instance.collection('loc_data_test');
 
   Stream<QuerySnapshot> getStream() {
     return collection.snapshots();
