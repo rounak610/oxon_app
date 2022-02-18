@@ -43,8 +43,8 @@ class _SusMappingState extends State<SusMapping>
   MarkerId? _currMarkerId;
   dynamic _currLocData;
 
-  // ToiletData? _currToiletData;
-  // _currDustbin? _currDustbinData;
+
+
 
   var shouldAskFeedback = false;
 
@@ -72,8 +72,8 @@ class _SusMappingState extends State<SusMapping>
   Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController _googleMapController;
 
-  // late GoogleMapController _toiletMapController;
-  // late GoogleMapController _dustbinMapController;
+
+
 
   var dustbinIcon = BitmapDescriptor.defaultMarker;
   var cSDustbinIcon = BitmapDescriptor.defaultMarker;
@@ -134,7 +134,7 @@ class _SusMappingState extends State<SusMapping>
               )),
         ),
         Align(
-          // here make more buttons based on the type of map.
+
           alignment: Alignment.bottomLeft,
           child: Visibility(
               visible: shouldAskFeedback,
@@ -167,7 +167,7 @@ class _SusMappingState extends State<SusMapping>
                                 updateDustbinBasedOnCondition(
                                     DustbinDataUpdateConditions.Helpful),
                             child: smallText("Helpful \ndustbin location")
-                            // Text("Helpful \ndustbin location")
+
                         ),
                         ElevatedButton(
                             onPressed: () =>
@@ -182,77 +182,77 @@ class _SusMappingState extends State<SusMapping>
                                         .NotPresent),
                             child: smallText("Dustbin \nnot present")),
                       ])
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     ElevatedButton(
-                //         onPressed: () {
-                //           thankForFeedback(_currLocData!);
+
+
+
+
+
+
+
                 //
-                //           if (type == "dustbin") {
-                //             print("before ${dustbinMarkers.length}");
-                //             dustbinMarkers.removeWhere((element) =>
-                //                 element.markerId.value == _currMarkerId!.value);
-                //             _currLocData!.helpfulCount = _currLocData!.helpfulCount + 1;
-                //             repository.updateLocData(_currLocData!);
-                //             dustbinMarkers.add(createMarkerFromLocData(
-                //                 _currLocData, dustbinMarkers.length + 1, type));
-                //             setState(() {});
+
+
+
+
+
+
+
+
+
                 //
-                //             print("after ${dustbinMarkers.length}");
-                //           } else {
-                //             print("before ${dustbinMarkers.length}");
+
+
+
                 //
-                //             toiletMarkers.removeWhere((element) =>
-                //                 element.markerId.value == _currMarkerId!.value);
-                //             _currLocData!.helpfulCount = _currLocData!.helpfulCount + 1;
-                //             repository.updateLocData(_currLocData!);
-                //             toiletMarkers.add(createMarkerFromLocData(
-                //                 _currLocData, toiletMarkers.length + 1, type));
-                //             setState(() {});
+
+
+
+
+
+
+
                 //
-                //             print("after ${dustbinMarkers.length}");
-                //           }
-                //         },
-                //         child: Row(
-                //           children: [
-                //             Text("Helpful\n$type location ",
-                //                 style: TextStyle(fontSize: 10)),
-                //             Icon(Icons.arrow_circle_up),
-                //           ],
-                //         )),
-                //     ElevatedButton(
-                //         onPressed: () {
-                //           thankForFeedback(_currLocData!);
+
+
+
+
+
+
+
+
+
+
+
+
+
                 //
-                //           if (type == "dustbin") {
-                //             dustbinMarkers.removeWhere(
-                //                 (element) => element.markerId == _currMarkerId);
-                //             _currLocData!.downvote = _currLocData!.downvote + 1;
-                //             repository.updateLocData(_currLocData!);
-                //             dustbinMarkers.add(createMarkerFromLocData(
-                //                 _currLocData, dustbinMarkers.length + 1, type));
-                //             setState(() {});
-                //           } else {
-                //             toiletMarkers.removeWhere(
-                //                 (element) => element.markerId == _currMarkerId);
-                //             _currLocData!.downvote = _currLocData!.downvote + 1;
-                //             repository.updateLocData(_currLocData!);
-                //             toiletMarkers.add(createMarkerFromLocData(
-                //                 _currLocData, toiletMarkers.length + 1, type));
-                //             setState(() {});
-                //           }
-                //         },
-                //         child: Row(
-                //           children: [
-                //             Text("Unhelpful\n$type location ",
-                //                 style: TextStyle(fontSize: 10)),
-                //             Icon(Icons.arrow_circle_down),
-                //           ],
-                //         ))
-                //   ],
-                // ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               )),
         )
       ],
@@ -333,7 +333,7 @@ class _SusMappingState extends State<SusMapping>
                                       .textTheme
                                       .headline6!
                                       .copyWith(color: Colors.black),
-                                  // textAlign: TextAlign.center
+
                               ),
                               CircularProgressIndicator()
                             ],
@@ -379,32 +379,32 @@ class _SusMappingState extends State<SusMapping>
     }
   }
 
-  // void _buildList(List<DocumentSnapshot>? snapshot) {
-  //   var count = 0;
-  //   snapshot!.forEach((element) {
-  //     count += 1;
-  //     final locData = LocData.fromSnapshot(element);
+
+
+
+
+
   //
-  //     if (locData.is_displayed) {
-  //       if (locData.type == "dustbin") {
-  //         dustbinMarkers
-  //             .add(createMarkerFromLocData(locData, count, locData.type));
-  //       } else {
-  //         toiletMarkers.add(Marker(
-  //             onTap: () => onTapMarker(locData, count),
-  //             markerId: MarkerId("${count}"),
-  //             infoWindow: InfoWindow(
-  //                 title: "Toilet located by ${locData.name}",
-  //                 snippet: locData.helpfulCount != 0
-  //                     ? "${locData.helpfulCount} people found helpful"
-  //                     : null),
-  //             icon: toiletIcon,
-  //             position: LatLng(
-  //                 locData.location.latitude, locData.location.longitude)));
-  //       }
-  //     }
-  //   });
-  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   void setCustomMarker() async {
     dustbinIcon = await BitmapDescriptor.fromAssetImage(
@@ -461,17 +461,17 @@ class _SusMappingState extends State<SusMapping>
       );
     }
 
-    // todo update this to individual
-    // final id = await repository.addLocData(LocData(
-    //     downvote: 0,
-    //     is_displayed: true,
-    //     location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
-    //     name: userName != null ? userName! : "Anonymous",
-    //     type: type,
-    //     sub_type: "ordinary",
-    //     uId: uid,
-    //     helpfulCount: 0,
-    //     usersVoted: [uid]));
+
+
+
+
+
+
+
+
+
+
+
 
     return type;
   }
@@ -960,21 +960,21 @@ class _SusMappingState extends State<SusMapping>
     }
   }
 
-  // void thankForFeedback(LocData locData) {
-  //   shouldAskFeedback = false;
-  //   setState(() {});
-  //
-  //   locData.usersVoted.add(uid);
-  //   print(locData.usersVoted);
-  //   repository.updateLocData(locData);
-  //   print("thisz ${locData.usersVoted}");
-  //
-  //   setState(() {});
-  //   ScaffoldMessenger.of(context)
-  //       .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
-  // }
 
-  // update this
+
+
+  //
+
+
+
+
+  //
+
+
+
+
+
+
   Marker createMarkerFromLocData(locData, count, type) {
     return Marker(
         markerId: MarkerId("${count}"),
@@ -1024,7 +1024,7 @@ class _SusMappingState extends State<SusMapping>
   updateToiletBasedOnCondition(ToiletDataUpdateConditions condition) {
     final toiletData = _currLocData as ToiletData;
 
-    // print("before ${dustbinMarkers.length}");
+
     toiletMarkers.removeWhere(
             (element) => element.markerId.value == _currMarkerId!.value);
 
@@ -1044,19 +1044,19 @@ class _SusMappingState extends State<SusMapping>
     repository.updateToiletData(toiletData);
     toiletMarkers.add(
         createMarkerFromLocData(_currLocData, toiletMarkers.length + 1, type));
-    // setState(() {});
 
-    // print("after ${dustbinMarkers.length}");
+
+
     shouldAskFeedback = false;
     setState(() {});
-    // setState(() {});
-    //
-    // locData.usersVoted.add(uid);
-    // print(locData.usersVoted);
-    // repository.updateLocData(locData);
-    // print("thisz ${locData.usersVoted}");
 
-    // setState(() {});
+    //
+
+
+
+
+
+
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
   }
@@ -1064,7 +1064,7 @@ class _SusMappingState extends State<SusMapping>
   updateDustbinBasedOnCondition(DustbinDataUpdateConditions condition) {
     final dustbinData = _currLocData as DustbinData;
 
-    // print("before ${dustbinMarkers.length}");
+
     dustbinMarkers.removeWhere(
             (element) => element.markerId.value == _currMarkerId!.value);
 
@@ -1091,7 +1091,7 @@ class _SusMappingState extends State<SusMapping>
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
 
-    // print("after ${dustbinMarkers.length}");
+
   }
 
   void _buildListToiletMarkers(List<DocumentSnapshot>? snapshot) {

@@ -3,15 +3,11 @@ import 'package:oxon_app/models/dustbin_data.dart';
 import 'package:oxon_app/models/toilet_data.dart';
 
 class LocDataRepository {
-  // final CollectionReference toiletCollection = FirebaseFirestore
-  //     .instance.toiletCollection('toilet_data');
+  final CollectionReference toiletCollection =
+      FirebaseFirestore.instance.collection('toilet_data');
 
-  final CollectionReference toiletCollection = FirebaseFirestore
-      .instance.collection('toilet_data');
-
-  final CollectionReference dustbinCollection = FirebaseFirestore
-      .instance.collection('dustbin_data');
-
+  final CollectionReference dustbinCollection =
+      FirebaseFirestore.instance.collection('dustbin_data');
 
   Stream<QuerySnapshot> getStreamToilet() {
     return toiletCollection.snapshots();
@@ -22,14 +18,15 @@ class LocDataRepository {
   }
 
   void updateToiletData(ToiletData toiletData) async {
-    await toiletCollection.doc(toiletData.referenceId).update(toiletData.toJson());
+    await toiletCollection
+        .doc(toiletData.referenceId)
+        .update(toiletData.toJson());
   }
 
   Future<String> deleteToiletData(ToiletData toiletData) async {
     await toiletCollection.doc(toiletData.referenceId).delete();
     return "deleted";
   }
-
 
   Stream<QuerySnapshot> getStreamDustbin() {
     return dustbinCollection.snapshots();
@@ -40,7 +37,9 @@ class LocDataRepository {
   }
 
   void updateDustbinData(DustbinData dustbinData) async {
-    await dustbinCollection.doc(dustbinData.referenceId).update(dustbinData.toJson());
+    await dustbinCollection
+        .doc(dustbinData.referenceId)
+        .update(dustbinData.toJson());
   }
 
   Future<String> deleteDustbinData(DustbinData dustbinData) async {
