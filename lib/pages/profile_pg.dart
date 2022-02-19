@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String userResidence = "Not set";
     String userMobileNo = "Not set";
     String userGender = "Not set";
+    int userCredits = 0 ;
     var userDOB = "Not set";
 
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -49,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ds.data()!['DOB'].millisecondsSinceEpoch)
               .toString();
           userGender = ds.data()!['gender'];
+          userCredits = ds.data()!['credits'];
         }).catchError((e) {
           print(e);
         });
@@ -179,6 +181,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                 return Text(userGender,
                                     style:
                                         Theme.of(context).textTheme.headline2);
+                              },
+                            )
+                          ]),
+                          TableRow(children: [
+                            SizedBox(height: 25),
+                            SizedBox(height: 25)
+                          ]),
+                          TableRow(children: [
+                            Text("Credits: ",
+                                style: Theme.of(context).textTheme.headline2),
+                            FutureBuilder(
+                              future: _fetch(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done)
+                                  return Text('Loading');
+                                return Text('$userCredits Credits',
+                                    style:
+                                    Theme.of(context).textTheme.headline2);
                               },
                             )
                           ]),

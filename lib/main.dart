@@ -7,6 +7,7 @@ import 'package:oxon_app/pages/donate_dustbin.dart';
 import 'package:oxon_app/pages/preview_report.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
+import 'package:oxon_app/pages/qr_scanner_pg.dart';
 import 'package:oxon_app/pages/raise_concern.dart';
 import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
             PreviewReport.routeName: (context) => PreviewReport(),
             UpdateProfile.routeName: (context) => UpdateProfile(),
             WelcomePage.routeName: (context) => WelcomePage(),
+            QRScannerPage.routeName: (context) => QRScannerPage(),
             SignOut.routeName: (context) => SignOut(),
           },
         );

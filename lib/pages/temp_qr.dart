@@ -47,7 +47,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
   }
 
   Widget _QRResult(String? result) {
-    if (result != null ) {
+    if (result != 'oxon') {
       if (scansToday! < 2) {
         if (lastScanDay == DateTime.now().day) {
           return Expanded(

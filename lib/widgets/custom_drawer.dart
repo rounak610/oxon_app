@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/qr_scanner_pg.dart';
 import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 
@@ -135,6 +136,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               // _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
+              _tileItem('QR Code Scanner', QRScannerPage.routeName, context),
               _tileItem('Log Out', SignOut.routeName, context),
 
               Expanded(
