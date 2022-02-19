@@ -56,6 +56,8 @@ dependencies:
   timer_button: ^2.0.0
   fluttertoast: ^8.0.8
   firebase_storage: ^10.2.7
+  flutter_local_notifications: ^9.3.2
+  firebase_messaging: ^11.2.6
 
 dev_dependencies:
   flutter_test:
