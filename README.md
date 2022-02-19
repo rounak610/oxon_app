@@ -50,7 +50,10 @@ If you do need action buttons, call CustomAppBar(context, <title>, <list of widg
   ```
   margin: EdgeInsets.only(top: 11.71 * SizeConfig.responsiveMultiplier)
   ```
-  #use LinearProgressIndicator whereever necessary. (the person who added this line. Could he elaborate?)
+  #use LinearProgressIndicator whereever necessary. 
+Whenever you want show some kind of loading in the app, Use:
+  
+Center(child: LinearProgressIndicator())
 
 # Guidelines for collaborative code development on GitHub
 - Ideally, master branch should contain the final, tried and tested, bug free code

@@ -6,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:oxon_app/models/dustbin_data.dart';
 import 'package:oxon_app/models/loc_data.dart';
+import 'package:oxon_app/models/toilet_data.dart';
 import 'package:oxon_app/repositories/loc_data_repository.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/styles/button_styles.dart';
@@ -39,7 +41,10 @@ class _SusMappingState extends State<SusMapping>
 
   LatLng? _currMarker;
   MarkerId? _currMarkerId;
-  LocData? _currLocData;
+  dynamic _currLocData;
+
+
+
 
   var shouldAskFeedback = false;
 
@@ -67,8 +72,14 @@ class _SusMappingState extends State<SusMapping>
   Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController _googleMapController;
 
+
+
+
   var dustbinIcon = BitmapDescriptor.defaultMarker;
-  var toiletIcon = BitmapDescriptor.defaultMarker;
+  var cSDustbinIcon = BitmapDescriptor.defaultMarker;
+  var toiletIcon = BitmapDescriptor
+      .defaultMarker; //cS - crowd sourced (located by users not government)
+  var cSToiletIcon = BitmapDescriptor.defaultMarker;
 
   late TabController _tabController;
 
@@ -87,10 +98,12 @@ class _SusMappingState extends State<SusMapping>
     return Stack(
       children: [
         GoogleMap(
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
           mapToolbarEnabled: false,
           mapType: MapType.normal,
           initialCameraPosition:
-              type == "toilet" ? cameraPosition2 : cameraPosition,
+          type == "toilet" ? cameraPosition2 : cameraPosition,
           markers: setOfMarkers,
           zoomControlsEnabled: false,
           onMapCreated: (GoogleMapController controller) {
@@ -116,86 +129,130 @@ class _SusMappingState extends State<SusMapping>
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/icons/bigger_gray_bg.png"))),
+                        image:
+                        AssetImage("assets/icons/blue_bg_gps_icon.png"))),
               )),
         ),
         Align(
+
           alignment: Alignment.bottomLeft,
           child: Visibility(
               visible: shouldAskFeedback,
               child: Container(
-                margin: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          thankForFeedback(_currLocData!);
+                  margin: EdgeInsets.all(10),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: type == "toilet"
+                          ? [
+                        ElevatedButton(
+                            onPressed: () =>
+                                updateToiletBasedOnCondition(
+                                    ToiletDataUpdateConditions.Helpful),
+                            child: smallText("Helpful \ntoilet location")),
+                        ElevatedButton(
+                            onPressed: () =>
+                                updateToiletBasedOnCondition(
+                                    ToiletDataUpdateConditions.NotCleaned),
+                            child: smallText("Toilet \nnot cleaned")),
+                        ElevatedButton(
+                            onPressed: () =>
+                                updateToiletBasedOnCondition(
+                                    ToiletDataUpdateConditions.NotPresent),
+                            child: smallText("Toilet \nnot present")),
+                      ]
+                          : [
+                        ElevatedButton(
+                            onPressed: () =>
+                                updateDustbinBasedOnCondition(
+                                    DustbinDataUpdateConditions.Helpful),
+                            child: smallText("Helpful \ndustbin location")
 
-                          if (type == "dustbin") {
-                            print("before ${dustbinMarkers.length}");
-                            dustbinMarkers.removeWhere((element) =>
-                                element.markerId.value == _currMarkerId!.value);
-                            _currLocData!.upvote = _currLocData!.upvote + 1;
-                            repository.updateLocData(_currLocData!);
-                            dustbinMarkers.add(createMarkerFromLocData(
-                                _currLocData, dustbinMarkers.length + 1, type));
-                            setState(() {});
+                        ),
+                        ElevatedButton(
+                            onPressed: () =>
+                                updateDustbinBasedOnCondition(
+                                    DustbinDataUpdateConditions
+                                        .Overflowing),
+                            child: smallText("Dustbin \noverflowing")),
+                        ElevatedButton(
+                            onPressed: () =>
+                                updateDustbinBasedOnCondition(
+                                    DustbinDataUpdateConditions
+                                        .NotPresent),
+                            child: smallText("Dustbin \nnot present")),
+                      ])
 
-                            print("after ${dustbinMarkers.length}");
-                          } else {
-                            print("before ${dustbinMarkers.length}");
 
-                            toiletMarkers.removeWhere((element) =>
-                                element.markerId.value == _currMarkerId!.value);
-                            _currLocData!.upvote = _currLocData!.upvote + 1;
-                            repository.updateLocData(_currLocData!);
-                            toiletMarkers.add(createMarkerFromLocData(
-                                _currLocData, toiletMarkers.length + 1, type));
-                            setState(() {});
 
-                            print("after ${dustbinMarkers.length}");
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Text("Helpful\n$type location ",
-                                style: TextStyle(fontSize: 10)),
-                            Icon(Icons.arrow_circle_up),
-                          ],
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          thankForFeedback(_currLocData!);
 
-                          if (type == "dustbin") {
-                            dustbinMarkers.removeWhere(
-                                (element) => element.markerId == _currMarkerId);
-                            _currLocData!.downvote = _currLocData!.downvote + 1;
-                            repository.updateLocData(_currLocData!);
-                            dustbinMarkers.add(createMarkerFromLocData(
-                                _currLocData, dustbinMarkers.length + 1, type));
-                            setState(() {});
-                          } else {
-                            toiletMarkers.removeWhere(
-                                (element) => element.markerId == _currMarkerId);
-                            _currLocData!.downvote = _currLocData!.downvote + 1;
-                            repository.updateLocData(_currLocData!);
-                            toiletMarkers.add(createMarkerFromLocData(
-                                _currLocData, toiletMarkers.length + 1, type));
-                            setState(() {});
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Text("Unhelpful\n$type location ",
-                                style: TextStyle(fontSize: 10)),
-                            Icon(Icons.arrow_circle_down),
-                          ],
-                        ))
-                  ],
-                ),
+
+
+
+                //
+
+
+
+
+
+
+
+
+
+                //
+
+
+
+                //
+
+
+
+
+
+
+
+                //
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               )),
         )
       ],
@@ -206,22 +263,26 @@ class _SusMappingState extends State<SusMapping>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _googleMapController.setMapStyle("[]");
-    } else if (state == AppLifecycleState.inactive) {
-    } else if (state == AppLifecycleState.paused) {
-    } else if (state == AppLifecycleState.detached) {}
+    } else if (state == AppLifecycleState.inactive) {} else
+    if (state == AppLifecycleState.paused) {} else
+    if (state == AppLifecycleState.detached) {}
   }
 
   Future<void> onTapMarker(LocData locData, count) async {
     {
       final markerTappedLatLng =
-          LatLng(locData.location.latitude, locData.location.longitude);
+      LatLng(locData.location.latitude, locData.location.longitude);
 
-      if (_currMarker == markerTappedLatLng && locData.u_id == uid) {
+      if (_currMarker == markerTappedLatLng && locData.uId == uid) {
+        print("in delete");
         print("del count $deleteCount");
         if (deleteCount == 1) {
           if (_currLocData != null &&
               auth.currentUser != null &&
-              _currLocData?.u_id == uid) {
+              _currLocData?.uId == uid) {
+
+
+            print("curr marker id $_currMarkerId");
             _googleMapController.hideMarkerInfoWindow(_currMarkerId!);
 
             if (locData.type == "toilet") {
@@ -243,13 +304,15 @@ class _SusMappingState extends State<SusMapping>
               context: context,
               builder: (BuildContext context) {
                 return FutureBuilder<String>(
-                  future: repository.deleteLocData(_currLocData!),
+                  future: type == "dustbin"
+                      ? repository.deleteDustbinData(_currLocData!)
+                      : repository.deleteToiletData(_currLocData),
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (snapshot.hasData) {
                       return AlertDialog(
                         content:
-                            Text("Marker deleted", textAlign: TextAlign.center),
+                        Text("Marker deleted", textAlign: TextAlign.center),
                       );
                     } else if (snapshot.hasError) {
                       return AlertDialog(
@@ -264,12 +327,14 @@ class _SusMappingState extends State<SusMapping>
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Deleting marker... Please wait...",
-                                  style: AppTheme.define()
+                              Text("Deleting marker... \nPlease wait...",
+                                  style: AppTheme
+                                      .define()
                                       .textTheme
                                       .headline6!
                                       .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.center),
+
+                              ),
                               CircularProgressIndicator()
                             ],
                           ),
@@ -296,7 +361,7 @@ class _SusMappingState extends State<SusMapping>
           ));
           deleteCount += 1;
         }
-      } else if (locData.u_id == uid) {
+      } else if (locData.uId == uid) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Press on the marker 2 more times to delete it."),
             duration: Duration(seconds: 1)));
@@ -314,32 +379,32 @@ class _SusMappingState extends State<SusMapping>
     }
   }
 
-  void _buildList(List<DocumentSnapshot>? snapshot) {
-    var count = 0;
-    snapshot!.forEach((element) {
-      count += 1;
-      final locData = LocData.fromSnapshot(element);
 
-      if (locData.is_displayed) {
-        if (locData.type == "dustbin") {
-          dustbinMarkers
-              .add(createMarkerFromLocData(locData, count, locData.type));
-        } else {
-          toiletMarkers.add(Marker(
-              onTap: () => onTapMarker(locData, count),
-              markerId: MarkerId("${count}"),
-              infoWindow: InfoWindow(
-                  title: "Toilet located by ${locData.name}",
-                  snippet: locData.upvote != 0
-                      ? "${locData.upvote} people found helpful"
-                      : null),
-              icon: toiletIcon,
-              position: LatLng(
-                  locData.location.latitude, locData.location.longitude)));
-        }
-      }
-    });
-  }
+
+
+
+
+  //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   void setCustomMarker() async {
     dustbinIcon = await BitmapDescriptor.fromAssetImage(
@@ -350,22 +415,63 @@ class _SusMappingState extends State<SusMapping>
       ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
       'assets/icons/toilet_1.png',
     );
+
+    cSDustbinIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
+      'assets/icons/crowd_sourced_dustbin.png',
+    );
+    cSToiletIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5, size: Size(52, 52)),
+      'assets/icons/crowd_sourced_toilet.png',
+    );
     setState(() {});
   }
 
   Future<String> getCurrLocationAndAdd(String type) async {
     _locationData = await location.getLocation();
+    print("_loc ${_locationData!.latitude}");
 
-    final id = await repository.addLocData(LocData(
-        downvote: 0,
-        is_displayed: true,
-        location: GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
-        name: userName != null ? userName! : "Anonymous",
-        type: type,
-        sub_type: "ordinary",
-        u_id: uid,
-        upvote: 0,
-        usersVoted: [uid]));
+    if (type == "dustbin") {
+      final id = await repository.addDustbinData(
+          DustbinData(locatedBy: userName != null ? userName! : "Anonymous",
+              helpfulCount: 0,
+              uId: uid,
+              usersVoted: [uid],
+              subType: "ordinary",
+              type: type,
+              isDisplayed: true,
+              location
+              : GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
+              notPresentCount: 0,
+              overflowingCount: 0)
+      );
+    } else {
+      final id = await repository.addToiletData(
+          ToiletData(locatedBy: userName != null ? userName! : "Anonymous",
+              helpfulCount: 0,
+              uId: uid,
+              usersVoted: [uid],
+              subType: "ordinary",
+              type: type,
+              isDisplayed: true,
+              location
+                  : GeoPoint(_locationData!.latitude!, _locationData!.longitude!),
+              notPresentCount: 0,
+              notCleanedCount: 0)
+      );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     return type;
   }
@@ -465,7 +571,10 @@ class _SusMappingState extends State<SusMapping>
                             )),
                         Text(
                           "Dustbins",
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline6,
                         )
                       ],
                     ),
@@ -487,7 +596,10 @@ class _SusMappingState extends State<SusMapping>
                             )),
                         Text(
                           "Toilets",
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline6,
                         )
                       ],
                     ),
@@ -506,7 +618,10 @@ class _SusMappingState extends State<SusMapping>
                             )),
                         Text(
                           "Suggest\nLocation",
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline6,
                           textAlign: TextAlign.center,
                         )
                       ],
@@ -524,29 +639,30 @@ class _SusMappingState extends State<SusMapping>
                     children: [
                       Container(
                         child: StreamBuilder<QuerySnapshot>(
-                            stream: repository.getStream(),
+                            stream: repository.getStreamDustbin(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return LinearProgressIndicator();
 
-                              _buildList(snapshot.data?.docs ?? []);
+                              _buildListDustbinMarkers(
+                                  snapshot.data?.docs ?? []);
 
                               return CustomMap(dustbinMarkers, "dustbin");
                             }),
                       ),
                       StreamBuilder<QuerySnapshot>(
-                          stream: repository.getStream(),
+                          stream: repository.getStreamToilet(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData)
                               return LinearProgressIndicator();
 
-                            _buildList(snapshot.data?.docs ?? []);
+                            _buildListToiletMarkers(snapshot.data?.docs ?? []);
 
                             return CustomMap(toiletMarkers, "toilet");
                           }),
                       Padding(
                         padding:
-                            EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
+                        EdgeInsets.all(1 * SizeConfig.responsiveMultiplier),
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.white, width: 3),
@@ -568,9 +684,9 @@ class _SusMappingState extends State<SusMapping>
                                     Radio(
                                         visualDensity: VisualDensity(
                                           horizontal:
-                                              VisualDensity.minimumDensity,
+                                          VisualDensity.minimumDensity,
                                           vertical:
-                                              VisualDensity.minimumDensity,
+                                          VisualDensity.minimumDensity,
                                         ),
                                         value: 0,
                                         groupValue: selectedRadio,
@@ -590,9 +706,9 @@ class _SusMappingState extends State<SusMapping>
                                     Radio(
                                         visualDensity: VisualDensity(
                                           horizontal:
-                                              VisualDensity.minimumDensity,
+                                          VisualDensity.minimumDensity,
                                           vertical:
-                                              VisualDensity.minimumDensity,
+                                          VisualDensity.minimumDensity,
                                         ),
                                         value: 1,
                                         groupValue: selectedRadio,
@@ -616,36 +732,37 @@ class _SusMappingState extends State<SusMapping>
                                           builder: (BuildContext context) {
                                             return FutureBuilder<String>(
                                               future:
-                                                  getCurrLocationAndAdd(type),
+                                              getCurrLocationAndAdd(type),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<String>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (snapshot.hasData) {
                                                   return AlertDialog(
                                                     titleTextStyle:
-                                                        AppTheme.define()
-                                                            .textTheme
-                                                            .headline1!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .black),
+                                                    AppTheme
+                                                        .define()
+                                                        .textTheme
+                                                        .headline1!
+                                                        .copyWith(
+                                                        color: Colors
+                                                            .black),
                                                     title: const Text(
                                                         'Thank you!'),
                                                     content: Container(
                                                       height: SizeConfig
-                                                              .screenHeight *
+                                                          .screenHeight *
                                                           0.5,
                                                       child: Column(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                         crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
+                                                        CrossAxisAlignment
+                                                            .center,
                                                         children: [
                                                           Container(
                                                             height: SizeConfig
-                                                                    .screenHeight *
+                                                                .screenHeight *
                                                                 0.25,
                                                             decoration: BoxDecoration(
                                                                 image: DecorationImage(
@@ -653,7 +770,10 @@ class _SusMappingState extends State<SusMapping>
                                                                         "assets/images/badge_final.jpeg"))),
                                                           ),
                                                           Text(
-                                                              "\nThank you ${userName != null ? '${userName} ' : ''}for your contribution.\n\nOur world needs more people like you :)")
+                                                              "\nThank you ${userName !=
+                                                                  null
+                                                                  ? '${userName} '
+                                                                  : ''}for your contribution.\n\nOur world needs more people like you :)")
                                                         ],
                                                       ),
                                                     ),
@@ -669,15 +789,15 @@ class _SusMappingState extends State<SusMapping>
                                                             child: Text(
                                                                 'Show added location on map',
                                                                 style: AppTheme
-                                                                        .define()
+                                                                    .define()
                                                                     .textTheme
                                                                     .headline5!
                                                                     .copyWith(
-                                                                        color: AppTheme
-                                                                            .colors
-                                                                            .oxonGreen))),
+                                                                    color: AppTheme
+                                                                        .colors
+                                                                        .oxonGreen))),
                                                         style:
-                                                            solidRoundButtonStyle,
+                                                        solidRoundButtonStyle,
                                                       ),
                                                     ],
                                                   );
@@ -691,18 +811,18 @@ class _SusMappingState extends State<SusMapping>
                                                     return AlertDialog(
                                                       content: Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                         children: [
                                                           Text(
                                                             "Adding ${type} on map...\nPlease wait..",
                                                             style: AppTheme
-                                                                    .define()
+                                                                .define()
                                                                 .textTheme
                                                                 .headline6!
                                                                 .copyWith(
-                                                                    color: Colors
-                                                                        .black),
+                                                                color: Colors
+                                                                    .black),
                                                           ),
                                                           CircularProgressIndicator()
                                                         ],
@@ -726,8 +846,8 @@ class _SusMappingState extends State<SusMapping>
                                         "Locate",
                                         style: mAppTheme.textTheme.headline3!
                                             .copyWith(
-                                                color:
-                                                    AppTheme.colors.oxonGreen),
+                                            color:
+                                            AppTheme.colors.oxonGreen),
                                       ),
                                       style: solidRoundButtonStyle,
                                     ),
@@ -758,7 +878,8 @@ class _SusMappingState extends State<SusMapping>
                     onPressed: () => _launchMapUrl(),
                     child: Text(
                       "Guide The Way",
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .headline3!
                           .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
@@ -775,7 +896,8 @@ class _SusMappingState extends State<SusMapping>
                     onPressed: () => _openInMaps(),
                     child: Text(
                       "Open In Maps",
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .headline3!
                           .copyWith(color: Color.fromARGB(255, 34, 90, 0)),
@@ -829,7 +951,8 @@ class _SusMappingState extends State<SusMapping>
     _locationData = await location.getLocation();
 
     final url =
-        'https://www.google.com/maps/search/?api=1&query=${_currMarker!.latitude},${_currMarker!.longitude}';
+        'https://www.google.com/maps/search/?api=1&query=${_currMarker!
+        .latitude},${_currMarker!.longitude}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -837,19 +960,20 @@ class _SusMappingState extends State<SusMapping>
     }
   }
 
-  void thankForFeedback(LocData locData) {
-    shouldAskFeedback = false;
-    setState(() {});
 
-    locData.usersVoted.add(uid);
-    print(locData.usersVoted);
-    repository.updateLocData(locData);
-    print("thisz ${locData.usersVoted}");
 
-    setState(() {});
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
-  }
+
+  //
+
+
+
+
+  //
+
+
+
+
+
 
   Marker createMarkerFromLocData(locData, count, type) {
     return Marker(
@@ -857,14 +981,14 @@ class _SusMappingState extends State<SusMapping>
         onTap: () => onTapMarker(locData, count),
         infoWindow: InfoWindow(
             title: type == "dustbin"
-                ? "Dustbin located by ${locData.name}"
-                : "Toilet located by ${locData.name}",
-            snippet: locData.upvote != 0
-                ? "${locData.upvote} people found helpful"
+                ? "Dustbin located by ${locData.locatedBy}"
+                : "Toilet located by ${locData.locatedBy}",
+            snippet: locData.helpfulCount != 0
+                ? "${locData.helpfulCount} people found helpful"
                 : null),
-        icon: type == "dustbin" ? dustbinIcon : toiletIcon,
+        icon: locData.uId == "-999" ? (type == "dustbin"? dustbinIcon : toiletIcon) : (type == "dustbin"? cSDustbinIcon : cSToiletIcon),
         position:
-            LatLng(locData.location.latitude, locData.location.longitude));
+        LatLng(locData.location.latitude, locData.location.longitude));
   }
 
   void getUserData() async {
@@ -896,4 +1020,129 @@ class _SusMappingState extends State<SusMapping>
     deleteCount = 0;
     deleteMarker = null;
   }
+
+  updateToiletBasedOnCondition(ToiletDataUpdateConditions condition) {
+    final toiletData = _currLocData as ToiletData;
+
+
+    toiletMarkers.removeWhere(
+            (element) => element.markerId.value == _currMarkerId!.value);
+
+    switch (condition) {
+      case ToiletDataUpdateConditions.NotPresent:
+        toiletData.notPresentCount = toiletData.notPresentCount + 1;
+        break;
+
+      case ToiletDataUpdateConditions.NotCleaned:
+        toiletData.notCleanedCount = toiletData.notCleanedCount + 1;
+        break;
+      case ToiletDataUpdateConditions.Helpful:
+        toiletData.helpfulCount = toiletData.helpfulCount + 1;
+        break;
+    }
+    toiletData.usersVoted.add(uid);
+    repository.updateToiletData(toiletData);
+    toiletMarkers.add(
+        createMarkerFromLocData(_currLocData, toiletMarkers.length + 1, type));
+
+
+
+    shouldAskFeedback = false;
+    setState(() {});
+
+    //
+
+
+
+
+
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
+  }
+
+  updateDustbinBasedOnCondition(DustbinDataUpdateConditions condition) {
+    final dustbinData = _currLocData as DustbinData;
+
+
+    dustbinMarkers.removeWhere(
+            (element) => element.markerId.value == _currMarkerId!.value);
+
+    switch (condition) {
+      case DustbinDataUpdateConditions.NotPresent:
+        dustbinData.notPresentCount = dustbinData.notPresentCount + 1;
+        break;
+
+      case DustbinDataUpdateConditions.Helpful:
+        dustbinData.helpfulCount = dustbinData.helpfulCount + 1;
+        break;
+      case DustbinDataUpdateConditions.Overflowing:
+        dustbinData.overflowingCount = dustbinData.overflowingCount + 1;
+        break;
+    }
+
+    shouldAskFeedback = false;
+    dustbinData.usersVoted.add(uid);
+    repository.updateDustbinData(dustbinData);
+    dustbinMarkers.add(
+        createMarkerFromLocData(_currLocData, dustbinMarkers.length + 1, type));
+    setState(() {});
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Thank you for your feedback")));
+
+
+  }
+
+  void _buildListToiletMarkers(List<DocumentSnapshot>? snapshot) {
+    var count = 0;
+    snapshot!.forEach((element) {
+      count += 1;
+      final toiletData = ToiletData.fromSnapshot(element);
+
+      if (toiletData.isDisplayed) {
+        toiletMarkers.add(Marker(
+            onTap: () => onTapMarker(toiletData, count),
+            markerId: MarkerId("${count}"),
+            infoWindow: InfoWindow(
+                title: "Toilet located by ${toiletData.locatedBy}",
+                snippet: toiletData.helpfulCount != 0
+                    ? "${toiletData.helpfulCount} people found helpful"
+                    : null),
+            icon: toiletData.uId == "-999" ? toiletIcon : cSToiletIcon,
+            position: LatLng(
+                toiletData.location.latitude, toiletData.location.longitude)));
+      }
+    });
+  }
+
+  void _buildListDustbinMarkers(List<DocumentSnapshot>? snapshot) {
+    var count = 0;
+    snapshot!.forEach((element) {
+      count += 1;
+      final dustbinData = DustbinData.fromSnapshot(element);
+
+      if (dustbinData.isDisplayed) {
+        dustbinMarkers.add(Marker(
+            onTap: () => onTapMarker(dustbinData, count),
+            markerId: MarkerId("${count}"),
+            infoWindow: InfoWindow(
+                title: "Dustbin located by ${dustbinData.locatedBy}",
+                snippet: dustbinData.helpfulCount != 0
+                    ? "${dustbinData.helpfulCount} people found helpful"
+                    : null),
+            icon: dustbinData.uId == "-999" ? dustbinIcon : cSDustbinIcon,
+            position: LatLng(dustbinData.location.latitude,
+                dustbinData.location.longitude)));
+      }
+    });
+  }
+}
+
+enum ToiletDataUpdateConditions { NotPresent, NotCleaned, Helpful }
+
+enum DustbinDataUpdateConditions { NotPresent, Overflowing, Helpful }
+
+Text smallText(String text) {
+  return Text(text, style: AppTheme.define().textTheme.headline6!.copyWith(fontSize: 10),);
 }

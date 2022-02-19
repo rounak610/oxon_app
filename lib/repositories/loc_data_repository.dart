@@ -1,24 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:oxon_app/models/loc_data.dart';
+import 'package:oxon_app/models/dustbin_data.dart';
+import 'package:oxon_app/models/toilet_data.dart';
 
 class LocDataRepository {
-  final CollectionReference collection = FirebaseFirestore
-      .instance.collection('loc_data');
+  final CollectionReference toiletCollection =
+      FirebaseFirestore.instance.collection('toilet_data');
 
-  Stream<QuerySnapshot> getStream() {
-    return collection.snapshots();
+  final CollectionReference dustbinCollection =
+      FirebaseFirestore.instance.collection('dustbin_data');
+
+  Stream<QuerySnapshot> getStreamToilet() {
+    return toiletCollection.snapshots();
   }
 
-  Future<DocumentReference> addLocData(LocData locData) {
-    return collection.add(locData.toJson());
+  Future<DocumentReference> addToiletData(ToiletData toiletData) {
+    return toiletCollection.add(toiletData.toJson());
   }
 
-  void updateLocData(LocData locData) async {
-    await collection.doc(locData.referenceId).update(locData.toJson());
+  void updateToiletData(ToiletData toiletData) async {
+    await toiletCollection
+        .doc(toiletData.referenceId)
+        .update(toiletData.toJson());
   }
 
-  Future<String> deleteLocData(LocData locData) async {
-    await collection.doc(locData.referenceId).delete();
+  Future<String> deleteToiletData(ToiletData toiletData) async {
+    await toiletCollection.doc(toiletData.referenceId).delete();
+    return "deleted";
+  }
+
+  Stream<QuerySnapshot> getStreamDustbin() {
+    return dustbinCollection.snapshots();
+  }
+
+  Future<DocumentReference> addDustbinData(DustbinData dustbinData) {
+    return dustbinCollection.add(dustbinData.toJson());
+  }
+
+  void updateDustbinData(DustbinData dustbinData) async {
+    await dustbinCollection
+        .doc(dustbinData.referenceId)
+        .update(dustbinData.toJson());
+  }
+
+  Future<String> deleteDustbinData(DustbinData dustbinData) async {
+    await dustbinCollection.doc(dustbinData.referenceId).delete();
 
     return "deleted";
   }
