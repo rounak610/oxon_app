@@ -7,6 +7,7 @@ class UserProfile with ChangeNotifier {
   final String gender;
   final String name;
   final int mobile;
+  final int credits;
 
   UserProfile({
     required this.userID,
@@ -15,6 +16,7 @@ class UserProfile with ChangeNotifier {
     required this.mobile,
     required this.gender,
     required this.name,
+    required this.credits
   });
 
 }

@@ -288,17 +288,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             width: 250, height: 60),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate() && mobile.length == 10 && name.length != 0) {
+                            if (_formKey.currentState!.validate() &&
+                                mobile.length == 10 &&
+                                name.length != 0) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Processing data....'),
                                   duration: Duration(seconds: 1),
                                 ),
                               );
-                            } else{
+                            } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Please update all fields correctly save your details.'),
+                                  content: Text(
+                                      'Please update all fields correctly save your details.'),
                                   duration: Duration(seconds: 1),
                                 ),
                               );
@@ -306,13 +309,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             FirebaseFirestore.instance
                                 .collection('users')
                                 .doc(uid)
-                                .set({
-                              'name': name,
-                              'mobile': mobile,
-                              'gender': gender,
-                              'DOB': DOB,
-                              'city': city,
-                            }).then((value) {
+                                .set(
+                              {
+                                'name': name,
+                                'mobile': mobile,
+                                'gender': gender,
+                                'DOB': DOB,
+                                'city': city,
+                              },
+                              SetOptions(merge: true),
+                            ).then((value) {
                               Navigator.of(context)
                                   .pushNamed(ProfilePage.routeName);
                             }).catchError((e) {
