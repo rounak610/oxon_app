@@ -100,7 +100,7 @@ bool other = false;
                                         ));
                                       },
                                       child: Container(
-                                        height: 200.0,
+                                        height: 210.0,
                                         decoration: BoxDecoration(
                                           color: AppColors().oxonOffWhite,
                                           borderRadius:
@@ -126,13 +126,17 @@ bool other = false;
                                                       ),
                                                     ),
                                                      Column(
-                                                       mainAxisAlignment : MainAxisAlignment.end,
+                                                       mainAxisAlignment : MainAxisAlignment.start,
 
                                                        children: [
-                                                         Padding(
-                                                           padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
-                                                           child: Text("${document.get('name')}",
-                                                             style: TextStyle(color:AppColors().oxonGreen,fontSize: 15),),
+                                                         Center(
+                                                           child: Padding(
+                                                             padding: EdgeInsets.only(top: 5.0),
+                                                             child: Center(
+                                                               child: Text("${document.get('name')}",
+                                                                 style: TextStyle(color:AppColors().oxonGreen,fontSize: 18),),
+                                                             ),
+                                                           ),
                                                          ),
                                                          Container(
                                                            decoration: BoxDecoration(
@@ -142,10 +146,12 @@ bool other = false;
                                                            ),
                                                            child:Padding(
                                                                padding: const EdgeInsets.symmetric(
-                                                                 vertical: 10.0,
-                                                                 horizontal: 10.0,
-                                                               ),child: Text("\u{20B9} ${document.get('price')}",
-                                                               style: TextStyle(fontSize: 15,color: AppColors().oxonGreen))),
+                                                                 vertical: 5.0,
+                                                                 horizontal: 5.0,
+                                                               ),child: Center(
+                                                                 child: Text("\u{20B9} ${document.get('price')}",
+                                                                 style: TextStyle(fontSize: 13,color: AppColors().oxonGreen)),
+                                                               )),
                                                          ),
                                                        ],
 
