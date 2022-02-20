@@ -76,7 +76,7 @@ class _DriverAuthState extends State<DriverAuth> {
                         pinAnimationType: PinAnimationType.fade,
                         onChanged: (value){
                           setState(() {
-                            input = value as int;
+                            input = int.parse(value); // this is the right way to convert string to int
                           });
                         },
                       ),
