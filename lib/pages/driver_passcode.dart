@@ -16,7 +16,7 @@ class DriverAuth extends StatefulWidget {
 
 class _DriverAuthState extends State<DriverAuth> {
 
-  int password = 787862;
+  int password = 787862;  //driver need to enter this passcode
   late int input;
   final FocusNode _pinPutFocusNode = FocusNode();
   final TextEditingController _pinPutController = TextEditingController();
@@ -83,48 +83,50 @@ class _DriverAuthState extends State<DriverAuth> {
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                          onPressed: () async
-                          {
-                            try
+                      Center(
+                        child: ElevatedButton(
+                            onPressed: () async
                             {
-                              if(password == input)
-                                {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DriversSection()));
+                              try
+                              {
+                                if(password == input)
+                                  {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DriversSection()));
+                                  }
+                                else if(input != password)
+                                  {
+                                  Fluttertoast.showToast(
+                                      msg: 'Wrong passcode\n Try again!!',
+                                      gravity: ToastGravity.TOP);
                                 }
-                              else if(input != password)
-                                {
+                                else if(input == null)
+                                  {
+                                    Fluttertoast.showToast(
+                                        msg: 'Please enter the correct passcode',
+                                        gravity: ToastGravity.TOP);
+                                  }
+                              }
+                              catch (e)
+                              {
+                                print(e);
                                 Fluttertoast.showToast(
                                     msg: 'Wrong passcode\n Try again!!',
                                     gravity: ToastGravity.TOP);
                               }
-                              else if(input == null)
-                                {
-                                  Fluttertoast.showToast(
-                                      msg: 'Please enter the correct passcode',
-                                      gravity: ToastGravity.TOP);
-                                }
-                            }
-                            catch (e)
-                            {
-                              print(e);
-                              Fluttertoast.showToast(
-                                  msg: 'Wrong passcode\n Try again!!',
-                                  gravity: ToastGravity.TOP);
-                            }
-                          },
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.green[900],
-                                fontWeight: FontWeight.bold),
-                          ),
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.green[50],
-                            shape: new RoundedRectangleBorder(
-                                borderRadius:
-                                new BorderRadius.circular(35.0))),
+                            },
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.green[900],
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.green[50],
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(35.0))),
+                        ),
                       ),
 
                     ],
