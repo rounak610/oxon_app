@@ -1,25 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CartItem extends StatelessWidget {
-  final String id;
   final String productId;
-  final double price;
+  final int price;
   final int quantity;
   final String title;
 
   CartItem(
-    this.id,
     this.productId,
     this.price,
     this.quantity,
     this.title,
   );
+  final CollectionReference _userRef =
+  FirebaseFirestore.instance.collection("users");
 
+  User? _user =  FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(id),
+      key: ValueKey(productId),
       background: Container(
         color: Theme.of(context).errorColor,
         child: const Icon(
@@ -47,13 +50,18 @@ class CartItem extends StatelessWidget {
                   FlatButton(
                     child: const Text('No'),
                     onPressed: () {
+
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   FlatButton(
                     child: const Text('Yes'),
                     onPressed: () {
+                      _userRef
+                          .doc(_user?.uid)
+                          .collection("Cart").doc(productId).delete();
                       Navigator.of(ctx).pop(true);
+
                     },
                   ),
                 ],
@@ -74,12 +82,12 @@ class CartItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text('\$$price'),
+                  child: Text("INR "+'$price'),
                 ),
               ),
             ),
             title: Text(title),
-            subtitle: Text('Total: \$${(price * quantity)}'),
+            subtitle: Text('Total: INR ${(price * quantity)}'),
             trailing: Text('$quantity x'),
           ),
         ),
