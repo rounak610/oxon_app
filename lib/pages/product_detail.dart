@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/theme/colors.dart';
 
+import 'cart_pg.dart';
+
 class ProductDetail extends StatefulWidget {
   final String description;
   final String ID;
@@ -158,32 +160,69 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
 
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 10.0,
-                  ),
-                  child: Center(
-                    child: GestureDetector(
+                Center(
+                  child: Row(
+                    children: [Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15.0,
+                        horizontal: 10.0,
+                      ),
+                      child: Center(
+                        child: GestureDetector(
 
-                      onTap : ()async{
+                          onTap : ()async{
 
-                        await _add_to_cart();
+                            await _add_to_cart();
 
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: addback,
-                          borderRadius: BorderRadius.circular(12.0),
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: addback,
+                              borderRadius: BorderRadius.circular(12.0),
 
+                            ),
+                            child:Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                  horizontal: 25.0,
+                                ),child: Text("Add To Cart",style: TextStyle(fontSize: 20,color: addtext))),
+                          ),
                         ),
-                        child:Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 15.0,
-                              horizontal: 25.0,
-                            ),child: Text("Add To Cart",style: TextStyle(fontSize: 30,color: addtext))),
                       ),
                     ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 10.0,
+                        ),
+                        child: Center(
+                          child: GestureDetector(
+
+                            onTap : (){
+                              if(count>0) {
+                                _add_to_cart();
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => CartPage()));
+                              }
+
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: addback,
+                                borderRadius: BorderRadius.circular(12.0),
+
+                              ),
+                              child:Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 15.0,
+                                    horizontal: 25.0,
+                                  ),child: Text("Buy Now",style: TextStyle(fontSize: 20,color: addtext))),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
                   ),
                 ),
                 Padding(

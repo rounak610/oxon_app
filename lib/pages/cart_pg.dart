@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/payment_page.dart';
 import 'package:oxon_app/theme/colors.dart';
 import 'package:oxon_app/widgets/cart_item.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
@@ -13,7 +14,7 @@ class CartPage extends StatelessWidget {
   final CollectionReference _userRef =
   FirebaseFirestore.instance.collection("users");
   User? _user =  FirebaseAuth.instance.currentUser;
-  dynamic total = 0;//can be modified to get delivery rate data directly from firebase collection delivery rate
+  int total = 0;//can be modified to get delivery rate data directly from firebase collection delivery rate
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +50,9 @@ class CartPage extends StatelessWidget {
                         children: snapshot.data!.docs.map((document){
                           int p=document.get('price') as int;
                           int q=document.get('quantity') as int;
+                          int d=document.get('delivery') as int;
                           total+=p*q;
+                          total+=d;
                           return CartItem("${document.get('ID')}", document.get('price'), document.get('quantity'), "${document.get('name')}");
                         }).toList(),
                       );
@@ -67,23 +70,33 @@ class CartPage extends StatelessWidget {
           ),
         ),
           Positioned(
-            bottom: 5.0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15.0,
-                horizontal: 10.0,
-              ),
-              child:Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: AppColors().oxonGreen
+            bottom:5.0 ,
+            right: 15,
+            left: 15,
+            child: Center(
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PaymentPage(price: total,)));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15.0,
+                    horizontal: 10.0,
                   ),
-                  child:Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15.0,
-                      horizontal: 25.0,
-                    ),child: Text("Calculate total with delivery",style: TextStyle(fontSize: 20,color: AppColors().oxonOffWhite)),
+                  child:Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: AppColors().oxonOffWhite
+                      ),
+                      child:Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 25.0,
+                        ),child: Text("Proceed to payment",style: TextStyle(fontSize: 20,color: AppColors().oxonGreen)),
+                      ),
+                    ),
                   ),
                 ),
               ),
