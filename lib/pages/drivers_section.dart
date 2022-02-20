@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'dart:async';
@@ -20,6 +21,7 @@ class DriversSection extends StatefulWidget {
 
 class _DriversSectionState extends State<DriversSection> {
 
+  late String vehicle_no;
   final loc.Location location = loc.Location();
   StreamSubscription<loc.LocationData>? _locationSubscription;
 
@@ -54,23 +56,39 @@ class _DriversSectionState extends State<DriversSection> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding : EdgeInsets.fromLTRB(0, 240, 0, 0),
-                        child: Center(
-                          child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Start live location',
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    color: Colors.green[900],
-                                    fontWeight: FontWeight.bold),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 240, 0, 0),
+                          child: TextFormField(
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white, width: 2.0),
                               ),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.green[50],
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                    new BorderRadius.circular(35.0))),
+                              border: OutlineInputBorder(
+                                // borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'Enter your vehicle number',
+                              hintStyle: TextStyle(color: Colors.white, fontSize: 20),
+                              labelText: 'Vehicle number',
+                              labelStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                vehicle_no = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please enter your vehicle number';
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -79,7 +97,37 @@ class _DriversSectionState extends State<DriversSection> {
                       ),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {},
+                            onPressed: () {
+                              _listenLocation(vehicle_no);
+                              Fluttertoast.showToast(
+                                  msg: 'Live location started',
+                                  gravity: ToastGravity.TOP);
+                            },
+                            child: Text(
+                              'Start live location',
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.green[900],
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.green[50],
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius:
+                                  new BorderRadius.circular(35.0))),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _stopListening();
+                            Fluttertoast.showToast(
+                                msg: 'Live location ended',
+                                gravity: ToastGravity.TOP);
+                          },
                           child: Text(
                             'End live location',
                             style: TextStyle(
@@ -104,7 +152,7 @@ class _DriversSectionState extends State<DriversSection> {
     );
   }
 
-  Future<void> _listenLocation() async {
+  Future<void> _listenLocation(String str) async {
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       print(onError);
       _locationSubscription?.cancel();
@@ -115,7 +163,7 @@ class _DriversSectionState extends State<DriversSection> {
       await FirebaseFirestore.instance.collection('location').doc('user1').set({
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
-        'name': 'john'
+        'Vehicle number': str
       }, SetOptions(merge: true));
     });
   }
