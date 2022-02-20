@@ -160,7 +160,7 @@ class _DriversSectionState extends State<DriversSection> {
         _locationSubscription = null;
       });
     }).listen((loc.LocationData currentlocation) async {
-      await FirebaseFirestore.instance.collection('location').doc('user1').set({
+      await FirebaseFirestore.instance.collection('location').doc(str).set({
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
         'Vehicle number': str
