@@ -134,7 +134,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _tileItem('Van Tracking', ComingSoon.routeName, context),
               // _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
-              _tileItem('Explore & Bid', ComingSoon.routeName, context),
+              _tileItem('Lets Shop', ProductsPage.routeName, context),
               _tileItem('Log Out', SignOut.routeName, context),
 
               Expanded(
