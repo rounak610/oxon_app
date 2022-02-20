@@ -138,7 +138,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
               // _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
-              _tileItem('Scan QR Code', QRScannerPage.routeName, context),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(QRScannerPage.routeName);
+                  },
+                  title: Text(
+                    'Scan QR Code',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green[900]),
+                  ),
+                ),
+              ),
 
               _tileItem('Log Out', SignOut.routeName, context),
 
