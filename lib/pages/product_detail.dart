@@ -25,8 +25,8 @@ class _ProductDetailState extends State<ProductDetail> {
 
   final CollectionReference _userRef =
   FirebaseFirestore.instance.collection("users");
-  Color addback = AppColors().oxonOffWhite;
-  Color addtext = AppColors().oxonGreen;
+  Color addtext = AppColors().oxonOffWhite;
+  Color addback = AppColors().oxonGreen;
   User? _user =  FirebaseAuth.instance.currentUser;
   int count = 1 ;
   Object _add_to_cart(){
@@ -101,18 +101,11 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
                 Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-
-                    ),
-                    child:Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5.0,
-                          horizontal: 10.0,
-                        ),child: Text("\u{20B9} "+widget.price.toString(),style: TextStyle(fontSize: 30,color: AppColors().oxonGreen))),
-                  ),
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 10.0,
+                      ),child: Text("\u{20B9} "+widget.price.toString(),style: TextStyle(fontSize: 30,color: AppColors().oxonGreen))),
                 ),
                 if(widget.isplant)...[
                   Column(

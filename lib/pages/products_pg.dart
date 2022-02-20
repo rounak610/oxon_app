@@ -25,7 +25,8 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 class _ProductsPageState extends State<ProductsPage> {
   final CollectionReference _productReference =
       FirebaseFirestore.instance.collection("Products");
-
+bool plant=true;
+bool other = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -126,7 +127,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                                     ),
                                                      Column(
                                                        mainAxisAlignment : MainAxisAlignment.end,
-                                                       
+
                                                        children: [
                                                          Padding(
                                                            padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
@@ -160,9 +161,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                       ),
 
                                     );
-
-
-
                                   }).toList(),
                                 );
                               }
