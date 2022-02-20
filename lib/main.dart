@@ -4,10 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
+import 'package:oxon_app/pages/driver_passcode.dart';
 import 'package:oxon_app/pages/preview_report.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
-import 'package:oxon_app/pages/qr_scanner_pg.dart';
 import 'package:oxon_app/pages/raise_concern.dart';
 import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
@@ -16,25 +16,8 @@ import 'package:oxon_app/pages/update_profile.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 List<CameraDescription> cameras = [];
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'notifications_channel', //id
-  'Notifications channel', //title
-  description:
-      'This channel is used for implementing the notifications feature ',
-  importance: Importance.high,
-  playSound: true,
-  enableVibration: true,
-);
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-Future<void> notificationsBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-}
 
 Future<void> main() async {
   try {
@@ -44,14 +27,7 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error in fetching the cameras: $e');
   }
-  FirebaseMessaging.onBackgroundMessage(
-      (message) => notificationsBackgroundHandler(message));
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true, badge: true, sound: true);
+
   runApp(MyApp());
 }
 
@@ -80,7 +56,7 @@ class MyApp extends StatelessWidget {
             UpdateProfile.routeName: (context) => UpdateProfile(),
             WelcomePage.routeName: (context) => WelcomePage(),
             SignOut.routeName: (context) => SignOut(),
-            QRScannerPage.routeName: ((context) => QRScannerPage())
+            DriverAuth.routeName: (context) => DriverAuth(),
           },
         );
       });

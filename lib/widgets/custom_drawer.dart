@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/qr_scanner_pg.dart';
+import 'package:oxon_app/pages/driver_passcode.dart';
 import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
-import 'package:oxon_app/theme/app_theme.dart';
 
 import '../pages/donate_dustbin.dart';
 import '../pages/products_pg.dart';
@@ -59,7 +58,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 15,
-      backgroundColor: AppTheme.colors.oxonOffWhite,
       child: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -138,23 +136,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               // _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: ListTile(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(QRScannerPage.routeName);
-                  },
-                  title: Text(
-                    'Scan QR Code',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green[900]),
-                  ),
-                ),
-              ),
-
+              _tileItem("Driver's Section", DriverAuth.routeName, context),
               _tileItem('Log Out', SignOut.routeName, context),
+
 
               Expanded(
                 child: Align(
