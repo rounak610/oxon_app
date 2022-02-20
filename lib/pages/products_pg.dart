@@ -94,7 +94,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                               description: "${document.get('description')}",
                                               image: "${document.get('image')}",
                                               price: document.get('price'),
-                                            delivery: document.get('delivery'),)
+                                            delivery: document.get('delivery'),
+                                              isplant: document.get('isplant'),)
                                         ));
                                       },
                                       child: Container(
@@ -125,12 +126,16 @@ class _ProductsPageState extends State<ProductsPage> {
                                                     ),
                                                      Column(
                                                        mainAxisAlignment : MainAxisAlignment.end,
+                                                       
                                                        children: [
-                                                         Text("${document.get('name')}",
-                                                           style: TextStyle(color:AppColors().oxonGreen,fontSize: 15),),
+                                                         Padding(
+                                                           padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
+                                                           child: Text("${document.get('name')}",
+                                                             style: TextStyle(color:AppColors().oxonGreen,fontSize: 15),),
+                                                         ),
                                                          Container(
                                                            decoration: BoxDecoration(
-                                                             color: AppColors().oxonGreen,
+                                                             color: AppColors().oxonOffWhite,
                                                              borderRadius: BorderRadius.circular(12.0),
 
                                                            ),
@@ -138,8 +143,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                                                padding: const EdgeInsets.symmetric(
                                                                  vertical: 10.0,
                                                                  horizontal: 10.0,
-                                                               ),child: Text("INR ${document.get('price')}",
-                                                               style: TextStyle(fontSize: 15,color: AppColors().oxonOffWhite))),
+                                                               ),child: Text("\u{20B9} ${document.get('price')}",
+                                                               style: TextStyle(fontSize: 15,color: AppColors().oxonGreen))),
                                                          ),
                                                        ],
 
