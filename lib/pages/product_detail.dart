@@ -13,8 +13,8 @@ class ProductDetail extends StatefulWidget {
   final String image;
   final int price;
   final int delivery;
-
-  ProductDetail( {required this.ID,required this.description,required this.name,required this.price,required this.image,required this.delivery});
+  final bool isplant;
+  ProductDetail( {required this.ID,required this.description,required this.name,required this.price,required this.image,required this.delivery,required this.isplant});
   @override
   _ProductDetailState createState() => _ProductDetailState();
 }
@@ -28,10 +28,35 @@ class _ProductDetailState extends State<ProductDetail> {
   Color addback = AppColors().oxonOffWhite;
   Color addtext = AppColors().oxonGreen;
   User? _user =  FirebaseAuth.instance.currentUser;
-  int count = 0 ;
+  int count = 1 ;
   Object _add_to_cart(){
     if(count>0) {
       ScaffoldMessenger.of(context).showSnackBar(_snackBar);
+      if(widget.isplant){
+        int additional=0;
+        if(dropdownvalue[8]=='B'){
+          additional=10;
+        }
+        else if(dropdownvalue[8]=='F'){
+          additional=35;
+        }
+        else{
+          additional=70;
+        }
+        return _userRef
+            .doc(_user?.uid)
+            .collection("Cart").doc(widget.ID).set(
+            {
+              "ID": widget.ID,
+              "name": widget.name,
+              "image": widget.image,
+              "price": widget.price+additional,
+              "quantity": count,
+              "delivery":widget.delivery,
+              "additional":dropdownvalue,
+              "isplant":widget.isplant
+            });
+      }
       return _userRef
           .doc(_user?.uid)
           .collection("Cart").doc(widget.ID).set(
@@ -42,6 +67,7 @@ class _ProductDetailState extends State<ProductDetail> {
             "price": widget.price,
             "quantity": count,
             "delivery":widget.delivery,
+            "isplant":widget.isplant
           }
       );
     }
@@ -50,6 +76,8 @@ class _ProductDetailState extends State<ProductDetail> {
         .collection("Cart").doc(widget.ID).delete();
     return Null;
   }
+  String dropdownvalue = 'Plastic Bag +\u{20B9}10';
+  var items = ['Plastic Bag +\u{20B9}10', 'Earthen Teracotta Pot +\u{20B9}70','Plastic Flowerpot +\u{20B9}35'];
   final SnackBar _snackBar = SnackBar(content:Text("Product Added to the cart"));
   @override
   Widget build(BuildContext context) {
@@ -59,21 +87,23 @@ class _ProductDetailState extends State<ProductDetail> {
             ListView(
               children: [
                 Image.network(widget.image),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 25.0,
-                  ),
-                  child: Text(widget.name,
-                    style: TextStyle(fontSize: 24,
-                        color: AppColors().oxonGreen,
-                        fontWeight: FontWeight.bold),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15.0,
+                      horizontal: 25.0,
+                    ),
+                    child: Text(widget.name,
+                      style: TextStyle(fontSize: 24,
+                          color: AppColors().oxonGreen,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors().oxonOffWhite,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12.0),
 
                     ),
@@ -81,91 +111,45 @@ class _ProductDetailState extends State<ProductDetail> {
                         padding: const EdgeInsets.symmetric(
                           vertical: 5.0,
                           horizontal: 10.0,
-                        ),child: Text("INR "+widget.price.toString(),style: TextStyle(fontSize: 30,color: AppColors().oxonGreen))),
+                        ),child: Text("\u{20B9} "+widget.price.toString(),style: TextStyle(fontSize: 30,color: AppColors().oxonGreen))),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children:[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 10.0,
+                if(widget.isplant)...[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButton(
+
+                        // Initial Value
+                        value: dropdownvalue,
+
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
+
+                        // Array list of items
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownvalue = newValue!;
+                          });
+                        },
                       ),
-                      child: Center(
-                        child: GestureDetector(
-                          onTap : (){
-                            setState(() {
-                              count++;
-                              if(count>0){
-                                addtext = AppColors().oxonOffWhite;
-                                addback = AppColors().oxonGreen;
-                              }
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors().oxonGreen,
-                              borderRadius: BorderRadius.circular(12.0),
-
-                            ),
-                            child:Text(" + ",style: TextStyle(fontSize: 40,color: AppColors().oxonOffWhite)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 25.0,
-                          horizontal: 25.0,
-
-                        ),
-                        child: Text("Quantity: "+count.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 15.0,
-                      ),
-                      child: Center(
-                        child: GestureDetector(
-                          onTap : (){
-                            setState(() {
-                              // This call to setState tells the Flutter framework that something has
-                              // changed in this State, which causes it to rerun the build method below
-                              // so that the display can reflect the updated values. If we changed
-                              // _counter without calling setState(), then the build method would not be
-                              // called again, and so nothing would appear to happen.
-
-
-                              if(count>0) {
-                                count--;
-                              }
-                              if(count==0){
-                                addtext = AppColors().oxonGreen;
-                                addback = AppColors().oxonOffWhite;
-                              }
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors().oxonGreen,
-                              borderRadius: BorderRadius.circular(12.0),
-
-                            ),
-                            child:Text("  -  ",style: TextStyle(fontSize: 40,color: AppColors().oxonOffWhite)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-
-                ),
+                    ],
+                  ),
+                ],
                 Center(
                   child: Row(
                     children: [Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 15.0,
-                        horizontal: 10.0,
+                        horizontal: 17.0,
                       ),
                       child: Center(
                         child: GestureDetector(
@@ -224,6 +208,83 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                     ]
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children:[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 15.0,
+                      ),
+                      child: Center(
+                        child: GestureDetector(
+                          onTap : (){
+                            setState(() {
+                              // This call to setState tells the Flutter framework that something has
+                              // changed in this State, which causes it to rerun the build method below
+                              // so that the display can reflect the updated values. If we changed
+                              // _counter without calling setState(), then the build method would not be
+                              // called again, and so nothing would appear to happen.
+
+
+                              if(count>0) {
+                                count--;
+                              }
+                              if(count==0){
+                                addtext = AppColors().oxonGreen;
+                                addback = AppColors().oxonOffWhite;
+                              }
+                            });
+                          },
+                          child: Container(
+                            width: 45.0,
+                            decoration: BoxDecoration(
+                              color: AppColors().oxonGreen,
+                              borderRadius: BorderRadius.circular(12.0),
+
+                            ),
+                            child:Center(child: Text(" - ",style: TextStyle(fontSize: 30,color: AppColors().oxonOffWhite))),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5.0,
+                          horizontal: 10.0,
+
+                        ),
+                        child: Text("Quantity: "+count.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 5.0,
+                      ),
+                      child: Center(
+                        child: GestureDetector(
+                          onTap : (){
+                            setState(() {
+                              count++;
+                              if(count>0){
+                                addtext = AppColors().oxonOffWhite;
+                                addback = AppColors().oxonGreen;
+                              }
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors().oxonGreen,
+                              borderRadius: BorderRadius.circular(12.0),
+
+                            ),
+                            child:Text(" + ",style: TextStyle(fontSize: 30,color: AppColors().oxonOffWhite)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(

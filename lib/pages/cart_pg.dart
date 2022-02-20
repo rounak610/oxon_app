@@ -51,6 +51,7 @@ class CartPage extends StatelessWidget {
                           int p=document.get('price') as int;
                           int q=document.get('quantity') as int;
                           int d=document.get('delivery') as int;
+
                           total+=p*q;
                           total+=d;
                           return CartItem("${document.get('ID')}", document.get('price'), document.get('quantity'), "${document.get('name')}");
