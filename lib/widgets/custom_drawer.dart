@@ -140,8 +140,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
               _tileItem('Explore & Bid', ComingSoon.routeName, context),
               _tileItem('Scan QR Code', QRScannerPage.routeName, context),
 
-
-
               _tileItem('Log Out', SignOut.routeName, context),
 
               Expanded(
