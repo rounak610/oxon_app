@@ -39,7 +39,7 @@ class SizeConfig {
     heightMultiplier = _blockHeight;
     widthMultiplier = _blockWidth;
 
-    print("responsiveMultiplier value = $responsiveMultiplier");
+    // print("responsiveMultiplier value = $responsiveMultiplier");
 
     if (screenHeight > 600) {
       responsiveMultiplier *= 0.8;

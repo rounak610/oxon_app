@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oxon_app/pages/product_detail.dart';
 import 'package:oxon_app/size_config.dart';
 
 import 'package:oxon_app/pages/cart_pg.dart';
+import 'package:oxon_app/theme/colors.dart';
 
 import 'package:oxon_app/widgets/custom_appbar.dart';
 
@@ -20,29 +23,35 @@ class ProductsPage extends StatefulWidget {
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
+  final CollectionReference _productReference =
+      FirebaseFirestore.instance.collection("Products");
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             drawer: CustomDrawer(),
             appBar: CustomAppBar(context, "Let's Shop", [
-              Container(
-                width: 105,
-                height: 105,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(CartPage.routeName);
-                    },
-                    icon: Container(
-                      width: 6.29 * SizeConfig.responsiveMultiplier,
-                      height: 6.29 * SizeConfig.responsiveMultiplier,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/icons/shopping_cart.png"))),
-                    )),
-              )
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CartPage()),
+                  );
+                },
+                child: Container(
+                  width: 105,
+                  height: 105,
+                  child: Container(
+                        width: 6.29 * SizeConfig.responsiveMultiplier,
+                        height: 6.29 * SizeConfig.responsiveMultiplier,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/icons/shopping_cart.png"))),
+                      )),
+                ),
             ]),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
             body: SafeArea(
@@ -57,805 +66,108 @@ class _ProductsPageState extends State<ProductsPage> {
                             fit: BoxFit.cover)),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 24),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(10, 10, 150, 10),
-                            child: Text(
-                              "Your previous orders",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: Image.asset(
-                                                        "assets/images/oxon_app.png")
-                                                    .image)),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
+                    child: Stack(
+                      children: [
+                        FutureBuilder<QuerySnapshot>(
+                            future: _productReference.get(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return Scaffold(
+                                  body: Center(
+                                    child: Text("Error Loading products"),
                                   ),
-                                  SizedBox(
-                                    width: 20,
+                                );
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return ListView(
+                                  padding: EdgeInsets.only(
+                                    top: 30.0,
+                                    bottom: 20.0,
                                   ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
+                                  children: snapshot.data!.docs.map((document) {
+                                    return GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(context,MaterialPageRoute(
+                                            builder: (context) => ProductDetail(name: "${document.get('name')}",
+                                              ID: document.id,
+                                              description: "${document.get('description')}",
+                                              image: "${document.get('image')}",
+                                              price: document.get('price'),
+                                            delivery: document.get('delivery'),)
+                                        ));
+                                      },
+                                      child: Container(
+                                        height: 200.0,
+                                        decoration: BoxDecoration(
+                                          color: AppColors().oxonOffWhite,
+                                          borderRadius:
+                                          BorderRadius.circular(12.0),
                                         ),
-                                        SizedBox(
-                                          height: 10,
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: 5.0,
+                                          horizontal: 24.0,
                                         ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
+                                        child :Stack(
+                                          children: [
+                                            Center(
+                                              child: Container(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(10.0,),
+                                                  child: Column(
+                                                    mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                                                    children:[Container(
+                                                      height:100.0,
+                                                      child: Image.network(
+                                                        "${document.get('image')}",
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                     Column(
+                                                       mainAxisAlignment : MainAxisAlignment.end,
+                                                       children: [
+                                                         Text("${document.get('name')}",
+                                                           style: TextStyle(color:AppColors().oxonGreen,fontSize: 15),),
+                                                         Container(
+                                                           decoration: BoxDecoration(
+                                                             color: AppColors().oxonGreen,
+                                                             borderRadius: BorderRadius.circular(12.0),
+
+                                                           ),
+                                                           child:Padding(
+                                                               padding: const EdgeInsets.symmetric(
+                                                                 vertical: 10.0,
+                                                                 horizontal: 10.0,
+                                                               ),child: Text("INR ${document.get('price')}",
+                                                               style: TextStyle(fontSize: 15,color: AppColors().oxonOffWhite))),
+                                                         ),
+                                                       ],
+
+                                                     )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+
                                         ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(10, 50, 212, 10),
-                            child: Text(
-                              "Our Bestsellers",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(10, 50, 140, 10),
-                            child: Text(
-                              "Recommended for you",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 80,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/oxon_app.png"))),
-                                        Text(
-                                          "Product",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Price",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                                      ),
+
+                                    );
+
+
+
+                                  }).toList(),
+                                );
+                              }
+                              return Scaffold(
+                                body: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            })
+                      ],
                     ),
                   )
                 ],
