@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
+import 'package:oxon_app/theme/app_theme.dart';
 
 import '../pages/donate_dustbin.dart';
 import '../pages/products_pg.dart';
@@ -57,6 +58,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 15,
+      backgroundColor: AppTheme.colors.oxonOffWhite,
       child: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
