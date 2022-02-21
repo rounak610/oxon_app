@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/product_detail.dart';
 import 'package:oxon_app/size_config.dart';
+
 import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/theme/colors.dart';
+
 import 'package:oxon_app/widgets/custom_appbar.dart';
+
 import '../widgets/custom_drawer.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -22,9 +25,9 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
   final CollectionReference _productReference =
-      FirebaseFirestore.instance.collection("Products");
-bool plant=true;
-bool other = false;
+  FirebaseFirestore.instance.collection("Products");
+  bool plant=true;
+  bool other = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +43,18 @@ bool other = false;
                   );
                 },
                 child: Container(
-                  width: 105,
-                  height: 105,
-                  child: Container(
-                        width: 6.29 * SizeConfig.responsiveMultiplier,
-                        height: 6.29 * SizeConfig.responsiveMultiplier,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/icons/shopping_cart.png"))),
-                      )),
-                ),
+                    width: 105,
+                    height: 105,
+                    child: Container(
+                      width: 6.29 * SizeConfig.responsiveMultiplier,
+                      height: 6.29 * SizeConfig.responsiveMultiplier,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  "assets/icons/shopping_cart.png"))),
+                    )),
+              ),
             ]),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
             body: DoubleBackToCloseApp(
@@ -63,8 +66,8 @@ bool other = false;
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image:
-                                  Image.asset('assets/images/products_pg_bg.png')
-                                      .image,
+                              Image.asset('assets/images/products_pg_bg.png')
+                                  .image,
                               fit: BoxFit.cover)),
                     ),
                     Container(
@@ -96,7 +99,7 @@ bool other = false;
                                                 description: "${document.get('description')}",
                                                 image: document.get('image'),
                                                 price: document.get('price'),
-                                              delivery: document.get('delivery'),
+                                                delivery: document.get('delivery'),
                                                 isplant: document.get('isplant'),)
                                           ));
                                         },
@@ -129,37 +132,37 @@ bool other = false;
                                                           fit: BoxFit.fill,
                                                         ),
                                                       ),
-                                                       Column(
-                                                        mainAxisAlignment : MainAxisAlignment.start,
+                                                        Column(
+                                                          mainAxisAlignment : MainAxisAlignment.start,
 
-                                                         children: [
-                                                           Center(
-                                                             child: Padding(
-                                                               padding: EdgeInsets.only(top: 5.0),
-                                                               child: Center(
-                                                                 child: Text("${document.get('name')}",
-                                                                   style: TextStyle(color:AppColors().oxonGreen,fontSize: 18),),
-                                                               ),
-                                                             ),
-                                                           ),
-                                                           Container(
-                                                             decoration: BoxDecoration(
-                                                               color: AppColors().oxonOffWhite,
-                                                               borderRadius: BorderRadius.circular(12.0),
+                                                          children: [
+                                                            Center(
+                                                              child: Padding(
+                                                                padding: EdgeInsets.only(top: 5.0),
+                                                                child: Center(
+                                                                  child: Text("${document.get('name')}",
+                                                                    style: TextStyle(color:AppColors().oxonGreen,fontSize: 18),),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                color: AppColors().oxonOffWhite,
+                                                                borderRadius: BorderRadius.circular(12.0),
 
-                                                             ),
-                                                             child:Padding(
-                                                                 padding: const EdgeInsets.symmetric(
-                                                                   vertical: 5.0,
-                                                                   horizontal: 5.0,
-                                                                 ),child: Center(
-                                                                   child: Text("\u{20B9} ${document.get('price')}",
-                                                                   style: TextStyle(fontSize: 13,color: AppColors().oxonGreen)),
-                                                                 )),
-                                                           ),
-                                                         ],
+                                                              ),
+                                                              child:Padding(
+                                                                  padding: const EdgeInsets.symmetric(
+                                                                    vertical: 5.0,
+                                                                    horizontal: 5.0,
+                                                                  ),child: Center(
+                                                                child: Text("\u{20B9} ${document.get('price')}",
+                                                                    style: TextStyle(fontSize: 13,color: AppColors().oxonGreen)),
+                                                              )),
+                                                            ),
+                                                          ],
 
-                                                       )
+                                                        )
                                                       ],
                                                     ),
                                                   ),
