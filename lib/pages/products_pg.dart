@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/product_detail.dart';
 import 'package:oxon_app/size_config.dart';
-
 import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/theme/colors.dart';
-
 import 'package:oxon_app/widgets/custom_appbar.dart';
-
 import '../widgets/custom_drawer.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -56,134 +54,137 @@ bool other = false;
                 ),
             ]),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
-            body: SafeArea(
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                Image.asset('assets/images/products_pg_bg.png')
-                                    .image,
-                            fit: BoxFit.cover)),
-                  ),
-                  Container(
-                    child: Stack(
-                      children: [
-                        FutureBuilder<QuerySnapshot>(
-                            future: _productReference.get(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) {
-                                return Scaffold(
-                                  body: Center(
-                                    child: Text("Error Loading products"),
-                                  ),
-                                );
-                              }
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return ListView(
-                                  padding: EdgeInsets.only(
-                                    top: 30.0,
-                                    bottom: 20.0,
-                                  ),
-                                  children: snapshot.data!.docs.map((document) {
-                                    return GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context,MaterialPageRoute(
-                                            builder: (context) => ProductDetail(name: "${document.get('name')}",
-                                              ID: document.id,
-                                              description: "${document.get('description')}",
-                                              image: document.get('image'),
-                                              price: document.get('price'),
-                                            delivery: document.get('delivery'),
-                                              isplant: document.get('isplant'),)
-                                        ));
-                                      },
-                                      child: Container(
-                                        height: 210.0,
+            body: DoubleBackToCloseApp(
+              snackBar: const SnackBar(content: Text('Press again to exit the app'),duration: Duration(seconds:2)),
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  Image.asset('assets/images/products_pg_bg.png')
+                                      .image,
+                              fit: BoxFit.cover)),
+                    ),
+                    Container(
+                      child: Stack(
+                        children: [
+                          FutureBuilder<QuerySnapshot>(
+                              future: _productReference.get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return Scaffold(
+                                    body: Center(
+                                      child: Text("Error Loading products"),
+                                    ),
+                                  );
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return ListView(
+                                    padding: EdgeInsets.only(
+                                      top: 30.0,
+                                      bottom: 20.0,
+                                    ),
+                                    children: snapshot.data!.docs.map((document) {
+                                      return GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context,MaterialPageRoute(
+                                              builder: (context) => ProductDetail(name: "${document.get('name')}",
+                                                ID: document.id,
+                                                description: "${document.get('description')}",
+                                                image: document.get('image'),
+                                                price: document.get('price'),
+                                              delivery: document.get('delivery'),
+                                                isplant: document.get('isplant'),)
+                                          ));
+                                        },
+                                        child: Container(
+                                          height: 210.0,
 
-                                        decoration: BoxDecoration(
-                                          color: AppColors().oxonOffWhite,
-                                          borderRadius:
-                                          BorderRadius.circular(12.0),
-                                        ),
-                                        margin: EdgeInsets.symmetric(
-                                          vertical: 5.0,
-                                          horizontal: 24.0,
-                                        ),
-                                        child :Stack(
-                                          children: [
-                                            Center(
-                                              child: Container(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(10.0,),
-                                                  child: Column(
-                                                    mainAxisAlignment : MainAxisAlignment.spaceBetween,
-                                                    children:[Container(
-                                                      height:100.0,
-                                                      child: Image.network(
+                                          decoration: BoxDecoration(
+                                            color: AppColors().oxonOffWhite,
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          margin: EdgeInsets.symmetric(
+                                            vertical: 5.0,
+                                            horizontal: 24.0,
+                                          ),
+                                          child :Stack(
+                                            children: [
+                                              Center(
+                                                child: Container(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(10.0,),
+                                                    child: Column(
+                                                      mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                                                      children:[Container(
+                                                        height:100.0,
+                                                        child: Image.network(
 
-                                                        "${document.get('image')[0]}",
+                                                          "${document.get('image')[0]}",
 
-                                                        fit: BoxFit.fill,
+                                                          fit: BoxFit.fill,
+                                                        ),
                                                       ),
-                                                    ),
-                                                     Column(
-                                                      mainAxisAlignment : MainAxisAlignment.start,
+                                                       Column(
+                                                        mainAxisAlignment : MainAxisAlignment.start,
 
-                                                       children: [
-                                                         Center(
-                                                           child: Padding(
-                                                             padding: EdgeInsets.only(top: 5.0),
-                                                             child: Center(
-                                                               child: Text("${document.get('name')}",
-                                                                 style: TextStyle(color:AppColors().oxonGreen,fontSize: 18),),
+                                                         children: [
+                                                           Center(
+                                                             child: Padding(
+                                                               padding: EdgeInsets.only(top: 5.0),
+                                                               child: Center(
+                                                                 child: Text("${document.get('name')}",
+                                                                   style: TextStyle(color:AppColors().oxonGreen,fontSize: 18),),
+                                                               ),
                                                              ),
                                                            ),
-                                                         ),
-                                                         Container(
-                                                           decoration: BoxDecoration(
-                                                             color: AppColors().oxonOffWhite,
-                                                             borderRadius: BorderRadius.circular(12.0),
+                                                           Container(
+                                                             decoration: BoxDecoration(
+                                                               color: AppColors().oxonOffWhite,
+                                                               borderRadius: BorderRadius.circular(12.0),
 
+                                                             ),
+                                                             child:Padding(
+                                                                 padding: const EdgeInsets.symmetric(
+                                                                   vertical: 5.0,
+                                                                   horizontal: 5.0,
+                                                                 ),child: Center(
+                                                                   child: Text("\u{20B9} ${document.get('price')}",
+                                                                   style: TextStyle(fontSize: 13,color: AppColors().oxonGreen)),
+                                                                 )),
                                                            ),
-                                                           child:Padding(
-                                                               padding: const EdgeInsets.symmetric(
-                                                                 vertical: 5.0,
-                                                                 horizontal: 5.0,
-                                                               ),child: Center(
-                                                                 child: Text("\u{20B9} ${document.get('price')}",
-                                                                 style: TextStyle(fontSize: 13,color: AppColors().oxonGreen)),
-                                                               )),
-                                                         ),
-                                                       ],
+                                                         ],
 
-                                                     )
-                                                    ],
+                                                       )
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
 
+                                          ),
                                         ),
-                                      ),
 
-                                    );
-                                  }).toList(),
+                                      );
+                                    }).toList(),
+                                  );
+                                }
+                                return Scaffold(
+                                  body: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 );
-                              }
-                              return Scaffold(
-                                body: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            })
-                      ],
-                    ),
-                  )
-                ],
+                              })
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             )));
   }
