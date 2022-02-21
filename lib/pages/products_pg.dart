@@ -101,7 +101,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                                 price: document.get('price'),
                                                 delivery: document.get('delivery'),
                                                 isplant: document.get('isplant'),)
-                                          ));
+                                          )
+                                          );
                                         },
                                         child: Container(
                                           height: 210.0,
