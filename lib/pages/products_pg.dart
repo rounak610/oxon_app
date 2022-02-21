@@ -25,7 +25,7 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
   final CollectionReference _productReference =
-  FirebaseFirestore.instance.collection("products");
+  FirebaseFirestore.instance.collection('products');
   bool plant=true;
   bool other = false;
 
