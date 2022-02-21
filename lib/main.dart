@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
 import 'package:oxon_app/pages/driver_passcode.dart';
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
     return OrientationBuilder(builder: (context, orientation) {
       return LayoutBuilder(builder: (context, constraints) {
         SizeConfig().init(constraints, orientation);
-        return MaterialApp(
+        return GetMaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
           home: InitializerWidget(),
