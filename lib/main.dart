@@ -2,8 +2,10 @@ import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
+import 'package:oxon_app/pages/driver_passcode.dart';
 import 'package:oxon_app/pages/preview_report.dart';
 import 'package:oxon_app/pages/products_pg.dart';
 import 'package:oxon_app/pages/profile_pg.dart';
@@ -15,6 +17,7 @@ import 'package:oxon_app/pages/update_profile.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon_app/pages/qr_scanner_pg.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -51,6 +54,7 @@ Future<void> main() async {
       ?.createNotificationChannel(channel);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
+
   runApp(MyApp());
 }
 
@@ -62,7 +66,7 @@ class MyApp extends StatelessWidget {
     return OrientationBuilder(builder: (context, orientation) {
       return LayoutBuilder(builder: (context, constraints) {
         SizeConfig().init(constraints, orientation);
-        return MaterialApp(
+        return GetMaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
           home: InitializerWidget(),
@@ -79,6 +83,8 @@ class MyApp extends StatelessWidget {
             UpdateProfile.routeName: (context) => UpdateProfile(),
             WelcomePage.routeName: (context) => WelcomePage(),
             SignOut.routeName: (context) => SignOut(),
+            QRScannerPage.routeName: ((context) => QRScannerPage()),
+            DriverAuth.routeName: (context) => DriverAuth(),
           },
         );
       });

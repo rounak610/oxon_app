@@ -120,7 +120,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                       smsCode: pin);
                               signinWithPhoneAuthCredential(
                                   phoneAuthCredential);
-                            }),
+                            }
+                            ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(9.0),

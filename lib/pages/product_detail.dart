@@ -8,6 +8,7 @@ import '../size_config.dart';
 import '../widgets/custom_appbar.dart';
 import 'cart_pg.dart';
 
+
 class ProductDetail extends StatefulWidget {
   final String description;
   final String ID;
@@ -70,6 +71,7 @@ class _ProductDetailState extends State<ProductDetail> {
             "quantity": count,
             "delivery":widget.delivery,
             "isplant":widget.isplant
+
           }
       );
     }
@@ -78,12 +80,14 @@ class _ProductDetailState extends State<ProductDetail> {
         .collection("Cart").doc(widget.ID).delete();
     return Null;
   }
+
   String dropdownvalue = 'Plastic Bag +\u{20B9}10';
   var items = ['Plastic Bag +\u{20B9}10', 'Earthen Teracotta Pot +\u{20B9}70','Plastic Flowerpot +\u{20B9}35'];
   final SnackBar _snackBar = SnackBar(content:Text("Product Added to the cart"));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: CustomAppBar(context, "Let's Shop", [
         GestureDetector(
           onTap: (){
@@ -108,7 +112,6 @@ class _ProductDetailState extends State<ProductDetail> {
                 )),
           ),
         ),
-      ]),
       body: Stack(
           children: [
             ListView(
@@ -198,6 +201,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   vertical: 15.0,
                                   horizontal: 25.0,
                                 ),child: Text("Add To Cart",style: TextStyle(fontSize: 20,color: addtext))),
+
                           ),
                         ),
                       ),
@@ -268,13 +272,17 @@ class _ProductDetailState extends State<ProductDetail> {
                             });
                           },
                           child: Container(
+
                             width: 45.0,
+
                             decoration: BoxDecoration(
                               color: AppColors().oxonGreen,
                               borderRadius: BorderRadius.circular(12.0),
 
                             ),
+
                             child:Center(child: Text(" - ",style: TextStyle(fontSize: 30,color: AppColors().oxonOffWhite))),
+
                           ),
                         ),
                       ),
@@ -315,6 +323,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ],
 
+
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(
@@ -327,7 +336,6 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
     );
   }
-
   Widget buildImage(imageurl,int index)=>Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.0),
@@ -335,6 +343,7 @@ class _ProductDetailState extends State<ProductDetail> {
     margin: EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
     child: Image.network(widget.image[index],fit: BoxFit.fitWidth,),
   );
+
 
 
 }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/payment_page.dart';
+
 import 'package:oxon_app/theme/colors.dart';
 import 'package:oxon_app/widgets/cart_item.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
@@ -15,6 +16,7 @@ class CartPage extends StatelessWidget {
   FirebaseFirestore.instance.collection("users");
   User? _user =  FirebaseAuth.instance.currentUser;
   int total = 0;//can be modified to get delivery rate data directly from firebase collection delivery rate
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +53,6 @@ class CartPage extends StatelessWidget {
                           int p=document.get('price') as int;
                           int q=document.get('quantity') as int;
                           int d=document.get('delivery') as int;
-
                           total+=p*q;
                           total+=d;
                           return CartItem("${document.get('ID')}", document.get('price'), document.get('quantity'), "${document.get('name')}");

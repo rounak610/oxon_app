@@ -27,6 +27,7 @@ class _ProductsPageState extends State<ProductsPage> {
       FirebaseFirestore.instance.collection("Products");
 bool plant=true;
 bool other = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -81,7 +82,6 @@ bool other = false;
                               }
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
-
                                 return ListView(
                                   padding: EdgeInsets.only(
                                     top: 30.0,
@@ -102,6 +102,7 @@ bool other = false;
                                       },
                                       child: Container(
                                         height: 210.0,
+
                                         decoration: BoxDecoration(
                                           color: AppColors().oxonOffWhite,
                                           borderRadius:
@@ -122,12 +123,14 @@ bool other = false;
                                                     children:[Container(
                                                       height:100.0,
                                                       child: Image.network(
+
                                                         "${document.get('image')[0]}",
+
                                                         fit: BoxFit.fill,
                                                       ),
                                                     ),
                                                      Column(
-                                                       mainAxisAlignment : MainAxisAlignment.start,
+                                                      mainAxisAlignment : MainAxisAlignment.start,
 
                                                        children: [
                                                          Center(
