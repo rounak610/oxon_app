@@ -93,7 +93,7 @@ bool other = false;
                                             builder: (context) => ProductDetail(name: "${document.get('name')}",
                                               ID: document.id,
                                               description: "${document.get('description')}",
-                                              image: "${document.get('image')}",
+                                              image: document.get('image'),
                                               price: document.get('price'),
                                             delivery: document.get('delivery'),
                                               isplant: document.get('isplant'),)
@@ -121,7 +121,7 @@ bool other = false;
                                                     children:[Container(
                                                       height:100.0,
                                                       child: Image.network(
-                                                        "${document.get('image')}",
+                                                        "${document.get('image')[0]}",
                                                         fit: BoxFit.fill,
                                                       ),
                                                     ),

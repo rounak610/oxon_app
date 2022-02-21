@@ -3,14 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/theme/colors.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'cart_pg.dart';
 
 class ProductDetail extends StatefulWidget {
   final String description;
   final String ID;
   final String name;
-  final String image;
+  List<dynamic>image;
   final int price;
   final int delivery;
   final bool isplant;
@@ -86,7 +86,14 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             ListView(
               children: [
-                Image.network(widget.image),
+                CarouselSlider.builder(options: CarouselOptions(height: 400),
+                  itemCount: widget.image.length,
+                  itemBuilder: (context, index,realIndex){
+                        final imageurl = widget.image[index];
+                        return buildImage(imageurl,index);
+                  },
+
+                ),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -290,4 +297,14 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
     );
   }
+
+  Widget buildImage(imageurl,int index)=>Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    margin: EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
+    child: Image.network(widget.image[index],fit: BoxFit.fitWidth,),
+  );
+
+
 }
