@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,113 +41,118 @@ class _DriversSectionState extends State<DriversSection> {
           backgroundColor: AppTheme.colors.oxonGreen,
           drawer: CustomDrawer(),
           appBar: CustomAppBar(context, "Driver's Section"),
-          body: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image:
-                        Image.asset('assets/images/products_pg_bg.png').image,
-                        fit: BoxFit.cover)),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(0, 240, 0, 0),
-                          child: TextFormField(
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white, width: 2.0),
+          body: DoubleBackToCloseApp(
+            snackBar: const SnackBar(
+                content: Text('Press again to exit the app'),
+                duration: Duration(seconds: 2)),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          Image.asset('assets/images/products_pg_bg.png').image,
+                          fit: BoxFit.cover)),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 240, 0, 0),
+                            child: TextFormField(
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
-                              border: OutlineInputBorder(
-                                // borderSide: BorderSide(color: Colors.white, width: 2.0),
-                                  borderRadius: BorderRadius.circular(20)),
-                              hintText: 'Enter your vehicle number',
-                              hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                              labelText: 'Vehicle number',
-                              labelStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300),
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                ),
+                                border: OutlineInputBorder(
+                                  // borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                    borderRadius: BorderRadius.circular(20)),
+                                hintText: 'Enter your vehicle number',
+                                hintStyle: TextStyle(color: Colors.white, fontSize: 20),
+                                labelText: 'Vehicle number',
+                                labelStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  vehicle_no = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please enter your vehicle number';
+                                }
+                              },
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                vehicle_no = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Please enter your vehicle number';
-                              }
-                            },
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: ElevatedButton(
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                              onPressed: () {
+                                _listenLocation(vehicle_no);
+                                Fluttertoast.showToast(
+                                    msg: 'Live location started',
+                                    gravity: ToastGravity.TOP);
+                              },
+                              child: Text(
+                                'Start live location',
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.green[900],
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.green[50],
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(35.0))),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: ElevatedButton(
                             onPressed: () {
-                              _listenLocation(vehicle_no);
+                              _stopListening();
                               Fluttertoast.showToast(
-                                  msg: 'Live location started',
+                                  msg: 'Live location ended',
                                   gravity: ToastGravity.TOP);
                             },
                             child: Text(
-                              'Start live location',
+                              'End live location',
                               style: TextStyle(
                                   fontSize: 30,
                                   color: Colors.green[900],
                                   fontWeight: FontWeight.bold),
                             ),
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.green[50],
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                  new BorderRadius.circular(35.0))),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _stopListening();
-                            Fluttertoast.showToast(
-                                msg: 'Live location ended',
-                                gravity: ToastGravity.TOP);
-                          },
-                          child: Text(
-                            'End live location',
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.green[900],
-                                fontWeight: FontWeight.bold),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.green[50],
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(35.0))),
                           ),
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.green[50],
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                  new BorderRadius.circular(35.0))),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         )
     );
