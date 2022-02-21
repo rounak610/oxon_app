@@ -87,8 +87,8 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: CustomAppBar(context, "Let's Shop", [
+        appBar: CustomAppBar(context, "Let's Shop",
+        [
         GestureDetector(
           onTap: (){
             Navigator.push(
@@ -109,8 +109,11 @@ class _ProductDetailState extends State<ProductDetail> {
                       image: DecorationImage(
                           image: AssetImage(
                               "assets/icons/shopping_cart.png"))),
-                )),
+                )
+                ),
           ),
+        ),
+      ],
         ),
       body: Stack(
           children: [
