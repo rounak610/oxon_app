@@ -146,18 +146,19 @@ class _DriversSectionState extends State<DriversSection> {
                                     msg: 'Live location started',
                                     gravity: ToastGravity.TOP);
                               },
-                              child: Text(
-                                'Start live location',
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    color: Colors.green[900],
-                                    fontWeight: FontWeight.bold),
-                              ),
+                            child: Text(
+                              'Start Live Location',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.green[50],
+                                side: BorderSide(color: Colors.white, width: 2),
+                                primary: Color.fromARGB(255, 34, 90, 0),
                                 shape: new RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(35.0))),
+                                    new BorderRadius.circular(40.0))),
                           ),
                         ),
                         SizedBox(
@@ -172,17 +173,18 @@ class _DriversSectionState extends State<DriversSection> {
                                   gravity: ToastGravity.TOP);
                             },
                             child: Text(
-                              'End live location',
+                              'End Live Location',
                               style: TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.green[900],
+                                  fontSize: 25,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.green[50],
+                                side: BorderSide(color: Colors.white, width: 2),
+                                primary: Colors.red,
                                 shape: new RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(35.0))),
+                                    new BorderRadius.circular(40.0))),
                           ),
                         ),
                       ],
