@@ -25,6 +25,8 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 class _ProductsPageState extends State<ProductsPage> {
   final CollectionReference _productReference =
       FirebaseFirestore.instance.collection("Products");
+bool plant=true;
+bool other = false;
 
   @override
   Widget build(BuildContext context) {
@@ -92,13 +94,15 @@ class _ProductsPageState extends State<ProductsPage> {
                                             builder: (context) => ProductDetail(name: "${document.get('name')}",
                                               ID: document.id,
                                               description: "${document.get('description')}",
-                                              image: "${document.get('image')}",
+                                              image: document.get('image'),
                                               price: document.get('price'),
-                                            delivery: document.get('delivery'),)
+                                            delivery: document.get('delivery'),
+                                              isplant: document.get('isplant'),)
                                         ));
                                       },
                                       child: Container(
-                                        height: 200.0,
+                                        height: 210.0,
+
                                         decoration: BoxDecoration(
                                           color: AppColors().oxonOffWhite,
                                           borderRadius:
@@ -119,27 +123,39 @@ class _ProductsPageState extends State<ProductsPage> {
                                                     children:[Container(
                                                       height:100.0,
                                                       child: Image.network(
-                                                        "${document.get('image')}",
+
+                                                        "${document.get('image')[0]}",
+
                                                         fit: BoxFit.fill,
                                                       ),
                                                     ),
                                                      Column(
-                                                       mainAxisAlignment : MainAxisAlignment.end,
+                                                      mainAxisAlignment : MainAxisAlignment.start,
+
                                                        children: [
-                                                         Text("${document.get('name')}",
-                                                           style: TextStyle(color:AppColors().oxonGreen,fontSize: 15),),
+                                                         Center(
+                                                           child: Padding(
+                                                             padding: EdgeInsets.only(top: 5.0),
+                                                             child: Center(
+                                                               child: Text("${document.get('name')}",
+                                                                 style: TextStyle(color:AppColors().oxonGreen,fontSize: 18),),
+                                                             ),
+                                                           ),
+                                                         ),
                                                          Container(
                                                            decoration: BoxDecoration(
-                                                             color: AppColors().oxonGreen,
+                                                             color: AppColors().oxonOffWhite,
                                                              borderRadius: BorderRadius.circular(12.0),
 
                                                            ),
                                                            child:Padding(
                                                                padding: const EdgeInsets.symmetric(
-                                                                 vertical: 10.0,
-                                                                 horizontal: 10.0,
-                                                               ),child: Text("INR ${document.get('price')}",
-                                                               style: TextStyle(fontSize: 15,color: AppColors().oxonOffWhite))),
+                                                                 vertical: 5.0,
+                                                                 horizontal: 5.0,
+                                                               ),child: Center(
+                                                                 child: Text("\u{20B9} ${document.get('price')}",
+                                                                 style: TextStyle(fontSize: 13,color: AppColors().oxonGreen)),
+                                                               )),
                                                          ),
                                                        ],
 
@@ -155,9 +171,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                       ),
 
                                     );
-
-
-
                                   }).toList(),
                                 );
                               }
