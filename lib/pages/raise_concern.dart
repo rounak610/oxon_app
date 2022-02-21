@@ -77,7 +77,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
   ];
 
   List<String> select = ['Other'];
-    List<String> van = [
+  List<String> van = [
     'Van didn\'t come today',
     'Van timings are irregular',
     'Van did not stop for waste collection',
@@ -210,9 +210,11 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                                 ),
                               );
                             }).toList(),
-                            onChanged: (issueTypeDropdownValue) => setState(
-                                () => this.issueTypeDropdownValue =
-                                    issueTypeDropdownValue),
+                            onChanged: (issueTypeDropdownValue) => setState(() {
+                              issueSubTypeDropdownValue = null;
+                              this.issueTypeDropdownValue =
+                                  issueTypeDropdownValue;
+                            }),
                           ),
                         ),
                       ),
