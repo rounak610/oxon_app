@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/theme/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../size_config.dart';
+import '../widgets/custom_appbar.dart';
 import 'cart_pg.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -82,6 +84,31 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(context, "Let's Shop", [
+        GestureDetector(
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartPage()),
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Container(
+                width: 50,
+                height: 50,
+                child: Container(
+                  width: 6.29 * SizeConfig.responsiveMultiplier,
+                  height: 6.29 * SizeConfig.responsiveMultiplier,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                              "assets/icons/shopping_cart.png"))),
+                )),
+          ),
+        ),
+      ]),
       body: Stack(
           children: [
             ListView(
@@ -144,6 +171,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ],
                   ),
                 ],
+
                 Center(
                   child: Row(
                     children: [Padding(
@@ -204,11 +232,13 @@ class _ProductDetailState extends State<ProductDetail> {
                                   ),child: Text("Buy Now",style: TextStyle(fontSize: 20,color: addtext))),
                             ),
                           ),
+
                         ),
                       ),
                     ]
                   ),
                 ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children:[
