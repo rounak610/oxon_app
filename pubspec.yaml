@@ -59,7 +59,8 @@ dependencies:
   qr_code_scanner: ^0.6.1
   flutter_local_notifications: ^9.3.2
   firebase_messaging: ^11.2.6
-  pin_code_fields: ^7.3.0
+  shared_preferences: ^2.0.13
+  get: ^4.6.1
 
 dev_dependencies:
   flutter_test:

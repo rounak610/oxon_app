@@ -2,6 +2,8 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:oxon_app/pages/driver_passcode.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'dart:async';
@@ -10,6 +12,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' as loc;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 
 import '../theme/app_theme.dart';
@@ -22,25 +26,59 @@ class DriversSection extends StatefulWidget {
 
 class _DriversSectionState extends State<DriversSection> {
 
+  late String final_pass;
   late String vehicle_no;
   final loc.Location location = loc.Location();
   StreamSubscription<loc.LocationData>? _locationSubscription;
 
   @override
-  void initState() {
+  void initState()
+  {
+    getValidationData().whenComplete(() async
+    {
+      Timer(Duration(milliseconds: 2), () => Get.to(final_pass == null ? DriverAuth() : DriversSection));
+    }
+    );
     super.initState();
     _requestPermission();
     location.changeSettings(interval: 300, accuracy: loc.LocationAccuracy.high);
     location.enableBackgroundMode(enable: true);
   }
 
+  Future getValidationData() async
+  {
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var obtained_pass = sharedPreferences.getString('password');
+    setState(() {
+      final_pass = obtained_pass!;
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return SafeArea(
         child: Scaffold(
           backgroundColor: AppTheme.colors.oxonGreen,
           drawer: CustomDrawer(),
-          appBar: CustomAppBar(context, "Driver's Section"),
+          appBar: CustomAppBar(context, "Driver's Section",
+            [
+              Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () async{
+                    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                    sharedPreferences.remove('password');
+                    Get.to(DriverAuth());
+                  },
+                  child: Icon(
+                      Icons.logout,
+                    size: 40,
+                  ),
+                )
+            ),
+            ]
+          ),
           body: DoubleBackToCloseApp(
             snackBar: const SnackBar(
                 content: Text('Press again to exit the app'),
@@ -146,7 +184,7 @@ class _DriversSectionState extends State<DriversSection> {
                                     borderRadius:
                                     new BorderRadius.circular(35.0))),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

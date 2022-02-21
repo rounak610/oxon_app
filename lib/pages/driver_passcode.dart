@@ -6,6 +6,8 @@ import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class DriverAuth extends StatefulWidget {
   const DriverAuth({Key? key}) : super(key: key);
@@ -92,6 +94,11 @@ class _DriverAuthState extends State<DriverAuth> {
                           child: ElevatedButton(
                               onPressed: () async
                               {
+                                
+                                final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                sharedPreferences.setString('password',_pinPutController.text);
+                                Get.to(DriversSection());
+
                                 try
                                 {
                                   if(password == input)
@@ -114,9 +121,6 @@ class _DriverAuthState extends State<DriverAuth> {
                                 catch (e)
                                 {
                                   print(e);
-                                  Fluttertoast.showToast(
-                                      msg: 'Wrong passcode\n Try again!!',
-                                      gravity: ToastGravity.TOP);
                                 }
                               },
                               child: Text(
@@ -133,7 +137,6 @@ class _DriverAuthState extends State<DriverAuth> {
                                     new BorderRadius.circular(35.0))),
                           ),
                         ),
-
                       ],
                     ),
                   ),
