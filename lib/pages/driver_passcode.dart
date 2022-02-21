@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:oxon_app/pages/drivers_section.dart';
@@ -36,104 +37,109 @@ class _DriverAuthState extends State<DriverAuth> {
           backgroundColor: AppTheme.colors.oxonGreen,
           drawer: CustomDrawer(),
           appBar: CustomAppBar(context, "Driver's Section"),
-          body: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image:
-                        Image.asset('assets/images/products_pg_bg.png').image,
-                        fit: BoxFit.cover)),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: Text('Enter passcode',
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w300),
+          body: DoubleBackToCloseApp(
+            snackBar: const SnackBar(
+                content: Text('Press again to exit the app'),
+                duration: Duration(seconds: 2)),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          Image.asset('assets/images/products_pg_bg.png').image,
+                          fit: BoxFit.cover)),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Text('Enter passcode',
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      PinPut(
-                        fieldsCount: 6,
-                        textStyle: const TextStyle(
-                            fontSize: 25.0, color: Colors.white),
-                        eachFieldWidth: 40.0,
-                        eachFieldHeight: 55.0,
-                        focusNode: _pinPutFocusNode,
-                        controller: _pinPutController,
-                        submittedFieldDecoration: pinPutDecoration,
-                        selectedFieldDecoration: pinPutDecoration,
-                        followingFieldDecoration: pinPutDecoration,
-                        pinAnimationType: PinAnimationType.fade,
-                        onChanged: (value){
-                          setState(() {
-                            input = int.parse(value); // this is the right way to convert string to int
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: ElevatedButton(
-                            onPressed: () async
-                            {
-                              try
+                        SizedBox(
+                          height: 20,
+                        ),
+                        PinPut(
+                          fieldsCount: 6,
+                          textStyle: const TextStyle(
+                              fontSize: 25.0, color: Colors.white),
+                          eachFieldWidth: 40.0,
+                          eachFieldHeight: 55.0,
+                          focusNode: _pinPutFocusNode,
+                          controller: _pinPutController,
+                          submittedFieldDecoration: pinPutDecoration,
+                          selectedFieldDecoration: pinPutDecoration,
+                          followingFieldDecoration: pinPutDecoration,
+                          pinAnimationType: PinAnimationType.fade,
+                          onChanged: (value){
+                            setState(() {
+                              input = int.parse(value); // this is the right way to convert string to int
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                              onPressed: () async
                               {
-                                if(password == input)
-                                  {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DriversSection()));
+                                try
+                                {
+                                  if(password == input)
+                                    {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DriversSection()));
+                                    }
+                                  else if(input != password)
+                                    {
+                                    Fluttertoast.showToast(
+                                        msg: 'Wrong passcode\n Try again!!',
+                                        gravity: ToastGravity.TOP);
                                   }
-                                else if(input != password)
-                                  {
+                                  else if(input == null)
+                                    {
+                                      Fluttertoast.showToast(
+                                          msg: 'Please enter the correct passcode',
+                                          gravity: ToastGravity.TOP);
+                                    }
+                                }
+                                catch (e)
+                                {
+                                  print(e);
                                   Fluttertoast.showToast(
                                       msg: 'Wrong passcode\n Try again!!',
                                       gravity: ToastGravity.TOP);
                                 }
-                                else if(input == null)
-                                  {
-                                    Fluttertoast.showToast(
-                                        msg: 'Please enter the correct passcode',
-                                        gravity: ToastGravity.TOP);
-                                  }
-                              }
-                              catch (e)
-                              {
-                                print(e);
-                                Fluttertoast.showToast(
-                                    msg: 'Wrong passcode\n Try again!!',
-                                    gravity: ToastGravity.TOP);
-                              }
-                            },
-                            child: Text(
-                              'Confirm',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.green[900],
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.green[50],
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                  new BorderRadius.circular(35.0))),
+                              },
+                              child: Text(
+                                'Confirm',
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.green[900],
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.green[50],
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(35.0))),
+                          ),
                         ),
-                      ),
 
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         )
     );
