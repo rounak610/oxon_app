@@ -94,13 +94,15 @@ class _ProductsPageState extends State<ProductsPage> {
                                       return GestureDetector(
                                         onTap: (){
                                           Navigator.push(context,MaterialPageRoute(
-                                              builder: (context) => ProductDetail(name: "${document.get('name')}",
+                                              builder: (context) => ProductDetail(
+                                                name: "${document.get('name')}",
                                                 ID: document.id,
                                                 description: "${document.get('description')}",
                                                 image: document.get('image'),
                                                 price: document.get('price'),
                                                 delivery: document.get('delivery'),
-                                                isplant: document.get('isplant'),)
+                                                isplant: document.get('isplant'),
+                                              )
                                           )
                                           );
                                         },
