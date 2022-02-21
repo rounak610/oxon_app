@@ -14,7 +14,8 @@ class CartItem extends StatelessWidget {
     this.price,
     this.quantity,
     this.title,
-  );
+      );
+
   final CollectionReference _userRef =
   FirebaseFirestore.instance.collection("users");
 
@@ -82,12 +83,14 @@ class CartItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text("INR "+'$price'),
+
+                  child: Text("\u{20B9} "+'$price'),
+
                 ),
               ),
             ),
             title: Text(title),
-            subtitle: Text('Total: INR ${(price * quantity)}'),
+            subtitle: Text('Total: \u{20B9} ${(price * quantity)}'),
             trailing: Text('$quantity x'),
           ),
         ),
