@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
     return OrientationBuilder(builder: (context, orientation) {
       return LayoutBuilder(builder: (context, constraints) {
         SizeConfig().init(constraints, orientation);
-        return GetMaterialApp(
+        return MaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
           home: InitializerWidget(),
