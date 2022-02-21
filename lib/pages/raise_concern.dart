@@ -82,6 +82,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Van timings are irregular',
     'Van did not stop for waste collection',
     'Irresponsible driver behaviour',
+    'Oxon QR code torn on van',
     'Other',
   ];
   List<String> dustbin = [
