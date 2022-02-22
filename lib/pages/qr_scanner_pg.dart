@@ -63,7 +63,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
-                        '5 Credits added to your account!',
+                        '5 Rupees added to your wallet!',
                         style: TextStyle(color: Colors.green[900]),
                       ),
                     ),
@@ -111,7 +111,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
-                        '5 Credits added to your account!',
+                        '5 Rupees added to your wallet!',
                         style: TextStyle(color: Colors.green[900]),
                       ),
                     ),
