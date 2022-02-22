@@ -26,13 +26,8 @@ class _VanTrackingState extends State<VanTracking>
   final FirebaseAuth auth = FirebaseAuth.instance;
   late String uid;
 
-  int selectedRadio = 1;
-  String type = "dustbin";
-
   var cameraPosition =
       CameraPosition(target: LatLng(19.7233, 73.1760), zoom: 15);
-  var cameraPosition2 = CameraPosition(
-      target: LatLng(26.475905253817444, 76.72756981104612), zoom: 15.5);
 
   Set<Polyline> _polylines = {};
 
@@ -58,7 +53,6 @@ class _VanTrackingState extends State<VanTracking>
     WidgetsBinding.instance?.addObserver(this);
     onLayoutDone(Duration());
     setCustomMarker();
-    selectedRadio = 0;
   }
 
   Widget CustomMap(Set<Marker> setOfMarkers, String type) {
@@ -120,9 +114,6 @@ class _VanTrackingState extends State<VanTracking>
     cameraPosition = CameraPosition(
         target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 16);
-    cameraPosition2 = CameraPosition(
-        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
-        zoom: 16);
     setState(() {});
   }
 
@@ -144,6 +135,9 @@ class _VanTrackingState extends State<VanTracking>
     }
 
     _locationData = await location.getLocation();
+    cameraPosition = CameraPosition(
+        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+        zoom: 15);
 
     setState(() {});
   }
@@ -215,6 +209,8 @@ class _VanTrackingState extends State<VanTracking>
   }
 
   void _buildListVanMarkers(List<DocumentSnapshot>? snapshot) {
+    vanMarkers.clear();
+    _polylines.clear();
     var count = 0;
 
     try {
