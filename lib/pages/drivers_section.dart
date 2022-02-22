@@ -30,10 +30,11 @@ class _DriversSectionState extends State<DriversSection> {
   @override
   void initState() {
     super.initState();
-    // vehicle_no = "123456"; // temp
+
     _requestPermission();
-    // location.changeSettings(interval: 300, accuracy: loc.LocationAccuracy.high);
-    location.changeSettings(interval: 5*1000, accuracy: loc.LocationAccuracy.high); // change interval to longer duration
+
+    location.changeSettings(
+        interval: 5 * 1000, accuracy: loc.LocationAccuracy.high);
     location.enableBackgroundMode(enable: true);
   }
 
@@ -74,7 +75,6 @@ class _DriversSectionState extends State<DriversSection> {
                                 BorderSide(color: Colors.white, width: 2.0),
                           ),
                           border: OutlineInputBorder(
-                              // borderSide: BorderSide(color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(20)),
                           hintText: 'Enter your vehicle number',
                           hintStyle:
@@ -160,60 +160,32 @@ class _DriversSectionState extends State<DriversSection> {
   Future<void> _listenLocation(String vehicle_no) async {
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       trackingStopped(vehicle_no);
-      print("onError");
+
       _locationSubscription?.cancel();
       setState(() {
         _locationSubscription = null;
       });
     }).listen((loc.LocationData currentlocation) async {
       DriverLocData driverLocData;
-      // driverLocData = DriverLocData(vehicleType: "ordinay_waste_collection", vehicleNumber: "123456", locationsVisited: [], routeId: "-999", dateOfTransport: DateTime.now(), isVehicleParked: false);
-      // DriverLocRepository().addDriverLocData(driverLocData);
-      print("before");
-      // final userData = await
+
       FirebaseFirestore.instance
           .collection("driver_loc_data")
           .where("vehicleNumber", isEqualTo: vehicle_no)
           .limit(1)
           .get()
           .then((value) {
-        print("here");
-
-        // driverLocData = DriverLocData.fromJson(value.docs.first.data());
         driverLocData = DriverLocData.fromSnapshot(value.docs.first);
-        if (driverLocData.locationsVisited.last != GeoPoint(currentlocation.latitude!, currentlocation.longitude!)) {
+        if (driverLocData.locationsVisited.last !=
+            GeoPoint(currentlocation.latitude!, currentlocation.longitude!)) {
           driverLocData.locationsVisited.add(
               GeoPoint(currentlocation.latitude!, currentlocation.longitude!));
           DriverLocRepository().updateDriverLocData(driverLocData);
         }
       });
-      // if (userData.docs.isEmpty && userData.docs[0].data() == null) {
-      //   print("is emptyy ${userData.docs.isEmpty}");
-      //   print("emplty");
-      //   driverLocData = DriverLocData(vehicleType: "ordinay_waste_collection", vehicleNumber: "123456", locationsVisited: [], routeId: "-999", dateOfTransport: DateTime.now(), isVehicleParked: false);
-      //   DriverLocRepository().addDriverLocData(driverLocData);
-      //   return;
-      // }
-      // print("here");
-      // driverLocData = DriverLocData.fromJson(userData.docs.first.data());
-      // driverLocData.locationsVisited.add(GeoPoint(currentlocation.latitude!, currentlocation.longitude!));
-      // DriverLocRepository().updateDriverLocData(driverLocData);
-
-      // await repository.updateDriverLocData(DriverLocData(vehicleType: "ordinay_waste_collection", vehicleNumber: "123456", locationsVisited: "locationsVisited", routeId: routeId, dateOfTransport: dateOfTransport, isVehicleParked: isVehicleParked))
-
-      // await FirebaseFirestore.instance.collection('location').doc(str).set({
-      //   'latitude': currentlocation.latitude,
-      //   'longitude': currentlocation.longitude,
-      //   'vehicle_number': str
-      // }, SetOptions(merge: true));
     });
   }
 
   _stopListening() {
-    print("stopped listening");
-    print(_locationSubscription);
-
-
     _locationSubscription?.cancel();
     setState(() {
       _locationSubscription = null;
@@ -223,18 +195,14 @@ class _DriversSectionState extends State<DriversSection> {
   _requestPermission() async {
     var status = await Permission.location.request();
     if (status.isGranted) {
-      print('done');
     } else if (status.isDenied) {
       _requestPermission();
     } else if (status.isPermanentlyDenied) {
-      print("in denied");
       Fluttertoast.showToast(
-          msg: "Select 'Allow all the time'", // message
-          toastLength: Toast.LENGTH_LONG, // length
-          gravity: ToastGravity.CENTER, // location
-          timeInSecForIosWeb: 1 // duration
-          );
-      // openAppSettings();
+          msg: "Select 'Allow all the time'",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1);
     }
   }
 
@@ -246,22 +214,26 @@ class _DriversSectionState extends State<DriversSection> {
         .limit(1)
         .get()
         .then((value) {
-          if(value.docs.isEmpty) {
-            print("empty in tracking started");
-            final driverLocData = DriverLocData(vehicleType: "ordinary_waste_collection", vehicleNumber: vehicle_no, locationsVisited: [GeoPoint(loc.latitude!, loc.longitude!)], routeId: "-999", dateOfTransport: Timestamp.now(), isVehicleParked: false);
-            repository.addDriverLocData(driverLocData);
-          }
-          else {
-            final driverLocData = DriverLocData.fromSnapshot(value.docs.first);
-            driverLocData.isVehicleParked = false;
-            // driverLocData.locationsVisited.clear();
-            driverLocData.locationsVisited = [GeoPoint(loc.latitude!, loc.longitude!)];
-            // if (DateTime.fromMillisecondsSinceEpoch(driverLocData.dateOfTransport.millisecondsSinceEpoch).day != DateTime.now().day) {
-            //   driverLocData.locationsVisited.clear();
-            //
-            // }
-          }
-          print("here");
+      if (value.docs.isEmpty) {
+        final driverLocData = DriverLocData(
+            vehicleType: "ordinary_waste_collection",
+            vehicleNumber: vehicle_no,
+            locationsVisited: [GeoPoint(loc.latitude!, loc.longitude!)],
+            routeId: "-999",
+            dateOfTransport: Timestamp.now(),
+            isVehicleParked: false);
+        repository.addDriverLocData(driverLocData);
+      } else {
+        final driverLocData = DriverLocData.fromSnapshot(value.docs.first);
+        driverLocData.isVehicleParked = false;
+
+        driverLocData.locationsVisited = [
+          GeoPoint(loc.latitude!, loc.longitude!)
+        ];
+
+        //
+
+      }
     });
   }
 

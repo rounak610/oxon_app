@@ -7,16 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:oxon_app/models/driver_loc_data.dart';
-import 'package:oxon_app/models/dustbin_data.dart';
-import 'package:oxon_app/models/loc_data.dart';
-import 'package:oxon_app/models/toilet_data.dart';
 import 'package:oxon_app/repositories/driver_loc_repository.dart';
 import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/styles/button_styles.dart';
-import 'package:oxon_app/theme/app_theme.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class VanTracking extends StatefulWidget {
   VanTracking({Key? key}) : super(key: key);
@@ -54,16 +48,12 @@ class _VanTrackingState extends State<VanTracking>
   Set<Marker> vanMarkers = {};
   Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController _googleMapController;
-  var truckIcon = BitmapDescriptor
-      .defaultMarker;
-
+  var truckIcon = BitmapDescriptor.defaultMarker;
 
   @override
   void initState() {
     super.initState();
-    // Timer mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
-    //   doAfterEvery();
-    // });
+
     getUserData();
     WidgetsBinding.instance?.addObserver(this);
     onLayoutDone(Duration());
@@ -114,6 +104,7 @@ class _VanTrackingState extends State<VanTracking>
     } else if (state == AppLifecycleState.paused) {
     } else if (state == AppLifecycleState.detached) {}
   }
+
   //
 
   void setCustomMarker() async {
@@ -124,7 +115,6 @@ class _VanTrackingState extends State<VanTracking>
 
     setState(() {});
   }
-
 
   void moveCameraFromAddLoc(String type) {
     cameraPosition = CameraPosition(
@@ -166,12 +156,6 @@ class _VanTrackingState extends State<VanTracking>
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle solidRoundButtonStyle = SolidRoundButtonStyle();
-    final ButtonStyle solidRoundButtonStyleMinSize = SolidRoundButtonStyle(Size(
-        146.32 * SizeConfig.responsiveMultiplier,
-        7.61 * SizeConfig.responsiveMultiplier));
-
-    final mAppTheme = AppTheme.define();
     return SafeArea(
       child: Scaffold(
           drawer: CustomDrawer(),
@@ -188,10 +172,8 @@ class _VanTrackingState extends State<VanTracking>
                 stream: repository.getStreamDriverLoc(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return LinearProgressIndicator();
-                  print("data");
-                  _buildListVanMarkers(snapshot.data?.docs ?? []);
 
-                  print('len ${vanMarkers.length}');
+                  _buildListVanMarkers(snapshot.data?.docs ?? []);
 
                   return CustomMap(vanMarkers, "dustbin");
                 }),
@@ -209,12 +191,9 @@ class _VanTrackingState extends State<VanTracking>
     setState(() {});
   }
 
-
-
   //
 
   //
-
 
   void getUserData() async {
     final user = await FirebaseAuth.instance.currentUser;
@@ -235,77 +214,38 @@ class _VanTrackingState extends State<VanTracking>
     setState(() {});
   }
 
-
-
-
   void _buildListVanMarkers(List<DocumentSnapshot>? snapshot) {
     var count = 0;
-    // if (snapshot!.isEmpty) {
-    //   return;
-    // }
+
     try {
       snapshot!.forEach((element) {
-        print("count $count");
-        print("${element.data()} check data");
         final driverLocData = DriverLocData.fromSnapshot(element);
 
-        // print("id ${element.id}");
         if (!driverLocData.isVehicleParked &&
             driverLocData.locationsVisited.isNotEmpty) {
           final latLngList = <LatLng>[];
           driverLocData.locationsVisited.forEach((geoPoint) {
             latLngList.add(LatLng(geoPoint.latitude, geoPoint.longitude));
           });
-          _polylines.add(
-              Polyline(
-                  polylineId: PolylineId(count.toString()),
-                  points: latLngList,
-                  color: Colors.blue
-              )
-          );
+          _polylines.add(Polyline(
+              polylineId: PolylineId(count.toString()),
+              points: latLngList,
+              color: Colors.blue));
         }
-        // print("element ${element.data()}");
+
         count += 1;
         vanMarkers.add(Marker(
             markerId: MarkerId("${count}"),
             infoWindow: InfoWindow(
               title:
-              "Waste collection van (Vehicle No. - ${driverLocData
-                  .vehicleNumber})",
-              // snippet: toiletData.helpfulCount != 0
-              //     ? "${toiletData.helpfulCount} people found helpful"
-              //     : null),
+                  "Waste collection van (Vehicle No. - ${driverLocData.vehicleNumber})",
             ),
             icon: truckIcon,
             position: LatLng(driverLocData.locationsVisited.last.latitude,
                 driverLocData.locationsVisited.last.longitude)));
 
-        // final toiletData = ToiletData.fromSnapshot(element);
         //
-        // if (toiletData.isDisplayed) {
-        //   toiletMarkers.add(Marker(
-        //       onTap: () => onTapMarker(toiletData, count),
-        //       markerId: MarkerId("${count}"),
-        //       infoWindow: InfoWindow(
-        //           title: "Toilet located by ${toiletData.locatedBy}",
-        //           snippet: toiletData.helpfulCount != 0
-        //               ? "${toiletData.helpfulCount} people found helpful"
-        //               : null),
-        //       icon: toiletData.uId == "-999" ? toiletIcon : cSToiletIcon,
-        //       position: LatLng(
-        //           toiletData.location.latitude, toiletData.location.longitude)));
-        // }
       });
-    } catch (e){
-      print("error $e");
-    }
+    } catch (e) {}
   }
-
-
-  // void doAfterEvery() async {
-  //   _polylines.clear();
-  //   vanMarkers.clear();
-  //   final thedata = await repository.getStreamDriverLoc()
-  //   _buildListVanMarkers(thedata.);
-  // }
 }

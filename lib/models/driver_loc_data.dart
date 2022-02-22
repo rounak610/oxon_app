@@ -19,7 +19,7 @@ class DriverLocData {
       required this.locationsVisited,
       required this.routeId,
       required this.dateOfTransport,
-        required this.isVehicleParked,
+      required this.isVehicleParked,
       this.referenceId});
 
   factory DriverLocData.fromSnapshot(DocumentSnapshot snapshot) {
@@ -36,16 +36,13 @@ class DriverLocData {
 }
 
 DriverLocData _driverLocDataFromJson(Map<String, dynamic> json) {
-  print(json);
-  print("printing json");
   return DriverLocData(
       vehicleType: json["vehicleType"],
       vehicleNumber: json["vehicleNumber"],
       locationsVisited: json["locationsVisited"],
       routeId: json["routeId"],
       dateOfTransport: json["dateOfTransport"],
-      isVehicleParked: json["isVehicleParked"]
-  );
+      isVehicleParked: json["isVehicleParked"]);
 }
 
 Map<String, dynamic> _driverLocDataToJson(DriverLocData instance) =>
