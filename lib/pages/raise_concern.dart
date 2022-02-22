@@ -22,6 +22,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
 
   List<String> mainIssueTypes = [
     'Select',
+    'Van Related Problems',
     'Dustbin',
     'Sewerage Problem',
     'Road Light',
@@ -32,6 +33,7 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
   ];
 
   List<String> selectSubTypeList(String issueType) {
+    if (issueType == 'Van Related Problems') return van;
     if (issueType == 'Dustbin') return dustbin;
     if (issueType == 'Sewerage Problem') return sewer;
     if (issueType == 'Road Light') return roadLight;
@@ -42,7 +44,8 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     return select;
   }
 
-  List<String> allCombined = ['Dustbin unavailable in locality',
+  List<String> allCombined = [
+    'Dustbin unavailable in locality',
     'Dustbins overfilled',
     'Non- Classification of Dustbins',
     'Place of Dustbins',
@@ -70,9 +73,18 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
     'Encroachment over roads',
     'Built of stairs & Ramp',
     'Absence of Parking',
-    'Absence of property documentation',];
+    'Absence of property documentation',
+  ];
 
   List<String> select = ['Other'];
+  List<String> van = [
+    'Van didn\'t come today',
+    'Van timings are irregular',
+    'Van did not stop for waste collection',
+    'Irresponsible driver behaviour',
+    'Oxon QR code torn on van',
+    'Other',
+  ];
   List<String> dustbin = [
     'Dustbin unavailable in locality',
     'Dustbins overfilled',
@@ -198,9 +210,11 @@ class _RaiseConcernDirectState extends State<RaiseConcernDirect> {
                                 ),
                               );
                             }).toList(),
-                            onChanged: (issueTypeDropdownValue) => setState(
-                                () => this.issueTypeDropdownValue =
-                                    issueTypeDropdownValue),
+                            onChanged: (issueTypeDropdownValue) => setState(() {
+                              issueSubTypeDropdownValue = null;
+                              this.issueTypeDropdownValue =
+                                  issueTypeDropdownValue;
+                            }),
                           ),
                         ),
                       ),

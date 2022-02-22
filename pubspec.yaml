@@ -25,7 +25,7 @@ dependencies:
 #  flutter_svg: ^1.0.3
   permission_handler: ^8.3.0
   location: ^4.3.0
-
+  carousel_slider: ^4.0.0
   google_maps_flutter: ^2.1.1
   dio: ^4.0.4
   flutter_polyline_points: ^1.0.0
@@ -59,7 +59,8 @@ dependencies:
   qr_code_scanner: ^0.6.1
   flutter_local_notifications: ^9.3.2
   firebase_messaging: ^11.2.6
-  pin_code_fields: ^7.3.0
+  shared_preferences: ^2.0.13
+  get: ^4.6.1
 
 dev_dependencies:
   flutter_test:

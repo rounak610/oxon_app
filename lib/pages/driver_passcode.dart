@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:oxon_app/pages/drivers_section.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-
 import '../theme/app_theme.dart';
 import '../widgets/custom_appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class DriverAuth extends StatefulWidget {
   const DriverAuth({Key? key}) : super(key: key);
@@ -16,7 +20,8 @@ class DriverAuth extends StatefulWidget {
 }
 
 class _DriverAuthState extends State<DriverAuth> {
-  int password = 787862;
+
+  late int password;  //driver need to enter this passcode
   late int input;
   final FocusNode _pinPutFocusNode = FocusNode();
   final TextEditingController _pinPutController = TextEditingController();
@@ -29,103 +34,144 @@ class _DriverAuthState extends State<DriverAuth> {
   );
 
   @override
+
   Widget build(BuildContext context) {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    _fetch() async
+    {
+      final user = await FirebaseAuth.instance.currentUser;
+      if (user != null)
+      {
+        await FirebaseFirestore.instance
+            .collection('drivers_passcode')
+            .doc('passcode')
+            .get()
+            .then((ds) {
+          print(ds);
+          password = ds.data()!['passcode'];
+        }).catchError((e) {
+          print(e);
+        });
+      }
+    }
+
     return SafeArea(
         child: Scaffold(
-      backgroundColor: AppTheme.colors.oxonGreen,
-      drawer: CustomDrawer(),
-      appBar: CustomAppBar(context, "Driver's Section"),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image:
-                        Image.asset('assets/images/products_pg_bg.png').image,
-                    fit: BoxFit.cover)),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: SingleChildScrollView(
-              child: Column(
+          backgroundColor: AppTheme.colors.oxonGreen,
+          drawer: CustomDrawer(),
+          appBar: CustomAppBar(context, "Driver's Section"),
+          body: FutureBuilder(
+            future: _fetch(),
+              builder: (context, snapshot) {
+              return DoubleBackToCloseApp(
+              snackBar: const SnackBar(
+                  content: Text('Press again to exit the app'),
+                  duration: Duration(seconds: 2)),
+              child: Stack(
                 children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                            Image.asset('assets/images/products_pg_bg.png').image,
+                            fit: BoxFit.cover)),
+                  ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    child: Text(
-                      'Enter passcode',
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PinPut(
-                    fieldsCount: 6,
-                    textStyle:
-                        const TextStyle(fontSize: 25.0, color: Colors.white),
-                    eachFieldWidth: 40.0,
-                    eachFieldHeight: 55.0,
-                    focusNode: _pinPutFocusNode,
-                    controller: _pinPutController,
-                    submittedFieldDecoration: pinPutDecoration,
-                    selectedFieldDecoration: pinPutDecoration,
-                    followingFieldDecoration: pinPutDecoration,
-                    pinAnimationType: PinAnimationType.fade,
-                    onChanged: (value) {
-                      setState(() {
-                        input = int.parse(value);
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          if (password == input) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DriversSection()));
-                          } else if (input != password) {
-                            Fluttertoast.showToast(
-                                msg: 'Wrong passcode\n Try again!!',
-                                gravity: ToastGravity.TOP);
-                          } else if (input == null) {
-                            Fluttertoast.showToast(
-                                msg: 'Please enter the correct passcode',
-                                gravity: ToastGravity.TOP);
-                          }
-                        } catch (e) {
-                          Fluttertoast.showToast(
-                              msg: 'Wrong passcode\n Try again!!',
-                              gravity: ToastGravity.TOP);
-                        }
-                      },
-                      child: Text(
-                        'Confirm',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.green[900],
-                            fontWeight: FontWeight.bold),
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: Text('Enter passcode',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          PinPut(
+                            fieldsCount: 6,
+                            textStyle: const TextStyle(
+                                fontSize: 25.0, color: Colors.white),
+                            eachFieldWidth: 40.0,
+                            eachFieldHeight: 55.0,
+                            focusNode: _pinPutFocusNode,
+                            controller: _pinPutController,
+                            submittedFieldDecoration: pinPutDecoration,
+                            selectedFieldDecoration: pinPutDecoration,
+                            followingFieldDecoration: pinPutDecoration,
+                            pinAnimationType: PinAnimationType.fade,
+                            onChanged: (value){
+                              setState(() {
+                                input = int.parse(value); // this is the right way to convert string to int
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Center(
+                            child: ElevatedButton(
+                                onPressed: () async
+                                {
+
+                                  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                  sharedPreferences.setString('password',_pinPutController.text);
+
+
+                                  try
+                                  {
+                                    if(password == input)
+                                      {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DriversSection()));
+                                        Get.to(DriversSection());
+                                      }
+                                    else if(input != password)
+                                      {
+                                      Fluttertoast.showToast(
+                                          msg: 'Wrong passcode\n Try again!!',
+                                          gravity: ToastGravity.TOP);
+                                    }
+                                    else if(input == null)
+                                      {
+                                        Fluttertoast.showToast(
+                                            msg: 'Please enter the correct passcode',
+                                            gravity: ToastGravity.TOP);
+                                      }
+                                  }
+                                  catch (e)
+                                  {
+                                    print(e);
+                                  }
+                                },
+                                child: Text(
+                                  'Confirm',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Colors.green[900],
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.green[50],
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                      new BorderRadius.circular(35.0))),
+                            ),
+                          ),
+                        ],
                       ),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.green[50],
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(35.0))),
                     ),
-                  ),
+                  )
                 ],
               ),
-            ),
-          )
-        ],
-      ),
-    ));
+            );
+          }),
+        )
+    );
   }
 }
