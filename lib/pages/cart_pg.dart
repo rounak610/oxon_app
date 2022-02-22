@@ -55,7 +55,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void initState() {
-
     // TODO: implement initState
     super.initState();
   }
@@ -107,7 +106,6 @@ class _CartPageState extends State<CartPage> {
                                   document.get('price'),
                                   document.get('quantity'),
                                   "${document.get('name')}");
-                                  
                             }).toList(),
                           );
                         }
@@ -124,36 +122,37 @@ class _CartPageState extends State<CartPage> {
             ),
             Positioned(
               bottom: 100,
-              left: 15,
-              right: 15,
-              child:
-                  FutureBuilder(
-                    future: _fetch(),
-                    builder: (context, snapshot) {
-                      return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Container(
-                        child: Text(
-                      'Your cart total is: Rs. $total ',
-                      style: TextStyle(color: Colors.white),
-                )),
-                Container(
-                        child: Text(
-                      'Discount applied from wallet (MAX 20%): Rs. $discount ',
-                      style: TextStyle(color: Colors.white),
-                )),
-                Container(
-                        child: Text(
-                      'Delivery Charges: Rs. 49 ',
-                      style: TextStyle(color: Colors.white),
-                )),
-                Container(
-                        child: Text(
-                      'Total amount to be paid: Rs. ${total - discount + 49} ',
-                      style: TextStyle(color: Colors.white),
-                )),
-              ]);
-                    }
-                  ),
+              left: 35,
+              child: FutureBuilder(
+                  future: _fetch(),
+                  builder: (context, snapshot) {
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              child: Text(
+                            'Your cart total is: Rs. $total ',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: Colors.white),
+                          )),
+                          Container(
+                              child: Text(
+                            'Discount applied from wallet (MAX 20%): Rs. $discount ',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                          Container(
+                              child: Text(
+                            'Delivery Charges: Rs. 49 ',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                          Container(
+                              child: Text(
+                            'Total amount to be paid: Rs. ${total - discount + 49} ',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                        ]);
+                  }),
             ),
             Positioned(
               bottom: 5.0,
