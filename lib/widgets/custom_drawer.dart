@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/driver_passcode.dart';
 import 'package:oxon_app/pages/sign_out.dart';
+import 'package:oxon_app/pages/van_tracking.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/pages/qr_scanner_pg.dart';
 import '../pages/donate_dustbin.dart';
@@ -134,7 +135,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
               //_tileItem('Let\'s Shop', ComingSoon.routeName, context),
               _tileItem('Dustbin and Toilets', SusMapping.routeName, context),
-              _tileItem('Van Tracking', ComingSoon.routeName, context),
+              _tileItem('Van Tracking', VanTracking.routeName, context),
               // _tileItem('My Wallet', ComingSoon.routeName, context),
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem("Let's Shop", ProductsPage.routeName, context),
