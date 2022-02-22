@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/product_detail.dart';
@@ -25,12 +26,8 @@ class ProductsPage extends StatefulWidget {
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
-  final urlImages =
-  [
-    'https://firebasestorage.googleapis.com/v0/b/oxon-app-a4ede.appspot.com/o/slide_show%2FOXON%20Banner%20for%20Facebook.png?alt=media&token=411ed100-7449-4319-9a80-0b507b9dfbdf',
-    'https://firebasestorage.googleapis.com/v0/b/oxon-app-a4ede.appspot.com/o/slide_show%2FIMG-20220131-WA0005.png?alt=media&token=19cfd3c1-59ba-435c-aaa8-e9ea37e5270d',
-    'https://firebasestorage.googleapis.com/v0/b/oxon-app-a4ede.appspot.com/o/slide_show%2FWhatsApp%20Image%202022-02-22%20at%2012.44.36%20PM.png?alt=media&token=93298035-ef0d-46b5-a54b-eb448c0eb64f'
-  ];
+
+  late List<dynamic> slide_images;
 
   final CollectionReference _productReference =
   FirebaseFirestore.instance.collection('products');
@@ -39,6 +36,26 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    _fetch() async
+    {
+      final user = await FirebaseAuth.instance.currentUser;
+      if (user != null)
+      {
+        await FirebaseFirestore.instance
+            .collection('slide_show_images')
+            .doc('slide_images')
+            .get()
+            .then((ds) {
+          print(ds);
+          slide_images = ds.data()!['images'];
+        }).catchError((e) {
+          print(e);
+        });
+      }
+    }
+
     return SafeArea(
         child: Scaffold(
             drawer: CustomDrawer(),
@@ -83,23 +100,32 @@ class _ProductsPageState extends State<ProductsPage> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            CarouselSlider.builder(
-                                itemCount: urlImages.length,
-                                itemBuilder: (context, index, realIndex)
-                                {
-                                  final urlImage = urlImages[index];
+                            FutureBuilder(
+                              future: _fetch(),
+                          builder: (context, snapshot) {
+                                return CarouselSlider.builder(
+                                itemCount: slide_images.length,
+                                itemBuilder: (context, index, realIndex) {
+                                  final urlImage = slide_images[index];
                                   return buildImage(urlImage, index);
                                 },
                                 options: CarouselOptions(
-                                    height: (MediaQuery. of(context). size. height)*0.3,
+                                  height: (MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height) * 0.3,
                                   autoPlay: true,
-                                    autoPlayAnimationDuration: Duration(seconds: 10),
+                                  autoPlayAnimationDuration: Duration(
+                                      seconds: 10),
                                   enableInfiniteScroll: true,
                                   //viewportFraction: 1,
                                   //enlargeCenterPage: true,
                                   initialPage: 0,
                                 )
+                            );
+                             },
                             ),
+                            SizedBox(height: 20),
                             FutureBuilder<QuerySnapshot>(
                                 future: _productReference.get(),
                                 builder: (context, snapshot) {
