@@ -176,11 +176,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                   SizedBox(height: 25)
                                 ]),
                                 TableRow(children: [
-                                  Text("Credits: ",
+                                  Text("Wallet: ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline2),
-                                  Text('$userCredits Credits',
+                                  Text('$userCredits Rupees',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline2),
