@@ -100,33 +100,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                       .image,
                                   fit: BoxFit.cover)),
                         ),
-                        Container(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                            child: SingleChildScrollView(
-                              child: CarouselSlider.builder(
-                                  itemCount: slide_images?.length,
-                                  itemBuilder: (context, index, realIndex) {
-                                    final urlImage = slide_images![index];
-                                    return buildImage(urlImage, index);
-                                  },
-                                  options: CarouselOptions(
-                                    height: (MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height) * 0.3,
-                                    autoPlay: true,
-                                    autoPlayAnimationDuration: Duration(
-                                        seconds: 10),
-                                    enableInfiniteScroll: true,
-                                    //viewportFraction: 1,
-                                    //enlargeCenterPage: true,
-                                    initialPage: 0,
-                                  )
-                              ),
-                            ),
-                          ),
-                        ),
                         FutureBuilder<QuerySnapshot>(
                             future: _productReference.get(),
                             builder: (context, snapshot) {
