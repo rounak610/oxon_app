@@ -428,6 +428,7 @@ class _SusMappingState extends State<SusMapping>
   }
 
   Future<String> getCurrLocationAndAdd(String type) async {
+    rewardUserOnContributingDustbinToiletLoc();
     _locationData = await location.getLocation();
     print("_loc ${_locationData!.latitude}");
 
@@ -1136,6 +1137,11 @@ class _SusMappingState extends State<SusMapping>
                 dustbinData.location.longitude)));
       }
     });
+  }
+
+  void rewardUserOnContributingDustbinToiletLoc() {
+    //todo: add credits to user's wallet
+    return;
   }
 }
 

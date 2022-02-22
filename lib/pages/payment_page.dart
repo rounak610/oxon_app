@@ -56,7 +56,7 @@ class _PaymentPageState extends State<PaymentPage> {
               .catchError((e) {
                 print(e);
               });
-          finalPrice = (price! * 0.8).toInt();
+          finalPrice = (price! * 0.8 + 50).toInt();
         }
       }).catchError((e) {
         print(e);

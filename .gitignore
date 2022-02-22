@@ -34,6 +34,7 @@
 # Web related
 lib/generated_plugin_registrant.dart
 lib/main_sus.dart
+lib/main_c.dart
 
 # Symbolication related
 app.*.symbols

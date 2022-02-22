@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:oxon_app/models/driver_loc_data.dart';
 import 'package:oxon_app/pages/driver_passcode.dart';
+import 'package:oxon_app/repositories/driver_loc_repository.dart';
 import 'package:oxon_app/widgets/custom_appbar.dart';
 import 'package:oxon_app/widgets/custom_drawer.dart';
 import 'dart:async';
@@ -30,6 +32,8 @@ class _DriversSectionState extends State<DriversSection> {
   late String vehicle_no;
   final loc.Location location = loc.Location();
   StreamSubscription<loc.LocationData>? _locationSubscription;
+
+  final repository = DriverLocRepository();
 
   @override
   void initState()
@@ -112,7 +116,7 @@ class _DriversSectionState extends State<DriversSection> {
                                   borderSide: BorderSide(color: Colors.white, width: 2.0),
                                 ),
                                 border: OutlineInputBorder(
-                                  // borderSide: BorderSide(color: Colors.white, width: 2.0),
+
                                     borderRadius: BorderRadius.circular(20)),
                                 hintText: 'Enter your vehicle number',
                                 hintStyle: TextStyle(color: Colors.white, fontSize: 20),
@@ -141,6 +145,7 @@ class _DriversSectionState extends State<DriversSection> {
                         Center(
                           child: ElevatedButton(
                               onPressed: () {
+                                trackingStarted(vehicle_no);
                                 _listenLocation(vehicle_no);
                                 Fluttertoast.showToast(
                                     msg: 'Live location started',
@@ -198,23 +203,40 @@ class _DriversSectionState extends State<DriversSection> {
     );
   }
 
-  Future<void> _listenLocation(String str) async {
+  Future<void> _listenLocation(String vehicle_no) async {
     _locationSubscription = location.onLocationChanged.handleError((onError) {
-      print(onError);
+      trackingStopped(vehicle_no);
+
       _locationSubscription?.cancel();
       setState(() {
         _locationSubscription = null;
       });
     }).listen((loc.LocationData currentlocation) async {
-      await FirebaseFirestore.instance.collection('location').doc(str).set({
-        'latitude': currentlocation.latitude,
-        'longitude': currentlocation.longitude,
-        'Vehicle number': str
-      }, SetOptions(merge: true));
+      DriverLocData driverLocData;
+
+      FirebaseFirestore.instance
+          .collection("driver_loc_data")
+          .where("vehicleNumber", isEqualTo: vehicle_no)
+          .limit(1)
+          .get()
+          .then((value) {
+        if (value.docs.isEmpty) {
+          print("empty");
+          return;
+        }
+        driverLocData = DriverLocData.fromSnapshot(value.docs.first);
+        if (driverLocData.locationsVisited.last !=
+            GeoPoint(currentlocation.latitude!, currentlocation.longitude!)) {
+          driverLocData.locationsVisited.add(
+              GeoPoint(currentlocation.latitude!, currentlocation.longitude!));
+          DriverLocRepository().updateDriverLocData(driverLocData);
+        }
+      });
     });
   }
 
   _stopListening() {
+    trackingStopped(vehicle_no);
     _locationSubscription?.cancel();
     setState(() {
       _locationSubscription = null;
@@ -228,8 +250,59 @@ class _DriversSectionState extends State<DriversSection> {
     } else if (status.isDenied) {
       _requestPermission();
     } else if (status.isPermanentlyDenied) {
+      Fluttertoast.showToast(
+          msg: "Select 'Allow all the time'",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1);
       openAppSettings();
     }
   }
 
+  void trackingStarted(String vehicle_no) async {
+    final loc = await location.getLocation();
+    FirebaseFirestore.instance
+        .collection("driver_loc_data")
+        .where("vehicleNumber", isEqualTo: vehicle_no)
+        .limit(1)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        print("empty");
+        final driverLocData = DriverLocData(
+            vehicleType: "ordinary_waste_collection",
+            vehicleNumber: vehicle_no,
+            locationsVisited: [GeoPoint(loc.latitude!, loc.longitude!)],
+            routeId: "-999",
+            dateOfTransport: Timestamp.now(),
+            isVehicleParked: false);
+        repository.addDriverLocData(driverLocData);
+      } else {
+        final driverLocData = DriverLocData.fromSnapshot(value.docs.first);
+        driverLocData.isVehicleParked = false;
+
+        driverLocData.locationsVisited = [
+          GeoPoint(loc.latitude!, loc.longitude!)
+        ];
+
+        //
+
+      }
+    });
+  }
+
+  void trackingStopped(String vehicle_no) {
+    FirebaseFirestore.instance
+        .collection("driver_loc_data")
+        .where("vehicleNumber", isEqualTo: vehicle_no)
+        .limit(1)
+        .get()
+        .then((value) {
+      final driverLocData = DriverLocData.fromSnapshot(value.docs.first);
+      driverLocData.isVehicleParked = true;
+      final pD = driverLocData.locationsVisited.last;
+      driverLocData.locationsVisited = <dynamic>[pD];
+      repository.updateDriverLocData(driverLocData);
+    });
+  }
 }
