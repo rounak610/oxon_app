@@ -24,7 +24,7 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
 
-  List<dynamic>? slide_images;
+  late List<dynamic> slide_images;
 
   final CollectionReference _productReference =
   FirebaseFirestore.instance.collection('Products');
@@ -106,9 +106,9 @@ class _ProductsPageState extends State<ProductsPage> {
                             child: Column(
                               children: [
                                 CarouselSlider.builder(
-                                    itemCount: slide_images?.length,
+                                    itemCount: slide_images.length,
                                     itemBuilder: (context, index, realIndex) {
-                                      final urlImage = slide_images![index];
+                                      final urlImage = slide_images[index];
                                       return buildImage(urlImage, index);
                                     },
                                     options: CarouselOptions(
