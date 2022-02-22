@@ -6,12 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon_app/pages/product_detail.dart';
 import 'package:oxon_app/size_config.dart';
-
 import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/theme/colors.dart';
-
 import 'package:oxon_app/widgets/custom_appbar.dart';
-
 import '../widgets/custom_drawer.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -78,9 +75,11 @@ class _ProductsPageState extends State<ProductsPage> {
                           image: DecorationImage(
                               image: AssetImage(
                                   "assets/icons/shopping_cart.png"))),
-                    )),
+                    )
+                ),
               ),
-            ]),
+            ]
+            ),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
             body: FutureBuilder(
               future: _fetch(),
