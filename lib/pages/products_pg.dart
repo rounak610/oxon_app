@@ -24,7 +24,7 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
 
-  late List<dynamic> slide_images;
+  List<dynamic>? slide_images;
 
   final CollectionReference _productReference =
   FirebaseFirestore.instance.collection('Products');
@@ -99,35 +99,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                       'assets/images/products_pg_bg.png')
                                       .image,
                                   fit: BoxFit.cover)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                CarouselSlider.builder(
-                                    itemCount: slide_images.length,
-                                    itemBuilder: (context, index, realIndex) {
-                                      final urlImage = slide_images[index];
-                                      return buildImage(urlImage, index);
-                                    },
-                                    options: CarouselOptions(
-                                      height: (MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height) * 0.3,
-                                      autoPlay: true,
-                                      autoPlayAnimationDuration: Duration(
-                                          seconds: 10),
-                                      enableInfiniteScroll: true,
-                                      //viewportFraction: 1,
-                                      //enlargeCenterPage: true,
-                                      initialPage: 0,
-                                    )
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                         FutureBuilder<QuerySnapshot>(
                             future: _productReference.get(),
@@ -290,7 +261,6 @@ class _ProductsPageState extends State<ProductsPage> {
         )
     );
   }
-
   Widget buildImage(String urlImage, int index) =>
       Container(
         // margin: EdgeInsets.symmetric(horizontal:5),
