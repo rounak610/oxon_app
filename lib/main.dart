@@ -13,6 +13,7 @@ import 'package:oxon_app/pages/sign_out.dart';
 import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
 import 'package:oxon_app/pages/take_picture.dart';
 import 'package:oxon_app/pages/update_profile.dart';
+import 'package:oxon_app/pages/van_tracking.dart';
 import 'package:oxon_app/pages/welcome_pg.dart';
 import 'package:oxon_app/size_config.dart';
 import 'package:oxon_app/theme/app_theme.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
                 TakePictureScreen(camera: cameras[0]),
             ProfilePage.routeName: (context) => ProfilePage(),
             SusMapping.routeName: (context) => SusMapping(),
+            VanTracking.routeName: (context) => VanTracking(),
             DonateDustbin.routeName: (context) => DonateDustbin(),
             ProductsPage.routeName: (context) => ProductsPage(),
             ComingSoon.routeName: (context) => ComingSoon(),
