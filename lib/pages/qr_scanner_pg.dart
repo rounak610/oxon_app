@@ -84,7 +84,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
         flex: 1,
         child: Center(
             child: Text(
-          'Please scan a valid QR code.',
+          'Please scan a valid QR code from waste collection van. Get 5 rupees in app everytime when you throw garbage in the van. Let\'s make the city clean and green.',
           style: TextStyle(fontSize: 20),
         )));
   }
