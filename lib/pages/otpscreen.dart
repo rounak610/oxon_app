@@ -55,16 +55,30 @@ class _OTPScreenState extends State<OTPScreen> {
           showLoading = false;
         });
 
-        if (result != null) {
+        if (result.docs.length != 0) {
           if (authCredential.user != null) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SusMapping()));
+                context, MaterialPageRoute(builder: (context) => SusMapping()));    ////////LOGIC FOR OLD USERS
           }
         } else {
-          if (authCredential.user != null) {
-            Navigator.push(context,
+            final user = await FirebaseAuth.instance.currentUser;   //////////LOGIC FOR NEW USERS
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user?.uid)
+                .update({
+                  'credits': 50,
+                })
+                .then((value) async {})
+                .catchError((e) {
+                  print(e);
+                });
+            const bonusSnackBar = SnackBar(
+              content: Text('Yay!Rs. 50 signing up bonus added to wallet!!'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(bonusSnackBar);
+            await Navigator.push(context,
                 MaterialPageRoute(builder: (context) => UpdateProfile()));
-          }
+          
         }
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -120,8 +134,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                       smsCode: pin);
                               signinWithPhoneAuthCredential(
                                   phoneAuthCredential);
-                            }
-                            ),
+                            }),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(9.0),
@@ -202,11 +215,15 @@ class _OTPScreenState extends State<OTPScreen> {
 
       if (result != null) {
         if (authCredential.user != null) {
+          print(result.toString() + 'fffffffffffffffffffffffffffffffffff');
+
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SusMapping()));
         }
       } else {
         if (authCredential.user != null) {
+          print(result.toString() + 'ppppppppppppppp');
+
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => UpdateProfile()));
         }
