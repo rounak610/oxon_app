@@ -28,6 +28,8 @@ class _CartPageState extends State<CartPage> {
   int userCredits = 0;
   int finalPrice = 0;
   int discount = 0;
+        int refresh = 1;
+
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   _fetch() async {
@@ -47,6 +49,10 @@ class _CartPageState extends State<CartPage> {
         } else {
           discount = (price * 0.2).toInt();
         }
+        if (refresh == 1) {
+          setState(() {});
+        }
+        refresh = 0;
       }).catchError((e) {
         print(e);
       });
