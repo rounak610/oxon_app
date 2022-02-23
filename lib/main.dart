@@ -87,6 +87,7 @@ class MyApp extends StatelessWidget {
             SignOut.routeName: (context) => SignOut(),
             QRScannerPage.routeName: ((context) => QRScannerPage()),
             DriverAuth.routeName: (context) => DriverAuth(),
+            CartPage.routeName: ((context) => CartPage())
           },
         );
       });
@@ -122,6 +123,6 @@ class _InitializerWidgetState extends State<InitializerWidget> {
           )
         : _user == null
             ? WelcomePage()
-            : SusMapping();
+            : ProductsPage();
   }
 }
