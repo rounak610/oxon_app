@@ -66,7 +66,7 @@ class _PreviewReportState extends State<PreviewReport> {
 
   String userName = "Not Updated";
   String mobile = "Not updated";
-  late String twitter;
+  String twitter = "Not updated";
 
   _fetch() async {
     final user = await FirebaseAuth.instance.currentUser;
@@ -359,11 +359,6 @@ class _PreviewReportState extends State<PreviewReport> {
                           twitter = value;
                         });
                       },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please enter your twitter user name';
-                        }
-                      },
                     ),
                     SizedBox(
                       height: 15,
@@ -385,21 +380,19 @@ class _PreviewReportState extends State<PreviewReport> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
-                                    duration: Duration(seconds: 8),
-                                  ),
-                                );
+
                               }
                               uploadFile(File(imagePath), userName);
                               FirebaseFirestore.instance.collection('complaints').add({'description': description, 'issueType': issueType, 'problem': problem, 'twitter username':twitter})
                                   .then((value) {
                                 if (value != null) {
-                                  Fluttertoast.showToast(
-                                      msg: 'Complaint posted successfully',
-                                      gravity: ToastGravity.TOP);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
+                                      duration: Duration(seconds: 8),
+                                    ),
+                                  );
                                 }
                               }).catchError((e) {
                                 print(e);
