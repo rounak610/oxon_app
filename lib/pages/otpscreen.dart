@@ -65,7 +65,7 @@ class _OTPScreenState extends State<OTPScreen> {
             await FirebaseFirestore.instance
                 .collection('users')
                 .doc(user?.uid)
-                .update({
+                .set({
                   'credits': 50,
                 })
                 .then((value) async {})
