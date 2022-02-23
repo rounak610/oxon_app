@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -158,19 +159,24 @@ class _VanTrackingState extends State<VanTracking>
             context,
             "Van Tracking",
           ),
-          body: Container(
-            margin: SizeConfig.screenHeight > 600
-                ? EdgeInsets.only(top: 5.85 * SizeConfig.responsiveMultiplier)
-                : EdgeInsets.all(0),
-            child: StreamBuilder<QuerySnapshot>(
-                stream: repository.getStreamDriverLoc(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return LinearProgressIndicator();
+          body: DoubleBackToCloseApp(
+            snackBar: const SnackBar(
+                content: Text('Press again to exit the app'),
+                duration: Duration(seconds: 2)),
+            child: Container(
+              margin: SizeConfig.screenHeight > 600
+                  ? EdgeInsets.only(top: 5.85 * SizeConfig.responsiveMultiplier)
+                  : EdgeInsets.all(0),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: repository.getStreamDriverLoc(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return LinearProgressIndicator();
 
-                  _buildListVanMarkers(snapshot.data?.docs ?? []);
+                    _buildListVanMarkers(snapshot.data?.docs ?? []);
 
-                  return CustomMap(vanMarkers, "dustbin");
-                }),
+                    return CustomMap(vanMarkers, "dustbin");
+                  }),
+            ),
           )),
     );
   }
