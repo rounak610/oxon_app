@@ -6,11 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:oxon_app/models/driver_loc_data.dart';
-import 'package:oxon_app/repositories/driver_loc_repository.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
-import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon/models/driver_loc_data.dart';
+import 'package:oxon/repositories/driver_loc_repository.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
+import 'package:oxon/widgets/custom_drawer.dart';
 
 class VanTracking extends StatefulWidget {
   VanTracking({Key? key}) : super(key: key);

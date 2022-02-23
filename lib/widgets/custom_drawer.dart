@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/driver_passcode.dart';
-import 'package:oxon_app/pages/sign_out.dart';
-import 'package:oxon_app/pages/van_tracking.dart';
-import 'package:oxon_app/pages/welcome_pg.dart';
-import 'package:oxon_app/pages/qr_scanner_pg.dart';
+import 'package:oxon/pages/driver_passcode.dart';
+import 'package:oxon/pages/sign_out.dart';
+import 'package:oxon/pages/van_tracking.dart';
+import 'package:oxon/pages/welcome_pg.dart';
+import 'package:oxon/pages/qr_scanner_pg.dart';
 import '../pages/donate_dustbin.dart';
 import '../pages/products_pg.dart';
 import '../pages/profile_pg.dart';
 import '../pages/sustainable_mapping_pg.dart';
 import '../pages/raise_concern.dart';
 import '../pages/coming_soon.dart';
-import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon/theme/app_theme.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);

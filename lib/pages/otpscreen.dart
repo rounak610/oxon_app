@@ -1,15 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
-import 'package:oxon_app/pages/update_profile.dart';
+import 'package:oxon/pages/sustainable_mapping_pg.dart';
+import 'package:oxon/pages/update_profile.dart';
 import '../models/mobile_number.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/pages/welcome_pg.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/pages/welcome_pg.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
-import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon/widgets/Appbar_otpscreen.dart';
+import 'package:oxon/theme/app_theme.dart';
 import 'package:timer_button/timer_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
