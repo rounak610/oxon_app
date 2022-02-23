@@ -62,7 +62,7 @@ class _OTPScreenState extends State<OTPScreen> {
           }
         } else {
             final user = await FirebaseAuth.instance.currentUser;   //////////LOGIC FOR NEW USERS
-            FirebaseFirestore.instance
+            await FirebaseFirestore.instance
                 .collection('users')
                 .doc(user?.uid)
                 .update({
