@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:oxon_app/pages/cart_pg.dart';
 import 'package:oxon_app/pages/coming_soon.dart';
 import 'package:oxon_app/pages/donate_dustbin.dart';
 import 'package:oxon_app/pages/driver_passcode.dart';
@@ -87,6 +88,7 @@ class MyApp extends StatelessWidget {
             SignOut.routeName: (context) => SignOut(),
             QRScannerPage.routeName: ((context) => QRScannerPage()),
             DriverAuth.routeName: (context) => DriverAuth(),
+            CartPage.routeName: ((context) => CartPage())
           },
         );
       });
