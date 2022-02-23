@@ -27,7 +27,7 @@ class _VanTrackingState extends State<VanTracking>
   late String uid;
 
   var cameraPosition =
-      CameraPosition(target: LatLng(19.7233, 73.1760), zoom: 15);
+      CameraPosition(target: LatLng(26.4814719, 76.7298792), zoom: 15);
 
   Set<Polyline> _polylines = {};
 
@@ -135,9 +135,9 @@ class _VanTrackingState extends State<VanTracking>
     }
 
     _locationData = await location.getLocation();
-    cameraPosition = CameraPosition(
-        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
-        zoom: 15);
+    // cameraPosition = CameraPosition(
+    //     target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+    //     zoom: 15);
 
     setState(() {});
   }

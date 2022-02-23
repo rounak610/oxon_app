@@ -78,7 +78,7 @@ class _OTPScreenState extends State<OTPScreen> {
             ScaffoldMessenger.of(context).showSnackBar(bonusSnackBar);
             await Navigator.push(context,
                 MaterialPageRoute(builder: (context) => UpdateProfile()));
-          
+
         }
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -215,15 +215,11 @@ class _OTPScreenState extends State<OTPScreen> {
 
       if (result != null) {
         if (authCredential.user != null) {
-          print(result.toString() + 'fffffffffffffffffffffffffffffffffff');
-
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SusMapping()));
         }
       } else {
         if (authCredential.user != null) {
-          print(result.toString() + 'ppppppppppppppp');
-
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => UpdateProfile()));
         }

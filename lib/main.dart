@@ -122,6 +122,6 @@ class _InitializerWidgetState extends State<InitializerWidget> {
           )
         : _user == null
             ? WelcomePage()
-            : ProductsPage();
+            : SusMapping();
   }
 }
