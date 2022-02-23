@@ -72,6 +72,7 @@ class _PaymentState extends State<Payment> {
 
   void paymentsuccess(PaymentSuccessResponse response) {
     Fluttertoast.showToast(msg: "SUCCESS ", timeInSecForIosWeb: 4);
+    productstodatabase();
   }
 
   void paymenterror(PaymentFailureResponse response) {
@@ -81,6 +82,8 @@ class _PaymentState extends State<Payment> {
   void externalwallet(ExternalWalletResponse response) {
     Fluttertoast.showToast(msg: "EXTERNAL_WALLET ", timeInSecForIosWeb: 4);
   }
+
+  Void productstodatabase() {}
 
   @override
   Widget build(BuildContext context) {
