@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:oxon/pages/driver_passcode.dart';
 import 'package:oxon/pages/sign_out.dart';
 import 'package:oxon/pages/van_tracking.dart';
 import 'package:oxon/pages/welcome_pg.dart';
 import 'package:oxon/pages/qr_scanner_pg.dart';
+import 'package:oxon/size_config.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../pages/donate_dustbin.dart';
 import '../pages/products_pg.dart';
 import '../pages/profile_pg.dart';
@@ -63,7 +66,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       backgroundColor: AppTheme.colors.oxonOffWhite,
       child: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          // height: MediaQuery.of(context).size.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -156,21 +159,47 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               _tileItem("Driver's Section", DriverAuth.routeName, context),
               _tileItem('Log Out', SignOut.routeName, context),
-
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    height: 120,
-                    padding: EdgeInsets.all(15),
-                    child: Image.asset('assets/images/oxon_logo.png'),
-                  ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: SizeConfig.responsiveMultiplier * 10,
+                  // padding: EdgeInsets.all(15),
+                  child: Image.asset('assets/images/oxon_logo.png'),
                 ),
-              )
+              ),
+
+              // Expanded(
+              //   child: ,
+              // ),
+              Divider(),
+              Center(child: TextButton(onPressed: () => _openPrivacyPolicy(), child: Text("Privacy Policy", style: AppTheme.define().textTheme.headline6!.copyWith(color: AppTheme.colors.oxonGreen),))),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+_openPrivacyPolicy() async {
+  final url = 'https://oxon.life/privacy-policy.html';
+
+  try {
+    await launch(url);
+  } catch (e) {
+    try {
+      Fluttertoast.showToast(msg: "Unkown error occurred");
+    } catch (e, s) {
+      print(s);
+    }
+  }
+
+  // // if (await canLaunch(url)) {
+  // if (true) {
+  //   print("yes");
+  // await launch(url);
+  // } else {
+  //   print("eror");
+  // throw 'Could not launch $url';
+  // }
 }
