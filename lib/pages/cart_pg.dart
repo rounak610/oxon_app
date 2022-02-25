@@ -168,32 +168,7 @@ class _CartPageState extends State<CartPage> {
                 child: GestureDetector(
                   onTap: () async {
                     int price = total;
-
                     final user = await FirebaseAuth.instance.currentUser;
-
-                    if (price * 0.2 >= userCredits) {
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user?.uid)
-                          .update({
-                            'credits': 0,
-                          })
-                          .then((value) {})
-                          .catchError((e) {
-                            print(e);
-                          });
-                    } else {
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user?.uid)
-                          .update({
-                            'credits': userCredits! - (0.2 * total!).toInt(),
-                          })
-                          .then((value) {})
-                          .catchError((e) {
-                            print(e);
-                          });
-                    }
                     await Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             (Payment(total - discount + 49))));
