@@ -1152,5 +1152,3 @@ enum DustbinDataUpdateConditions { NotPresent, Overflowing, Helpful }
 Text smallText(String text) {
   return Text(text, style: AppTheme.define().textTheme.headline6!.copyWith(fontSize: 10),);
 }
-
-// todo: in sus mapping and van tracking, show prominent disclosure.
