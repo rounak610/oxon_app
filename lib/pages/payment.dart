@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
 import 'package:oxon_app/theme/app_theme.dart';
 
+import '../theme/colors.dart';
+
 class Payment extends StatefulWidget {
   final int total;
   Payment(this.total);
@@ -72,6 +74,31 @@ class _PaymentState extends State<Payment> {
 
   void paymentsuccess(PaymentSuccessResponse response) {
     Fluttertoast.showToast(msg: "SUCCESS ", timeInSecForIosWeb: 4);
+
+    final CollectionReference _userRef =
+    FirebaseFirestore.instance.collection("users");
+    Color addtext = AppColors().oxonOffWhite;
+    Color addback = AppColors().oxonGreen;
+    User? _user =  FirebaseAuth.instance.currentUser;
+    final CollectionReference _order =
+    FirebaseFirestore.instance.collection("orders");
+    Object _add_to_cart(){
+      return _order.doc(_user?.uid).set(
+          {"customer name": _user?.displayName,
+            "contact": _user?.phoneNumber,
+            "cart":_userRef.doc(_user?.uid).collection("cart")
+          }
+      );
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+            'Thanks for using Oxon, your order has been successfully created\nOur marketing team will get back to you soon for more details.'),
+        duration: Duration(seconds: 8),
+      ),
+    );
+
   }
 
   void paymenterror(PaymentFailureResponse response) {

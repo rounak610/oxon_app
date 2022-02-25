@@ -379,10 +379,13 @@ class _PreviewReportState extends State<PreviewReport> {
                               width: 250, height: 60),
                           child: ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
 
+                              if (_formKey.currentState!.validate())
+                              {
                               }
+
                               uploadFile(File(imagePath), userName);
+
                               FirebaseFirestore.instance.collection('complaints').add({'description': description, 'issueType': issueType, 'problem': problem, 'twitter username':twitter})
                                   .then((value) {
                                 if (value != null) {
@@ -397,6 +400,7 @@ class _PreviewReportState extends State<PreviewReport> {
                               }).catchError((e) {
                                 print(e);
                               });
+
                             },
                             child: Text(
                               'Confirm',
