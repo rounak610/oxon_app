@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:oxon_app/pages/welcome_pg.dart';
-import 'package:oxon_app/pages/welcome_pg.dart';
+import 'package:oxon/pages/welcome_pg.dart';
+import 'package:oxon/pages/welcome_pg.dart';
 
 class SignOut extends StatefulWidget {
   const SignOut({Key? key}) : super(key: key);

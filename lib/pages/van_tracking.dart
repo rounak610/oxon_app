@@ -7,11 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:oxon_app/models/driver_loc_data.dart';
-import 'package:oxon_app/repositories/driver_loc_repository.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
-import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon/models/driver_loc_data.dart';
+import 'package:oxon/repositories/driver_loc_repository.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
+import 'package:oxon/widgets/custom_drawer.dart';
 
 class VanTracking extends StatefulWidget {
   VanTracking({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _VanTrackingState extends State<VanTracking>
   late String uid;
 
   var cameraPosition =
-      CameraPosition(target: LatLng(19.7233, 73.1760), zoom: 15);
+      CameraPosition(target: LatLng(26.4814719, 76.7298792), zoom: 15);
 
   Set<Polyline> _polylines = {};
 
@@ -136,9 +136,9 @@ class _VanTrackingState extends State<VanTracking>
     }
 
     _locationData = await location.getLocation();
-    cameraPosition = CameraPosition(
-        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
-        zoom: 15);
+    // cameraPosition = CameraPosition(
+    //     target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+    //     zoom: 15);
 
     setState(() {});
   }

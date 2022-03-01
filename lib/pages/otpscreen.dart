@@ -1,15 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
-import 'package:oxon_app/pages/update_profile.dart';
+import 'package:oxon/pages/products_pg.dart';
+import 'package:oxon/pages/products_pg.dart';
+import 'package:oxon/pages/sustainable_mapping_pg.dart';
+import 'package:oxon/pages/update_profile.dart';
 import '../models/mobile_number.dart';
 import 'welcome_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/pages/welcome_pg.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/pages/welcome_pg.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
-import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon/widgets/Appbar_otpscreen.dart';
+import 'package:oxon/theme/app_theme.dart';
 import 'package:timer_button/timer_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -58,7 +60,7 @@ class _OTPScreenState extends State<OTPScreen> {
         if (result.docs.length != 0) {
           if (authCredential.user != null) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SusMapping()));    ////////LOGIC FOR OLD USERS
+                context, MaterialPageRoute(builder: (context) => ProductsPage()));    ////////LOGIC FOR OLD USERS
           }
         } else {
             final user = await FirebaseAuth.instance.currentUser;   //////////LOGIC FOR NEW USERS
@@ -78,7 +80,7 @@ class _OTPScreenState extends State<OTPScreen> {
             ScaffoldMessenger.of(context).showSnackBar(bonusSnackBar);
             await Navigator.push(context,
                 MaterialPageRoute(builder: (context) => UpdateProfile()));
-          
+
         }
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -215,15 +217,11 @@ class _OTPScreenState extends State<OTPScreen> {
 
       if (result != null) {
         if (authCredential.user != null) {
-          print(result.toString() + 'fffffffffffffffffffffffffffffffffff');
-
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SusMapping()));
+              context, MaterialPageRoute(builder: (context) => ProductsPage()));
         }
       } else {
         if (authCredential.user != null) {
-          print(result.toString() + 'ppppppppppppppp');
-
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => UpdateProfile()));
         }

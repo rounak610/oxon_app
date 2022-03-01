@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oxon_app/size_config.dart';
+import 'package:oxon/size_config.dart';
 
 ButtonStyle outlinedButtonStyle(BuildContext context) {
   return OutlinedButton.styleFrom(

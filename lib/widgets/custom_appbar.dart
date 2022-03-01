@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/theme/app_theme.dart';
 
 PreferredSizeWidget CustomAppBar(BuildContext context, String title,
     [List<Widget>? actions]) {

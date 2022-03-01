@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:oxon_app/models/mobile_number.dart';
-import 'package:oxon_app/pages/otpscreen.dart';
-import 'package:oxon_app/pages/products_pg.dart';
-import 'package:oxon_app/pages/profile_pg.dart';
-import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
+import 'package:oxon/models/mobile_number.dart';
+import 'package:oxon/pages/otpscreen.dart';
+import 'package:oxon/pages/products_pg.dart';
+import 'package:oxon/pages/profile_pg.dart';
+import 'package:oxon/pages/sustainable_mapping_pg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oxon_app/models/user_profile.dart';
+import 'package:oxon/models/user_profile.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);

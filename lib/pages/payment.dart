@@ -4,8 +4,8 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oxon_app/widgets/Appbar_otpscreen.dart';
-import 'package:oxon_app/theme/app_theme.dart';
+import 'package:oxon/widgets/Appbar_otpscreen.dart';
+import 'package:oxon/theme/app_theme.dart';
 
 import '../theme/colors.dart';
 

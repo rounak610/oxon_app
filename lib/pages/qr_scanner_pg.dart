@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:oxon_app/pages/profile_pg.dart';
+import 'package:oxon/pages/profile_pg.dart';
 import 'dart:io';
 
 import 'package:qr_code_scanner/qr_code_scanner.dart';

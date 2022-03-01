@@ -2,14 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:oxon_app/pages/payment.dart';
 import 'package:oxon_app/pages/payment_page.dart';
 import 'package:oxon_app/size_config.dart';
 
-import 'package:oxon_app/theme/colors.dart';
-import 'package:oxon_app/widgets/cart_item.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
-import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon/theme/colors.dart';
+import 'package:oxon/widgets/cart_item.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
+import 'package:oxon/widgets/custom_drawer.dart';
 
 class CartPage extends StatefulWidget {
   static const routeName = '/cart-page';

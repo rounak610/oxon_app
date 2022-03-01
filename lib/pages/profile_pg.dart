@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/coming_soon.dart';
-import 'package:oxon_app/pages/sustainable_mapping_pg.dart';
-import 'package:oxon_app/pages/update_profile.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/styles/button_styles.dart';
-import 'package:oxon_app/theme/app_theme.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
-import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon/pages/coming_soon.dart';
+import 'package:oxon/pages/sustainable_mapping_pg.dart';
+import 'package:oxon/pages/update_profile.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/styles/button_styles.dart';
+import 'package:oxon/theme/app_theme.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
+import 'package:oxon/widgets/custom_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';

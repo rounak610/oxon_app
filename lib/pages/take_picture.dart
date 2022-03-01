@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/preview_report.dart';
+import 'package:oxon/pages/preview_report.dart';
 
 import '../models/concern.dart';
 

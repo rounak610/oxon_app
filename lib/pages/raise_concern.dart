@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:oxon_app/models/concern.dart';
-import 'package:oxon_app/pages/take_picture.dart';
-import 'package:oxon_app/theme/app_theme.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
+import 'package:oxon/models/concern.dart';
+import 'package:oxon/pages/take_picture.dart';
+import 'package:oxon/theme/app_theme.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import '../widgets/custom_drawer.dart';
 

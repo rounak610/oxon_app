@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:oxon_app/theme/app_theme.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
-import 'package:oxon_app/widgets/custom_drawer.dart';
+import 'package:oxon/theme/app_theme.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
+import 'package:oxon/widgets/custom_drawer.dart';
 
 class DonateDustbin extends StatefulWidget {
   const DonateDustbin({Key? key}) : super(key: key);
