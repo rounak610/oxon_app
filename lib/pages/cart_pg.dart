@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon/pages/payment.dart';
-import 'package:oxon/pages/payment_page.dart';
 
+import './payment_page.dart';
+import './payment.dart';
+import 'package:oxon/size_config.dart';
 import 'package:oxon/theme/colors.dart';
 import 'package:oxon/widgets/cart_item.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
@@ -28,7 +29,7 @@ class _CartPageState extends State<CartPage> {
   int userCredits = 0;
   int finalPrice = 0;
   int discount = 0;
-        int refresh = 1;
+  int refresh = 1;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -49,10 +50,6 @@ class _CartPageState extends State<CartPage> {
         } else {
           discount = (price * 0.2).toInt();
         }
-        if (refresh == 1) {
-          setState(() {});
-        }
-        refresh = 0;
       }).catchError((e) {
         print(e);
       });
@@ -81,8 +78,12 @@ class _CartPageState extends State<CartPage> {
                       color: AppColors().oxonOffWhite,
                       fontWeight: FontWeight.bold),
                 )),
+            SizedBox(
+              height: 10,
+            ),
             Container(
-              child: Padding(
+              child: Container(
+                margin: EdgeInsets.all(15.0),
                 padding: EdgeInsets.all(15.0),
                 child: Stack(
                   children: [
@@ -97,27 +98,133 @@ class _CartPageState extends State<CartPage> {
                           );
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          return ListView(
-                            padding: EdgeInsets.only(
-                              top: 30.0,
-                              bottom: 20.0,
+                          return Scaffold(
+                            backgroundColor: AppColors().oxonGreen,
+                            body: Column(
+                              children: [
+                                SizedBox(
+                                  height: SizeConfig.screenHeight * 0.5,
+                                  child: ListView(
+                                    padding: EdgeInsets.only(
+                                      top: 30.0,
+                                      bottom: 20.0,
+                                    ),
+                                    children:
+                                        snapshot.data!.docs.map((document) {
+                                      int p = document.get('price') as int;
+                                      int q = document.get('quantity') as int;
+                                      int d = document.get('delivery') as int;
+                                      total += p * q;
+
+                                      return CartItem(
+                                          "${document.get('ID')}",
+                                          document.get('price'),
+                                          document.get('quantity'),
+                                          "${document.get('name')}");
+                                    }).toList(),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: SizeConfig.screenHeight * 0.2,
+                                  left: 35,
+                                  child: FutureBuilder(
+                                      future: _fetch(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text("Loading"),
+                                          );
+                                        }
+                                        return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  child: Text(
+                                                'Your cart total is: Rs. $total ',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                              Container(
+                                                  child: Text(
+                                                'Discount applied from wallet (MAX 20%): Rs. $discount ',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                              Container(
+                                                  child: Text(
+                                                'Delivery Charges: Rs. 49 ',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                              Container(
+                                                  child: Text(
+                                                'Total amount to be paid: Rs. ${total - discount + 49} ',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                            ]);
+                                      }),
+                                ),
+                                Positioned(
+                                  bottom: SizeConfig.screenHeight * 0.1,
+                                  right: 15,
+                                  left: 15,
+                                  child: Center(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        int price = total;
+                                        final user = await FirebaseAuth
+                                            .instance.currentUser;
+                                        await Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) => (Payment(
+                                                    total - discount + 49))));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 15.0,
+                                          horizontal: 10.0,
+                                        ),
+                                        child: Center(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                color:
+                                                    AppColors().oxonOffWhite),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 15.0,
+                                                horizontal: 25.0,
+                                              ),
+                                              child: Text("Proceed to payment",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: AppColors()
+                                                          .oxonGreen)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                            children: snapshot.data!.docs.map((document) {
-                              int p = document.get('price') as int;
-                              int q = document.get('quantity') as int;
-                              int d = document.get('delivery') as int;
-                              total += p * q;
-                              return CartItem(
-                                  "${document.get('ID')}",
-                                  document.get('price'),
-                                  document.get('quantity'),
-                                  "${document.get('name')}");
-                            }).toList(),
                           );
                         }
                         return Scaffold(
+                          backgroundColor: Colors.transparent,
                           body: Center(
-                            child: LinearProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.transparent,
+                              color: Colors.white,
+                            ),
                           ),
                         );
                       },
@@ -126,78 +233,6 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 100,
-              left: 35,
-              child: FutureBuilder(
-                  future: _fetch(),
-                  builder: (context, snapshot) {
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              child: Text(
-                            'Your cart total is: Rs. $total ',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(color: Colors.white),
-                          )),
-                          Container(
-                              child: Text(
-                            'Discount applied from wallet (MAX 20%): Rs. $discount ',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                          Container(
-                              child: Text(
-                            'Delivery Charges: Rs. 49 ',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                          Container(
-                              child: Text(
-                            'Total amount to be paid: Rs. ${total - discount + 49} ',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                        ]);
-                  }),
-            ),
-            Positioned(
-              bottom: 5.0,
-              right: 15,
-              left: 15,
-              child: Center(
-                child: GestureDetector(
-                  onTap: () async {
-                    int price = total;
-                    final user = await FirebaseAuth.instance.currentUser;
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            (Payment(total - discount + 49))));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15.0,
-                      horizontal: 10.0,
-                    ),
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: AppColors().oxonOffWhite),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15.0,
-                            horizontal: 25.0,
-                          ),
-                          child: Text("Proceed to payment",
-                              style: TextStyle(
-                                  fontSize: 20, color: AppColors().oxonGreen)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )
           ],
         ));
     ;

@@ -57,7 +57,7 @@ class _PaymentState extends State<Payment> {
 
   void openCheckout() {
     var options = {
-      "key": "rzp_test_bVtoD4khNzG52t",
+      "key": "rzp_live_GlexjxcNIxZbCm",
       "amount": widget.total * 100,
       "name": "Oxon",
       "description": "Your final amount",
