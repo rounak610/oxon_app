@@ -2,6 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+
+import 'package:oxon_app/pages/payment.dart';
+import 'package:oxon_app/pages/payment_page.dart';
+import 'package:oxon_app/size_config.dart';
+>>>>>>> 355fc9a41e30cc5a3a95cd2160df60f1c4b70802
 
 import './payment_page.dart';
 import './payment.dart';
@@ -50,6 +57,10 @@ class _CartPageState extends State<CartPage> {
         } else {
           discount = (price * 0.2).toInt();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 355fc9a41e30cc5a3a95cd2160df60f1c4b70802
       }).catchError((e) {
         print(e);
       });
@@ -103,7 +114,11 @@ class _CartPageState extends State<CartPage> {
                             body: Column(
                               children: [
                                 SizedBox(
+<<<<<<< HEAD
                                   height: SizeConfig.screenHeight * 0.5,
+=======
+                                  height: SizeConfig.screenHeight * 0.6,
+>>>>>>> 355fc9a41e30cc5a3a95cd2160df60f1c4b70802
                                   child: ListView(
                                     padding: EdgeInsets.only(
                                       top: 30.0,
