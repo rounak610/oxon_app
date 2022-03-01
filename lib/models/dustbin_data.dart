@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:oxon_app/models/loc_data.dart';
+import 'package:oxon/models/loc_data.dart';
 
 class DustbinData extends LocData {
   int overflowingCount;

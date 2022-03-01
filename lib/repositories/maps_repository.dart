@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:oxon_app/models/geocoded_location.dart';
+import 'package:oxon/models/geocoded_location.dart';
 
 class MapsRepository {
   static const String _baseUrl =

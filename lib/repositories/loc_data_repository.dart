@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:oxon_app/models/dustbin_data.dart';
-import 'package:oxon_app/models/toilet_data.dart';
+import 'package:oxon/models/dustbin_data.dart';
+import 'package:oxon/models/toilet_data.dart';
 
 class LocDataRepository {
   final CollectionReference toiletCollection =

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/theme/colors.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/theme/colors.dart';
 
 @immutable
 class AppTheme {

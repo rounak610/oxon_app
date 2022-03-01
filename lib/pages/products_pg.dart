@@ -4,11 +4,11 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/pages/product_detail.dart';
-import 'package:oxon_app/size_config.dart';
-import 'package:oxon_app/pages/cart_pg.dart';
-import 'package:oxon_app/theme/colors.dart';
-import 'package:oxon_app/widgets/custom_appbar.dart';
+import 'package:oxon/pages/product_detail.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/pages/cart_pg.dart';
+import 'package:oxon/theme/colors.dart';
+import 'package:oxon/widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
 
 class ProductsPage extends StatefulWidget {

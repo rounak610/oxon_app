@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:oxon_app/models/driver_loc_data.dart';
+import 'package:oxon/models/driver_loc_data.dart';
 
 class DriverLocRepository {
   final CollectionReference driverLocCollection = FirebaseFirestore.instance.collection('driver_loc_data');

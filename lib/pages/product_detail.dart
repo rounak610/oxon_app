@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon_app/theme/colors.dart';
+import 'package:oxon/theme/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../size_config.dart';
 import '../widgets/custom_appbar.dart';
