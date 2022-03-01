@@ -104,7 +104,7 @@ class _CartPageState extends State<CartPage> {
                             body: Column(
                               children: [
                                 SizedBox(
-                                  height: SizeConfig.screenHeight * 0.6,
+                                  height: SizeConfig.screenHeight * 0.5,
                                   child: ListView(
                                     padding: EdgeInsets.only(
                                       top: 30.0,
