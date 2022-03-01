@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:oxon/pages/driver_passcode.dart';
+import 'package:oxon/pages/qr_scanner_pg.dart';
 import 'package:oxon/pages/sign_out.dart';
 import 'package:oxon/pages/van_tracking.dart';
-import 'package:oxon/pages/welcome_pg.dart';
-import 'package:oxon/pages/qr_scanner_pg.dart';
-import '../pages/donate_dustbin.dart';
+import 'package:oxon/size_config.dart';
+import 'package:oxon/theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../pages/coming_soon.dart';
 import '../pages/products_pg.dart';
 import '../pages/profile_pg.dart';
-import '../pages/sustainable_mapping_pg.dart';
 import '../pages/raise_concern.dart';
-import '../pages/coming_soon.dart';
-import 'package:oxon/theme/app_theme.dart';
+import '../pages/sustainable_mapping_pg.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -41,6 +43,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   String userName = "Not Updated";
+
   _fetch() async {
     final user = await FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -63,7 +66,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
       backgroundColor: AppTheme.colors.oxonOffWhite,
       child: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -136,7 +138,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               //_tileItem('Let\'s Shop', ComingSoon.routeName, context),
               _tileItem('Dustbin and Toilets', SusMapping.routeName, context),
               _tileItem('Van Tracking', VanTracking.routeName, context),
-              // _tileItem('My Wallet', ComingSoon.routeName, context),
+
               _tileItem('Help the city', ComingSoon.routeName, context),
               _tileItem("Let's Shop", ProductsPage.routeName, context),
               Padding(
@@ -156,21 +158,43 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               _tileItem("Driver's Section", DriverAuth.routeName, context),
               _tileItem('Log Out', SignOut.routeName, context),
-
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    height: 120,
-                    padding: EdgeInsets.all(15),
-                    child: Image.asset('assets/images/oxon_logo.png'),
-                  ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: SizeConfig.responsiveMultiplier * 10,
+                  child: Image.asset('assets/images/oxon_logo.png'),
                 ),
-              )
+              ),
+
+              Divider(),
+              Center(
+                  child: TextButton(
+                      onPressed: () => _openPrivacyPolicy(),
+                      child: Text(
+                        "Privacy Policy",
+                        style: AppTheme.define()
+                            .textTheme
+                            .headline6!
+                            .copyWith(color: AppTheme.colors.oxonGreen),
+                      ))),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+_openPrivacyPolicy() async {
+  final url = 'https://oxon.life/privacy-policy.html';
+
+  try {
+    await launch(url);
+  } catch (e) {
+    try {
+      Fluttertoast.showToast(msg: "Unkown error occurred");
+    } catch (e, s) {
+      print(s);
+    }
   }
 }

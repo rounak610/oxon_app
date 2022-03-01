@@ -1,24 +1,24 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:location/location.dart' as loc;
 import 'package:oxon/models/driver_loc_data.dart';
 import 'package:oxon/pages/driver_passcode.dart';
 import 'package:oxon/repositories/driver_loc_repository.dart';
+import 'package:oxon/styles/button_styles.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
 import 'package:oxon/widgets/custom_drawer.dart';
-import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:location/location.dart' as loc;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:get/get.dart';
-
 
 import '../theme/app_theme.dart';
+
 class DriversSection extends StatefulWidget {
   const DriversSection({Key? key}) : super(key: key);
 
@@ -27,7 +27,6 @@ class DriversSection extends StatefulWidget {
 }
 
 class _DriversSectionState extends State<DriversSection> {
-
   late String final_pass;
   late String vehicle_no;
   final loc.Location location = loc.Location();
@@ -35,23 +34,22 @@ class _DriversSectionState extends State<DriversSection> {
 
   final repository = DriverLocRepository();
 
+  var shouldShowBody = false;
+
   @override
-  void initState()
-  {
-    getValidationData().whenComplete(() async
-    {
-      Timer(Duration(milliseconds: 2), () => Get.to(final_pass == null ? DriverAuth() : DriversSection));
-    }
-    );
+  void initState() {
+    getValidationData().whenComplete(() async {
+      Timer(Duration(milliseconds: 2),
+          () => Get.to(final_pass == null ? DriverAuth() : DriversSection));
+    });
     super.initState();
-    _requestPermission();
-    location.changeSettings(interval: 300, accuracy: loc.LocationAccuracy.high);
-    location.enableBackgroundMode(enable: true);
+
+    _checkPermStatus();
   }
 
-  Future getValidationData() async
-  {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  Future getValidationData() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     var obtained_pass = sharedPreferences.getString('password');
     setState(() {
       final_pass = obtained_pass!;
@@ -59,148 +57,188 @@ class _DriversSectionState extends State<DriversSection> {
   }
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: AppTheme.colors.oxonGreen,
-          drawer: CustomDrawer(),
-          appBar: CustomAppBar(context, "Driver's Section",
-            [
+            backgroundColor: AppTheme.colors.oxonGreen,
+            drawer: CustomDrawer(),
+            appBar: CustomAppBar(context, "Driver's Section", [
               Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () async{
-                    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                    sharedPreferences.remove('password');
-                    Get.to(DriverAuth());
-                  },
-                  child: Icon(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      sharedPreferences.remove('password');
+                      Get.to(DriverAuth());
+                    },
+                    child: Icon(
                       Icons.logout,
-                    size: 40,
-                  ),
-                )
-            ),
-            ]
-          ),
-          body: DoubleBackToCloseApp(
-            snackBar: const SnackBar(
-                content: Text('Press again to exit the app'),
-                duration: Duration(seconds: 2)),
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image:
-                          Image.asset('assets/images/products_pg_bg.png').image,
-                          fit: BoxFit.cover)),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      size: 40,
+                    ),
+                  )),
+            ]),
+            body: shouldShowBody
+                ? DoubleBackToCloseApp(
+                    snackBar: const SnackBar(
+                        content: Text('Press again to exit the app'),
+                        duration: Duration(seconds: 2)),
+                    child: Stack(
                       children: [
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 240, 0, 0),
-                            child: TextFormField(
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: Image.asset(
+                                          'assets/images/products_pg_bg.png')
+                                      .image,
+                                  fit: BoxFit.cover)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 240, 0, 0),
+                                    child: TextFormField(
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white, width: 2.0),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        hintText: 'Enter your vehicle number',
+                                        hintStyle: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                        labelText: 'Vehicle number',
+                                        labelStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          vehicle_no = value;
+                                        });
+                                      },
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please enter your vehicle number';
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
-                                border: OutlineInputBorder(
-
-                                    borderRadius: BorderRadius.circular(20)),
-                                hintText: 'Enter your vehicle number',
-                                hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                                labelText: 'Vehicle number',
-                                labelStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  vehicle_no = value;
-                                });
-                              },
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Please enter your vehicle number';
-                                }
-                              },
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      trackingStarted(vehicle_no);
+                                      _listenLocation(vehicle_no);
+                                      Fluttertoast.showToast(
+                                          msg: 'Live location started',
+                                          gravity: ToastGravity.TOP);
+                                    },
+                                    child: Text(
+                                      'Start Live Location',
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        side: BorderSide(
+                                            color: Colors.white, width: 2),
+                                        primary: Color.fromARGB(255, 34, 90, 0),
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(
+                                                    40.0))),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      _stopListening();
+                                      Fluttertoast.showToast(
+                                          msg: 'Live location ended',
+                                          gravity: ToastGravity.TOP);
+                                    },
+                                    child: Text(
+                                      'End Live Location',
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        side: BorderSide(
+                                            color: Colors.white, width: 2),
+                                        primary: Colors.red,
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(
+                                                    40.0))),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: ElevatedButton(
-                              onPressed: () {
-                                trackingStarted(vehicle_no);
-                                _listenLocation(vehicle_no);
-                                Fluttertoast.showToast(
-                                    msg: 'Live location started',
-                                    gravity: ToastGravity.TOP);
-                              },
-                            child: Text(
-                              'Start Live Location',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: Colors.white, width: 2),
-                                primary: Color.fromARGB(255, 34, 90, 0),
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                    new BorderRadius.circular(40.0))),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _stopListening();
-                              Fluttertoast.showToast(
-                                  msg: 'Live location ended',
-                                  gravity: ToastGravity.TOP);
-                            },
-                            child: Text(
-                              'End Live Location',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: Colors.white, width: 2),
-                                primary: Colors.red,
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                    new BorderRadius.circular(40.0))),
-                          ),
-                        ),
+                        )
                       ],
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        )
-    );
+                  )
+                : Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 3),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Use your location",
+                            style: AppTheme.define().textTheme.headline1,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                          child: Text(
+                            "Oxon collects location data to enable van tracking even when the app is closed or not in use.",
+                            style: AppTheme.define().textTheme.headline3,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => _requestPermission(),
+                          child: Text(
+                            "Turn on",
+                            style: AppTheme.define()
+                                .textTheme
+                                .headline3!
+                                .copyWith(color: AppTheme.colors.oxonGreen),
+                          ),
+                          style: SolidRoundButtonStyle(),
+                        ),
+                      ],
+                    )))));
   }
 
   Future<void> _listenLocation(String vehicle_no) async {
@@ -243,9 +281,23 @@ class _DriversSectionState extends State<DriversSection> {
     });
   }
 
+  _checkPermStatus() async {
+    var status = await Permission.location.status;
+
+    if (status.isGranted) {
+      shouldShowBody = true;
+    }
+  }
+
   _requestPermission() async {
+    print("requestiong perm");
     var status = await Permission.location.request();
     if (status.isGranted) {
+      location.changeSettings(
+          interval: 300, accuracy: loc.LocationAccuracy.high);
+      location.enableBackgroundMode(enable: true);
+      shouldShowBody = true;
+      setState(() {});
       print('done');
     } else if (status.isDenied) {
       _requestPermission();

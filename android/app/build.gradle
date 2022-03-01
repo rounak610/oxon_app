@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.oxonlife.oxon"
+        applicationId "com.oxonlife.oxon" // package_name_changed has all these changes
         minSdkVersion 21
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
