@@ -3,10 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:oxon_app/pages/payment.dart';
-import 'package:oxon_app/pages/payment_page.dart';
-import 'package:oxon_app/size_config.dart';
+import 'package:oxon/pages/payment.dart';
+import 'package:oxon/pages/payment_page.dart';
+import 'package:oxon/size_config.dart';
 
+import './payment_page.dart';
+import './payment.dart';
+import 'package:oxon/size_config.dart';
 import 'package:oxon/theme/colors.dart';
 import 'package:oxon/widgets/cart_item.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
@@ -51,7 +54,6 @@ class _CartPageState extends State<CartPage> {
         } else {
           discount = (price * 0.2).toInt();
         }
-
       }).catchError((e) {
         print(e);
       });
