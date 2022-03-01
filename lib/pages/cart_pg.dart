@@ -50,7 +50,6 @@ class _CartPageState extends State<CartPage> {
         } else {
           discount = (price * 0.2).toInt();
         }
-
       }).catchError((e) {
         print(e);
       });
