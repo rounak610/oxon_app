@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:oxon/pages/cart_pg.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/cart_page.dart';
+
 class CartItem extends StatefulWidget {
   final String productId;
   final int price;
@@ -69,8 +71,10 @@ class _CartItemState extends State<CartItem> {
                       .collection("Cart")
                       .doc(widget.productId)
                       .delete()
-                      .then((value)async {
-                    await  Navigator.of(context).pushReplacementNamed(CartPage.routeName);
+                      .then((value) async {
+                    await Navigator.of(context)
+                        .pushReplacementNamed(CartPageNew.routeName);
+                      
                   });
                 },
               ),

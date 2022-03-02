@@ -10,6 +10,7 @@ import 'package:oxon/pages/cart_pg.dart';
 import 'package:oxon/theme/colors.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
+import 'cart_page.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -61,7 +62,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CartPage()),
+                    MaterialPageRoute(builder: (context) => CartPageNew()),
                   );
                 },
                 child: Container(
