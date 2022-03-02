@@ -6,6 +6,7 @@ import 'package:oxon/theme/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../size_config.dart';
 import '../widgets/custom_appbar.dart';
+import 'cart_page.dart';
 import 'cart_pg.dart';
 
 
@@ -102,7 +103,7 @@ class _ProductDetailState extends State<ProductDetail> {
           onTap: (){
     Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => CartPage()),
+    MaterialPageRoute(builder: (context) => CartPageNew()),
     );
     },
       child: Padding(
