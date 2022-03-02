@@ -231,7 +231,7 @@ class _ProductDetailState extends State<ProductDetail> {
     _add_to_cart();
 
     Navigator.of(context).push(MaterialPageRoute(
-    builder: (context) => CartPage()));
+    builder: (context) => CartPageNew()));
     }
 
     },
