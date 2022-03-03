@@ -23,6 +23,7 @@ import 'package:oxon/theme/app_theme.dart';
 import 'package:oxon/pages/qr_scanner_pg.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:oxon/user_data.dart';
 
 List<CameraDescription> cameras = [];
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
     return OrientationBuilder(builder: (context, orientation) {
       return LayoutBuilder(builder: (context, constraints) {
         SizeConfig().init(constraints, orientation);
+        // UserData().init();
         return MaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
@@ -120,12 +122,36 @@ class _InitializerWidgetState extends State<InitializerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
+    return FutureBuilder(
+        builder:
+            (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.hasData) {
+            if (UserData.user == null) {
+              return WelcomePage();
+            } else {
+              if (UserData.mobileNumber != null) {
+                return SusMapping();
+              } else {
+                return UpdateProfile();
+              }
+            }
+            // UserData.user == null
+            //     ? return WelcomePage()
+            //     : (UserData.mobileNumber != null ? SusMapping() : UpdateProfile());
+          }
+          return Scaffold(
+            backgroundColor: AppTheme.colors.oxonGreen,
+              body: Center(child: CircularProgressIndicator()));
+        },
+      future: UserData().getUserData(),
+    );
+
+      isLoading
         ? Scaffold(
             body: Center(child: LinearProgressIndicator()),
           )
         : _user == null
             ? WelcomePage()
-            : ProductsPage();
+            : (UserData.mobileNumber != null ? SusMapping() : UpdateProfile());//SusMapping();
   }
 }

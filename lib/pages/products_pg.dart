@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:oxon/pages/product_detail.dart';
 import 'package:oxon/size_config.dart';
 import 'package:oxon/pages/cart_pg.dart';
+import 'package:oxon/theme/app_theme.dart';
 import 'package:oxon/theme/colors.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
@@ -248,6 +249,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                 );
                               }
                               return Scaffold(
+                                backgroundColor: AppTheme.colors.oxonGreen,
                                 body: Center(
                                   child: CircularProgressIndicator(),
                                 ),

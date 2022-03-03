@@ -1,6 +1,9 @@
 App Link - https://play.google.com/store/apps/details?id=com.oxonlife.oxon
 # Using reusable objects:
 
+- To get UserData (userName, uId, user or userMoblieNumber) - UserData.userName 
+  or anything you want (check the user_data.dart file for more clarity 
+  and/or to add more properties to UserData class)
 - To use oxonGreen color- color:AppTheme.colors.oxonGreen
 - To create the standard rounded button- style: SolidRoundButtonStyle()
 - To style text- style: Theme.of(context).textTheme.headline2
