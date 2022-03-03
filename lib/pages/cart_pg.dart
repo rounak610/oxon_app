@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:oxon/pages/payment.dart';
 import 'package:oxon/size_config.dart';
-
-import './payment.dart';
 import 'package:oxon/theme/colors.dart';
 import 'package:oxon/widgets/cart_item.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
 import 'package:oxon/widgets/custom_drawer.dart';
+
+import './payment.dart';
 
 class CartPage extends StatefulWidget {
   static const routeName = '/cart-page';
@@ -58,7 +57,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -70,7 +68,7 @@ class _CartPageState extends State<CartPage> {
         backgroundColor: Color.fromARGB(255, 34, 90, 0),
         body: SingleChildScrollView(
           child: SizedBox(
-            height: SizeConfig.screenHeight ,
+            height: SizeConfig.screenHeight,
             child: Stack(
               children: [
                 Padding(
@@ -91,7 +89,8 @@ class _CartPageState extends State<CartPage> {
                     child: Stack(
                       children: [
                         FutureBuilder<QuerySnapshot>(
-                          future: _userRef.doc(_user?.uid).collection("Cart").get(),
+                          future:
+                              _userRef.doc(_user?.uid).collection("Cart").get(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
                               return Scaffold(
@@ -100,7 +99,8 @@ class _CartPageState extends State<CartPage> {
                                 ),
                               );
                             }
-                            if (snapshot.connectionState == ConnectionState.done) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
                               return Scaffold(
                                 backgroundColor: AppColors().oxonGreen,
                                 body: Column(
@@ -115,10 +115,12 @@ class _CartPageState extends State<CartPage> {
                                         children:
                                             snapshot.data!.docs.map((document) {
                                           int p = document.get('price') as int;
-                                          int q = document.get('quantity') as int;
-                                          int d = document.get('delivery') as int;
+                                          int q =
+                                              document.get('quantity') as int;
+                                          int d =
+                                              document.get('delivery') as int;
                                           total += p * q;
-                  
+
                                           return CartItem(
                                               "${document.get('ID')}",
                                               document.get('price'),
@@ -127,7 +129,9 @@ class _CartPageState extends State<CartPage> {
                                         }).toList(),
                                       ),
                                     ),
-                                    SizedBox(height: 10,),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
                                     FutureBuilder(
                                         future: _fetch(),
                                         builder: (context, snapshot) {
@@ -177,8 +181,10 @@ class _CartPageState extends State<CartPage> {
                                               .instance.currentUser;
                                           await Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                  builder: (context) => (Payment(
-                                                      total - discount + 49))));
+                                                  builder: (context) =>
+                                                      (Payment(total -
+                                                          discount +
+                                                          49))));
                                         },
                                         child: Center(
                                           child: Container(
@@ -226,6 +232,5 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
         ));
-    
   }
 }

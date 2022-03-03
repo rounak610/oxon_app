@@ -1,23 +1,19 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon/pages/products_pg.dart';
-import 'package:oxon/pages/products_pg.dart';
-import 'package:oxon/pages/sustainable_mapping_pg.dart';
 import 'package:oxon/pages/update_profile.dart';
-import '../models/mobile_number.dart';
-import 'welcome_pg.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oxon/size_config.dart';
-import 'package:oxon/pages/welcome_pg.dart';
-import 'package:pinput/pin_put/pin_put.dart';
-import 'package:oxon/widgets/Appbar_otpscreen.dart';
 import 'package:oxon/theme/app_theme.dart';
+import 'package:oxon/widgets/Appbar_otpscreen.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 import 'package:timer_button/timer_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
+
   OTPScreen(this.phone);
+
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -60,27 +56,30 @@ class _OTPScreenState extends State<OTPScreen> {
         if (result.docs.length != 0) {
           if (authCredential.user != null) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ProductsPage()));    ////////LOGIC FOR OLD USERS
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProductsPage())); ////////LOGIC FOR OLD USERS
           }
         } else {
-            final user = await FirebaseAuth.instance.currentUser;   //////////LOGIC FOR NEW USERS
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(user?.uid)
-                .set({
-                  'credits': 50,
-                })
-                .then((value) async {})
-                .catchError((e) {
-                  print(e);
-                });
-            const bonusSnackBar = SnackBar(
-              content: Text('Yay!Rs. 50 signing up bonus added to wallet!!'),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(bonusSnackBar);
-            await Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UpdateProfile()));
-
+          final user = await FirebaseAuth
+              .instance.currentUser; //////////LOGIC FOR NEW USERS
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user?.uid)
+              .set({
+                'credits': 50,
+              })
+              .then((value) async {})
+              .catchError((e) {
+                print(e);
+              });
+          const bonusSnackBar = SnackBar(
+            content: Text('Yay!Rs. 50 signing up bonus added to wallet!!'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(bonusSnackBar);
+          await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => UpdateProfile()));
         }
       } on FirebaseAuthException catch (e) {
         setState(() {

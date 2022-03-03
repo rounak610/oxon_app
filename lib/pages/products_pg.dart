@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oxon/pages/product_detail.dart';
 import 'package:oxon/size_config.dart';
-import 'package:oxon/pages/cart_pg.dart';
 import 'package:oxon/theme/app_theme.dart';
 import 'package:oxon/theme/colors.dart';
 import 'package:oxon/widgets/custom_appbar.dart';
+
 import '../widgets/custom_drawer.dart';
 import 'cart_page.dart';
 
@@ -25,23 +24,19 @@ class ProductsPage extends StatefulWidget {
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _ProductsPageState extends State<ProductsPage> {
-
   List<dynamic>? slide_images;
 
   final CollectionReference _productReference =
-  FirebaseFirestore.instance.collection('Products');
-  bool plant=true;
+      FirebaseFirestore.instance.collection('Products');
+  bool plant = true;
   bool other = false;
 
   @override
   Widget build(BuildContext context) {
-
     final FirebaseAuth auth = FirebaseAuth.instance;
-    _fetch() async
-    {
+    _fetch() async {
       final user = await FirebaseAuth.instance.currentUser;
-      if (user != null)
-      {
+      if (user != null) {
         await FirebaseFirestore.instance
             .collection('side_show_images')
             .doc('slide_images')
@@ -60,7 +55,7 @@ class _ProductsPageState extends State<ProductsPage> {
             drawer: CustomDrawer(),
             appBar: CustomAppBar(context, "Let's Shop", [
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CartPageNew()),
@@ -77,11 +72,9 @@ class _ProductsPageState extends State<ProductsPage> {
                           image: DecorationImage(
                               image: AssetImage(
                                   "assets/icons/shopping_cart.png"))),
-                    )
-                ),
+                    )),
               ),
-            ]
-            ),
+            ]),
             backgroundColor: Color.fromARGB(255, 34, 90, 0),
             body: FutureBuilder(
                 future: _fetch(),
@@ -95,10 +88,8 @@ class _ProductsPageState extends State<ProductsPage> {
                         Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image:
-                                  Image
-                                      .asset(
-                                      'assets/images/products_pg_bg.png')
+                                  image: Image.asset(
+                                          'assets/images/products_pg_bg.png')
                                       .image,
                                   fit: BoxFit.cover)),
                         ),
@@ -108,8 +99,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               if (snapshot.hasError) {
                                 return Scaffold(
                                   body: Center(
-                                    child: Text(
-                                        "Error Loading products"),
+                                    child: Text("Error Loading products"),
                                   ),
                                 );
                               }
@@ -120,40 +110,35 @@ class _ProductsPageState extends State<ProductsPage> {
                                     top: 30.0,
                                     bottom: 20.0,
                                   ),
-                                  children: snapshot.data!.docs.map((
-                                      document) {
+                                  children: snapshot.data!.docs.map((document) {
                                     return GestureDetector(
                                       onTap: () {
                                         Navigator.push(
-                                            context, MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetail(
-                                                  name: "${document
-                                                      .get('name')}",
-                                                  ID: document.id,
-                                                  description: "${document
-                                                      .get(
-                                                      'description')}",
-                                                  image: document.get(
-                                                      'image'),
-                                                  price: document.get(
-                                                      'price'),
-                                                  delivery: document
-                                                      .get('delivery'),
-                                                  isplant: document
-                                                      .get('isplant'),
-                                                )
-                                        )
-                                        );
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductDetail(
+                                                      name:
+                                                          "${document.get('name')}",
+                                                      ID: document.id,
+                                                      description:
+                                                          "${document.get('description')}",
+                                                      image:
+                                                          document.get('image'),
+                                                      price:
+                                                          document.get('price'),
+                                                      delivery: document
+                                                          .get('delivery'),
+                                                      isplant: document
+                                                          .get('isplant'),
+                                                    )));
                                       },
                                       child: Container(
                                         height: 210.0,
-
                                         decoration: BoxDecoration(
-                                          color: AppColors()
-                                              .oxonOffWhite,
+                                          color: AppColors().oxonOffWhite,
                                           borderRadius:
-                                          BorderRadius.circular(12.0),
+                                              BorderRadius.circular(12.0),
                                         ),
                                         margin: EdgeInsets.symmetric(
                                           vertical: 5.0,
@@ -164,75 +149,72 @@ class _ProductsPageState extends State<ProductsPage> {
                                             Center(
                                               child: Container(
                                                 child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .all(10.0,),
+                                                  padding: const EdgeInsets.all(
+                                                    10.0,
+                                                  ),
                                                   child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment
-                                                        .spaceBetween,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Container(
                                                         height: 100.0,
-                                                        child: Image
-                                                            .network(
-
-                                                          "${document
-                                                              .get(
-                                                              'image')[0]}",
-
-                                                          fit: BoxFit
-                                                              .fill,
+                                                        child: Image.network(
+                                                          "${document.get('image')[0]}",
+                                                          fit: BoxFit.fill,
                                                         ),
                                                       ),
                                                       Column(
-                                                        mainAxisAlignment: MainAxisAlignment
-                                                            .start,
-
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Center(
                                                             child: Padding(
                                                               padding: EdgeInsets
                                                                   .only(
-                                                                  top: 5.0),
+                                                                      top: 5.0),
                                                               child: Center(
                                                                 child: Text(
-                                                                  "${document
-                                                                      .get(
-                                                                      'name')}",
+                                                                  "${document.get('name')}",
                                                                   style: TextStyle(
                                                                       color: AppColors()
                                                                           .oxonGreen,
-                                                                      fontSize: 18),),
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
                                                           Container(
-                                                            decoration: BoxDecoration(
+                                                            decoration:
+                                                                BoxDecoration(
                                                               color: AppColors()
                                                                   .oxonOffWhite,
-                                                              borderRadius: BorderRadius
-                                                                  .circular(
-                                                                  12.0),
-
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
                                                             ),
                                                             child: Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
                                                                   vertical: 5.0,
-                                                                  horizontal: 5.0,
+                                                                  horizontal:
+                                                                      5.0,
                                                                 ),
                                                                 child: Center(
                                                                   child: Text(
-                                                                      "\u{20B9} ${document
-                                                                          .get(
-                                                                          'price')}",
+                                                                      "\u{20B9} ${document.get('price')}",
                                                                       style: TextStyle(
-                                                                          fontSize: 13,
-                                                                          color: AppColors()
-                                                                              .oxonGreen)),
+                                                                          fontSize:
+                                                                              13,
+                                                                          color:
+                                                                              AppColors().oxonGreen)),
                                                                 )),
                                                           ),
                                                         ],
-
                                                       )
                                                     ],
                                                   ),
@@ -240,10 +222,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                               ),
                                             ),
                                           ],
-
                                         ),
                                       ),
-
                                     );
                                   }).toList(),
                                 );
@@ -255,23 +235,17 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ),
                               );
                             })
-
                       ],
                     ),
                   );
-                }
-            )
-        )
-    );
+                })));
   }
-  Widget buildImage(String urlImage, int index) =>
-      Container(
-        // margin: EdgeInsets.symmetric(horizontal:5),
+
+  Widget buildImage(String urlImage, int index) => Container(
         color: Colors.grey,
-        child: Image.network(urlImage,
+        child: Image.network(
+          urlImage,
           fit: BoxFit.fill,
         ),
-
       );
-
 }
