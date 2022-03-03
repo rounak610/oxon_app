@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:oxon/pages/cart_pg.dart';
-import 'package:provider/provider.dart';
 
 import '../pages/cart_page.dart';
 
@@ -74,7 +72,6 @@ class _CartItemState extends State<CartItem> {
                       .then((value) async {
                     await Navigator.of(context)
                         .pushReplacementNamed(CartPageNew.routeName);
-                      
                   });
                 },
               ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,10 +40,15 @@ class _PreviewReportState extends State<PreviewReport> {
   late PermissionStatus _permissionGranted;
   LocationData? _locationData = null;
 
+
   @override
   void initState() {
     super.initState();
   }
+
+  FirebaseFirestore firestoreRef = FirebaseFirestore.instance;
+  FirebaseStorage storageRef = FirebaseStorage.instance;
+  String collectionName = "complaint_images";
 
   void onLayoutDone(Duration timeStamp) async {
     _serviceEnabled = await location.serviceEnabled();
@@ -91,6 +97,7 @@ class _PreviewReportState extends State<PreviewReport> {
     final issueType = args.issueType;
     final imagePath = args.imagePath;
     final problem = args.authorityType;
+
 
     return SafeArea(
         child: Scaffold(
@@ -384,22 +391,7 @@ class _PreviewReportState extends State<PreviewReport> {
                               {
                               }
 
-                              uploadFile(File(imagePath), userName);
-
-                              FirebaseFirestore.instance.collection('complaints').add({'description': description, 'issueType': issueType, 'problem': problem, 'twitter username':twitter})
-                                  .then((value) {
-                                if (value != null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
-                                      duration: Duration(seconds: 8),
-                                    ),
-                                  );
-                                }
-                              }).catchError((e) {
-                                print(e);
-                              });
+                              _uploadComplaint_Details(imagePath, userName,description,issueType,problem, twitter);
 
                             },
                             child: Text(
@@ -504,13 +496,46 @@ class _PreviewReportState extends State<PreviewReport> {
   }
 
   //to upload the image taken by the user to the firebase storage
-  Future uploadFile(File image_path, String username) async
-  {
-    final fileName = 'uploaded by ${username}';
-    final destination = 'images/$fileName';
-    FirebaseApi.uploadFile(destination, image_path);
-    setState(() {});
+  _uploadComplaint_Details(String imagePath, String username, String description, String issueType, String problem, String twitter)
+  async {
+    var uniquekey = firestoreRef.collection(collectionName);
+    String uploadFileName = 'uploaded by' + username + 'at' + DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+    Reference reference = storageRef.ref().child(collectionName).child(uploadFileName);
+    UploadTask uploadTask = reference.putFile(File(imagePath));
+    uploadTask.snapshotEvents.listen((event)
+    {
+      print(event.bytesTransferred.toString()+ "\t" + event.totalBytes.toString());
+    }
+    );
+
+    await uploadTask.whenComplete(()
+    async {
+      var uploadPath = await uploadTask.snapshot.ref.getDownloadURL();
+      FirebaseFirestore.instance.collection('complaints').add({
+        'description': description,
+        'issueType': issueType,
+        'problem': problem,
+        'twitter username': twitter,
+        'image': uploadPath
+      })
+          .then((value) {
+        if (value != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Thanks for using Oxon, your complain is registered\nWe will soon get back to you with further updates on your complain.'),
+              duration: Duration(seconds: 8),
+            ),
+          );
+        }
+      }).catchError((e) {
+        print(e);
+      }
+      );
+    }
+    );
   }
+
 
   Future<String> getCurrentLocationAddress() async
   {

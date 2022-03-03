@@ -1,8 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:oxon/pages/cart_page.dart';
 import 'package:oxon/pages/cart_pg.dart';
 import 'package:oxon/pages/coming_soon.dart';
@@ -11,6 +12,7 @@ import 'package:oxon/pages/driver_passcode.dart';
 import 'package:oxon/pages/preview_report.dart';
 import 'package:oxon/pages/products_pg.dart';
 import 'package:oxon/pages/profile_pg.dart';
+import 'package:oxon/pages/qr_scanner_pg.dart';
 import 'package:oxon/pages/raise_concern.dart';
 import 'package:oxon/pages/sign_out.dart';
 import 'package:oxon/pages/sustainable_mapping_pg.dart';
@@ -20,14 +22,12 @@ import 'package:oxon/pages/van_tracking.dart';
 import 'package:oxon/pages/welcome_pg.dart';
 import 'package:oxon/size_config.dart';
 import 'package:oxon/theme/app_theme.dart';
-import 'package:oxon/pages/qr_scanner_pg.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:oxon/user_data.dart';
 
 List<CameraDescription> cameras = [];
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'notifications_channel', //id
-  'Notifications channel', //title
+  'notifications_channel',
+  'Notifications channel',
   description:
       'This channel is used for implementing the notifications feature ',
   importance: Importance.high,
@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
     return OrientationBuilder(builder: (context, orientation) {
       return LayoutBuilder(builder: (context, constraints) {
         SizeConfig().init(constraints, orientation);
+
         return MaterialApp(
           theme: AppTheme.define(),
           debugShowCheckedModeBanner: false,
@@ -120,12 +121,24 @@ class _InitializerWidgetState extends State<InitializerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? Scaffold(
-            body: Center(child: LinearProgressIndicator()),
-          )
-        : _user == null
-            ? WelcomePage()
-            : ProductsPage();
+    return FutureBuilder(
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          if (UserData.user == null) {
+            return WelcomePage();
+          } else {
+            if (UserData.mobileNumber != null) {
+              return SusMapping();
+            } else {
+              return UpdateProfile();
+            }
+          }
+        }
+        return Scaffold(
+            backgroundColor: AppTheme.colors.oxonGreen,
+            body: Center(child: CircularProgressIndicator()));
+      },
+      future: UserData().getUserData(),
+    );
   }
 }
