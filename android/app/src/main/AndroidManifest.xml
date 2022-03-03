@@ -47,14 +47,6 @@
            android:value="AIzaSyBDY5afB5ZnIg3eO4O7bOFocAyeX0cl2ME"/>
 <!--           android:value="AIzaSyCcywbZyeAkGWf3qkJ-Tc1e_58d7oQVvaE"/>-->
 <!--           android:value="AIzaSyA5g2UYGLDIKrpRidLtgG7UCLkcfCC0Z6w"/> restricted api key-->
-       <meta-data
-           android:name="com.facebook.sdk.ApplicationId"
-           android:value="@string/facebook_app_id" />
-
-       <provider
-           android:name="com.facebook.FacebookContentProvider"
-           android:authorities="com.facebook.app.FacebookContentProvider[facebook_app_id]"
-           android:exported="false" />
     </application>
 
     <queries>
