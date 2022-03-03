@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:oxon/pages/coming_soon.dart';
 import 'package:oxon/pages/sustainable_mapping_pg.dart';
@@ -44,16 +43,16 @@ class _ProfilePageState extends State<ProfilePage> {
             .doc(user.uid)
             .get()
             .then((ds) {
-          print(ds);
+          userCredits =
+              ds.data()!['credits'] == null ? 0 : ds.data()!['credits'];
+          print(ds.data());
           userName = ds.data()!['name'];
           userResidence = ds.data()!['city'];
           userMobileNo = ds.data()!['mobile'];
           userDOB = DateTime.fromMillisecondsSinceEpoch(
-              ds.data()!['DOB'].millisecondsSinceEpoch)
+                  ds.data()!['DOB'].millisecondsSinceEpoch)
               .toString();
           userGender = ds.data()!['gender'];
-          userCredits =
-          ds.data()!['credits'] == null ? 0 : ds.data()!['credits'];
         }).catchError((e) {
           print(e);
         });
@@ -84,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image:
-                                AssetImage("assets/images/profile_pg.png"),
+                                    AssetImage("assets/images/profile_pg.png"),
                                 fit: BoxFit.cover)),
                       ),
                       Container(
@@ -204,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .textTheme
                                         .headline4!
                                         .copyWith(
-                                        color: AppTheme.colors.oxonGreen),
+                                            color: AppTheme.colors.oxonGreen),
                                   ),
                                   style: solidRoundButtonStyle,
                                 ),
@@ -224,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .textTheme
                                         .headline4!
                                         .copyWith(
-                                        color: AppTheme.colors.oxonGreen),
+                                            color: AppTheme.colors.oxonGreen),
                                   ),
                                   style: solidRoundButtonStyle,
                                 ),
@@ -239,8 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 );
-              })
-      ),
+              })),
     );
   }
 }
