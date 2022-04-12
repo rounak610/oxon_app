@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:oxon/pages/cart_page.dart';
 import 'package:oxon/pages/cart_pg.dart';
@@ -136,7 +137,19 @@ class _InitializerWidgetState extends State<InitializerWidget> {
         }
         return Scaffold(
             backgroundColor: AppTheme.colors.oxonGreen,
-            body: Center(child: CircularProgressIndicator()));
+            body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.all(16),child: Image(image: AssetImage("assets/images/oxon_logo.png"), width: SizeConfig.responsiveMultiplier * 26,)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Empowering Happy and Healthy Life", style: AppTheme.define().textTheme.headline6, textAlign: TextAlign.center,),
+                    )
+                  ],
+                )));
       },
       future: UserData().getUserData(),
     );
