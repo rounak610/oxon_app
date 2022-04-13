@@ -158,7 +158,7 @@ class _OTPScreenState extends State<OTPScreen> {
         .doc(user?.uid)
         .set({
           'credits': 50,
-        })
+        }, SetOptions(merge: true))
         .then((value) async {})
         .catchError((e) {
           print(e);
